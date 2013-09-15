@@ -196,7 +196,7 @@ public class Tetris extends Screen {
 	@Override
 	public void touchUp(LTouch e) {
 		// TODO Auto-generated method stub
-		if(gameStart){
+		if(gameStart&&!gameField.isGameOver()){
 			
 			if(!move){
 				gameField.rotateStone();
