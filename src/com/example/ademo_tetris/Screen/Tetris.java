@@ -27,7 +27,7 @@ import loon.core.timer.LTimerContext;
 public class Tetris extends Screen {
 	
 
-	private int curLevel = 1, blockSize1 = 38,blockSize=Config.getW(38),blockSizeMin=Config.getW((int)(38*0.6));
+	private int curLevel = 1, blockSize1 = 38,blockSize=Config.getW(38),blockSizeMin1=20,blockSizeMin=Config.getW(20);
 
 	private boolean gameStart=false;
 
@@ -41,7 +41,7 @@ public class Tetris extends Screen {
 	private LTexture[] stones = new LTexture[9];
 	private LTexture[] stonesMin = new LTexture[9];
 
-	private LTexture  background,styleImage,brand,dd;
+	private LTexture  background,styleImage,brand;
 
 	public int xm=Config.getW(106+26);
 	public int ym=Config.getH(74+26);
@@ -58,15 +58,13 @@ public class Tetris extends Screen {
 		// 提示背景
 		styleImage = LImage.createImage("assets/game_btn_tools1.png").scaledInstance(Config.getW(124), Config.getH(124)).getTexture();
 		LImage b=LImage.createImage("assets/pic_fangkuai_highlight.png");
-		dd = b.getTexture();
+		LImage b2=LImage.createImage("assets/pic_fangkuai_med.png");
 		// 俄罗斯方块小图
 //		LImage[] blocks = LImage.createImage(8, blockSize, blockSize, true);
 		for (int i = 0; i < 8; i++) {
 			stones[i + 1] = b.getSubImage(i*blockSize1, 0, blockSize1, blockSize1).scaledInstance(blockSize, blockSize).getTexture();
-			stonesMin[i + 1] = b.getSubImage(i*blockSize1, 0, blockSize1, blockSize1).scaledInstance(blockSizeMin, blockSizeMin).getTexture();
+			stonesMin[i + 1] = b2.getSubImage(i*blockSizeMin1, 0, blockSizeMin1, blockSizeMin1).scaledInstance(blockSizeMin, blockSizeMin).getTexture();
 		}
-//		setBackground(background);
-//		setBackground(background);
 		delay = new LTimer(100);
 		initialize();
 	}
