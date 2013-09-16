@@ -1,7 +1,5 @@
 package com.mogu.game.tetris.screen;
 
-import loon.core.graphics.LImage;
-import loon.core.graphics.device.LGraphics;
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
 

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="vertical"
+    android:background="@drawable/bg_001_light"
+    android:gravity="center|top"
+    >
+    <RelativeLayout 
+        
+        android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
+        <Button 
+	    android:id="@+id/bangzhu"
+	    style="@style/TopBarBtn"
+	    
+	    android:layout_alignParentLeft="true"
+	    android:layout_alignParentTop="true"
+	    
+	    android:background="@drawable/topbar_btn_bangzhu"
+	    android:onClick="onBtnClick"
+	    />
+        <Button 
+	    android:id="@+id/yuezhan"
+	    style="@style/TopBarBtn"
+	    android:layout_alignParentRight="true"
+	    android:layout_alignParentTop="true"
+	    android:background="@drawable/topbar_btn_yuezhan"
+	    android:onClick="onBtnClick"
+	    />
+    </RelativeLayout>
+	<Button 
+	    android:id="@+id/danren"
+	    style="@style/MenuBtn"
+	    android:background="@drawable/menu_btn_danren"
+	    android:onClick="onBtnClick"
+	    />
+	<Button 
+	    android:id="@+id/duoren"
+	    style="@style/MenuBtn"
+	    android:background="@drawable/menu_btn_duoren"
+	    android:onClick="onBtnClick"
+	    />
+	<Button 
+	    android:id="@+id/daoju"
+	    style="@style/MenuBtn"
+	    android:background="@drawable/menu_btn_daoju"
+	    android:onClick="onBtnClick"
+	    />
+	<Button 
+	    android:id="@+id/shezhi"
+	    style="@style/MenuBtn"
+	    android:background="@drawable/menu_btn_shezhi"
+	    android:onClick="onBtnClick"
+	    />
+	<Button 
+	    android:id="@+id/chenjiu"
+	    style="@style/MenuBtn"
+	    android:background="@drawable/menu_btn_chenjiu"
+	    android:onClick="onBtnClick"
+	    />
+
+</LinearLayout>

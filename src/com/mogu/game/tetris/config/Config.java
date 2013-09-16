@@ -16,6 +16,7 @@ public class Config {
 	
 	public int main_menu_btn_x=99;
 	public int main_menu_btn_y=136;
+	
 	public int main_menu_btn2_y=280;
 	public int main_menu_btn3_y=424;
 	public int main_menu_btn4_y=569;

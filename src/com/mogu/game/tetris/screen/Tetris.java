@@ -2,8 +2,8 @@ package com.mogu.game.tetris.screen;
 
 
 
+
 import loon.core.graphics.LColor;
-import loon.core.graphics.LImage;
 import loon.core.graphics.Screen;
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
@@ -33,7 +33,7 @@ public class Tetris extends Screen {
 	private LTexture[] stones = new LTexture[9];
 	private LTexture[] stonesMin = new LTexture[9];
 
-	private LTexture  background,styleImage,brand;
+	private LTexture  styleImage,brand;
 
 //	public int xm=Config.getW(106+26);
 //	public int ym=Config.getH(74+26);
@@ -47,20 +47,8 @@ public class Tetris extends Screen {
 	public MainMenu mainMenu=null;
 	
 	public Tetris() {
-		// 背景图
-		background = LImage.createImage(ConfigTool.getConfig().bg_001_light).getTexture();
-		brand = LImage.createImage(ConfigTool.getConfig().game_board).getTexture();
-		// 提示背景
-		styleImage = LImage.createImage(ConfigTool.getConfig().game_btn_tools1).getTexture();
-		LImage b=LImage.createImage(ConfigTool.getConfig().pic_fangkuai_highlight);
-		LImage b2=LImage.createImage(ConfigTool.getConfig().pic_fangkuai_med);
-		// 俄罗斯方块小图
-//		LImage[] blocks = LImage.createImage(8, blockSize, blockSize, true);
-		for (int i = 0; i < 8; i++) {
-			stones[i + 1] = b.getSubImage(i*ConfigTool.getConfig().blockSize, 0, ConfigTool.getConfig().blockSize, ConfigTool.getConfig().blockSize).getTexture();
-			stonesMin[i + 1] = b2.getSubImage(i*ConfigTool.getConfig().blockSizeMin, 0, ConfigTool.getConfig().blockSizeMin, ConfigTool.getConfig().blockSizeMin).getTexture();
-		}
-		delay = new LTimer(100);
+		
+		
 //		showJieMian();
 	}
 	
@@ -104,6 +92,12 @@ public class Tetris extends Screen {
 					}
 				}
 				delay.setDelay(300 / curLevel);
+			}else if(gameField!=null&&gameField.isGameOver()){
+				if(jiemian==0){
+					replaceScreen(new MainMenu(), MoveMethod.FROM_LEFT);
+//					setScreen(new MainMenu());
+					jiemian=1;
+				}
 			}
 		}
 	}
@@ -151,7 +145,7 @@ public class Tetris extends Screen {
 	public void draw(GLEx g) {
 		if (isOnLoadComplete()) {
 			
-		g.drawTexture(background, 0,0);
+//		g.drawTexture(background, 0,0);
 		g.drawTexture(brand, ConfigTool.getConfig().g_board_x,ConfigTool.getConfig().g_board_y);
 		// TODO Auto-generated method stub
 		if (gameStart) {
@@ -247,7 +241,24 @@ public class Tetris extends Screen {
 		
 	}
 
-	
+	@Override
+	public void onLoad() {
+		// 背景图
+//		background = new LTexture(ConfigTool.getConfig().bg_001_light);
+		brand = new LTexture(ConfigTool.getConfig().game_board);
+		// 提示背景
+		styleImage = new LTexture(ConfigTool.getConfig().game_btn_tools1);
+		LTexture b=new LTexture(ConfigTool.getConfig().pic_fangkuai_highlight);
+		LTexture b2=new LTexture(ConfigTool.getConfig().pic_fangkuai_med);
+		// 俄罗斯方块小图
+//				LImage[] blocks = new LTexture(8, blockSize, blockSize, true);
+		for (int i = 0; i < 8; i++) {
+			stones[i + 1] = b.getSubTexture(i*ConfigTool.getConfig().blockSize, 0, ConfigTool.getConfig().blockSize, ConfigTool.getConfig().blockSize);
+			stonesMin[i + 1] = b2.getSubTexture(i*ConfigTool.getConfig().blockSizeMin, 0, ConfigTool.getConfig().blockSizeMin, ConfigTool.getConfig().blockSizeMin);
+		}
+		delay = new LTimer(100);
+		setBackground(ConfigTool.getConfig().bg_001_light);
+	}
 
 	
 
