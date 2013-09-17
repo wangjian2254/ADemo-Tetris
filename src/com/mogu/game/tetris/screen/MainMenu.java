@@ -5,9 +5,11 @@ import loon.core.graphics.Screen;
 import loon.core.graphics.component.LButton;
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
+import loon.core.graphics.opengl.LTexture.Format;
 import loon.core.graphics.opengl.LTextures;
 import loon.core.input.LTouch;
 import loon.core.timer.LTimerContext;
+import android.graphics.Bitmap;
 import android.util.Log;
 
 import com.mogu.game.tetris.config.ConfigTool;
@@ -55,7 +57,8 @@ public class MainMenu extends Screen {
 	public void onLoad() {
 //		background = new LPanel(0, 0, (int)ConfigTool.getConfig().all_w, (int)ConfigTool.getConfig().all_h);
 //		background.setBackground(LImage.createImage(ConfigTool.getConfig().bg_001_light).getTexture());
-		LTexture[] btn1={LTextures.loadTexture(ConfigTool.getConfig().menu_btn_danren1),LTextures.loadTexture(ConfigTool.getConfig().menu_btn_danren2)};
+		LTexture b=new LTexture(ConfigTool.getConfig().menu_btn_danren1);
+		LTexture[] btn1={b,LTextures.loadTexture(ConfigTool.getConfig().menu_btn_danren2)};
 		danren=new  LButton(btn1, null, btn1[0].getWidth(), btn1[0].getHeight(), ConfigTool.getConfig().main_menu_btn_x, ConfigTool.getConfig().main_menu_btn_y){
 			@Override
 			public void doClick(){

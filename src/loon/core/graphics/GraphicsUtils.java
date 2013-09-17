@@ -173,8 +173,6 @@ public class GraphicsUtils {
 			try {
 				if (config != null) {
 					defaultoptions.inPreferredConfig = config;
-				}else{
-					
 				}
 				in = Resources.openResource(resName);
 				Bitmap bitmap = BitmapFactory.decodeStream(in, null,
