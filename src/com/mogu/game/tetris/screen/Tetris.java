@@ -5,8 +5,10 @@ package com.mogu.game.tetris.screen;
 
 import loon.core.graphics.LColor;
 import loon.core.graphics.Screen;
+import loon.core.graphics.component.LButton;
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
+import loon.core.graphics.opengl.LTexture.Format;
 import loon.core.input.LTouch;
 import loon.core.timer.LTimer;
 import loon.core.timer.LTimerContext;
@@ -33,7 +35,10 @@ public class Tetris extends Screen {
 	private LTexture[] stones = new LTexture[9];
 	private LTexture[] stonesMin = new LTexture[9];
 
-	private LTexture  styleImage,brand;
+	private LTexture  styleImage,brand,game_pic_topbar,game_siglemessage;
+	
+	private LButton zanting;
+	
 
 //	public int xm=Config.getW(106+26);
 //	public int ym=Config.getH(74+26);
@@ -139,14 +144,33 @@ public class Tetris extends Screen {
 //
 //	}
 
+	public void drawBackground(GLEx g){
+		g.drawTexture(game_pic_topbar, ConfigTool.getConfig().game_pic_topbar_x, ConfigTool.getConfig().game_pic_topbar_y);
+		g.drawTexture(game_siglemessage, ConfigTool.getConfig().game_siglemessage_x, ConfigTool.getConfig().game_siglemessage_y);
+		g.drawTexture(brand, ConfigTool.getConfig().g_board_x,ConfigTool.getConfig().g_board_y);
+		g.drawTexture(styleImage, ConfigTool.getConfig().g_btn_tool0_x, ConfigTool.getConfig().g_btn_tool0_y);
+		g.drawTexture(styleImage, ConfigTool.getConfig().g_btn_tool1_x, ConfigTool.getConfig().g_btn_tool1_y);
+	}
     
+	public void drawGameBackground(GLEx g){
+		
+		// 绘制游戏方块
+		gameField.drawTexture(g, stonesMin,ConfigTool.getConfig().g_btn_tool1_x,ConfigTool.getConfig().g_btn_tool1_y,styleImage.getWidth(),styleImage.getHeight(),ConfigTool.getConfig().blockSizeMin);
+		
+		g.setColor(LColor.white);
+		g.drawString("等级:" + Integer.toString(gameField.getLevel()), ConfigTool.getConfig().all_w-80,
+				220);
+		g.drawString("消层:" + Integer.toString(gameField.getLines()), ConfigTool.getConfig().all_w-80,
+				260);
+		g.drawString("得分:" + Integer.toString(gameField.getPoints()), ConfigTool.getConfig().all_w-80,
+				300);
+	}
 
 	@Override
 	public void draw(GLEx g) {
 		if (isOnLoadComplete()) {
 			
-//		g.drawTexture(background, 0,0);
-		g.drawTexture(brand, ConfigTool.getConfig().g_board_x,ConfigTool.getConfig().g_board_y);
+			drawBackground(g);
 		// TODO Auto-generated method stub
 		if (gameStart) {
 			
@@ -171,17 +195,8 @@ public class Tetris extends Screen {
 				g.drawString("GAME OVER", 120, 160);
 				return;
 			}
-			g.drawTexture(styleImage, ConfigTool.getConfig().g_btn_tool0_x, ConfigTool.getConfig().g_btn_tool0_y);
-			// 绘制游戏方块
-			gameField.draw(g, stonesMin,ConfigTool.getConfig().g_btn_tool0_x,ConfigTool.getConfig().g_btn_tool0_y,styleImage.getWidth(),styleImage.getHeight(),ConfigTool.getConfig().blockSizeMin);
 			
-			g.setColor(LColor.white);
-			g.drawString("等级:" + Integer.toString(gameField.getLevel()), ConfigTool.getConfig().all_w-80,
-					220);
-			g.drawString("消层:" + Integer.toString(gameField.getLines()), ConfigTool.getConfig().all_w-80,
-					260);
-			g.drawString("得分:" + Integer.toString(gameField.getPoints()), ConfigTool.getConfig().all_w-80,
-					300);
+			drawGameBackground(g);
 		} else {
 			g.setColor(LColor.white);
 			g.drawString("GAME START", 110, 160);
@@ -235,17 +250,22 @@ public class Tetris extends Screen {
 		
 	}
 
-	@Override
-	public void touchDrag(LTouch e) {
-		// TODO Auto-generated method stub
-		
-	}
+	
 
 	@Override
 	public void onLoad() {
-		// 背景图
-//		background = new LTexture(ConfigTool.getConfig().bg_001_light);
 		brand = new LTexture(ConfigTool.getConfig().game_board);
+		
+		LTexture[] btn1={new LTexture(ConfigTool.getConfig().topbar_btn_zhanting1),new LTexture(ConfigTool.getConfig().topbar_btn_zhanting2)};
+		zanting=new  LButton(btn1, null, btn1[0].getWidth(), btn1[0].getHeight(), ConfigTool.getConfig().topbar_btn_yuezhan_x, ConfigTool.getConfig().topbar_btn_yuezhan_y){
+			@Override
+			public void doClick(){
+			}
+		};
+		add(zanting);
+		
+		game_pic_topbar = new LTexture(ConfigTool.getConfig().game_pic_topbar);
+		game_siglemessage = new LTexture(ConfigTool.getConfig().game_siglemessage);
 		// 提示背景
 		styleImage = new LTexture(ConfigTool.getConfig().game_btn_tools1);
 		LTexture b=new LTexture(ConfigTool.getConfig().pic_fangkuai_highlight);
@@ -258,6 +278,12 @@ public class Tetris extends Screen {
 		}
 		delay = new LTimer(100);
 		setBackground(ConfigTool.getConfig().bg_001_light);
+	}
+
+	@Override
+	public void touchDrag(LTouch e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 	

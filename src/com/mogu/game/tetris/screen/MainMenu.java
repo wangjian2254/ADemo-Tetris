@@ -1,9 +1,11 @@
 package com.mogu.game.tetris.screen;
 
+import loon.core.graphics.LColor;
 import loon.core.graphics.Screen;
 import loon.core.graphics.component.LButton;
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
+import loon.core.graphics.opengl.LTextures;
 import loon.core.input.LTouch;
 import loon.core.timer.LTimerContext;
 import android.util.Log;
@@ -12,9 +14,8 @@ import com.mogu.game.tetris.config.ConfigTool;
 
 public class MainMenu extends Screen {
 	
-	private LButton danren,duoren,daoju,shezhi,chengjiu;
+	private LButton danren,duoren,daoju,shezhi,chengjiu,bangzhu,yuezhan;
 //	private LPanel  background;
-
 
 	@Override
 	public void alter(LTimerContext timer) {
@@ -40,11 +41,7 @@ public class MainMenu extends Screen {
 
 	}
 
-	@Override
-	public void touchDrag(LTouch e) {
-		// TODO Auto-generated method stub
-
-	}
+	
 
 
 	@Override
@@ -52,13 +49,13 @@ public class MainMenu extends Screen {
 		// TODO Auto-generated method stub
 	}
 	
+	
+	
 	@Override
 	public void onLoad() {
 //		background = new LPanel(0, 0, (int)ConfigTool.getConfig().all_w, (int)ConfigTool.getConfig().all_h);
 //		background.setBackground(LImage.createImage(ConfigTool.getConfig().bg_001_light).getTexture());
-		
-		
-		LTexture[] btn1={new LTexture(ConfigTool.getConfig().menu_btn_danren1),new LTexture(ConfigTool.getConfig().menu_btn_danren2),new LTexture(ConfigTool.getConfig().menu_btn_danren1)};
+		LTexture[] btn1={LTextures.loadTexture(ConfigTool.getConfig().menu_btn_danren1),LTextures.loadTexture(ConfigTool.getConfig().menu_btn_danren2)};
 		danren=new  LButton(btn1, null, btn1[0].getWidth(), btn1[0].getHeight(), ConfigTool.getConfig().main_menu_btn_x, ConfigTool.getConfig().main_menu_btn_y){
 			@Override
 			public void doClick(){
@@ -93,6 +90,20 @@ public class MainMenu extends Screen {
 				Log.d("game_btn", "5");
 			}
 		};
+		LTexture[] btn6={new LTexture(ConfigTool.getConfig().topbar_btn_bangzhu1),new LTexture(ConfigTool.getConfig().topbar_btn_bangzhu2)};
+		bangzhu=new  LButton(btn6, null, btn6[0].getWidth(), btn6[0].getHeight(), ConfigTool.getConfig().topbar_btn_bangzhu_x, ConfigTool.getConfig().topbar_btn_bangzhu_y){
+			@Override
+			public void doClick(){
+				Log.d("game_btn", "6");
+			}
+		};
+		LTexture[] btn7={new LTexture(ConfigTool.getConfig().topbar_btn_yuezhan1),new LTexture(ConfigTool.getConfig().topbar_btn_yuezhan2)};
+		yuezhan=new  LButton(btn7, null, btn6[0].getWidth(), btn6[0].getHeight(), ConfigTool.getConfig().topbar_btn_yuezhan_x, ConfigTool.getConfig().topbar_btn_yuezhan_y){
+			@Override
+			public void doClick(){
+				Log.d("game_btn", "7");
+			}
+		};
 		//danren,duoren,daoju,shezhi,chengjiu
 //		add(background);
 		setBackground(ConfigTool.getConfig().bg_001_light);
@@ -101,6 +112,14 @@ public class MainMenu extends Screen {
 		add(daoju);
 		add(shezhi);
 		add(chengjiu);
+		add(bangzhu);
+		add(yuezhan);
+	}
+
+	@Override
+	public void touchDrag(LTouch e) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

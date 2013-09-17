@@ -7,8 +7,10 @@ public class Config {
 	public int movepoint=64;
 	public int blockSize=38;
 	public int blockSizeMin=20;
-	public  float g_btn_tool0_x=517;
+	public  float g_btn_tool0_x=2;
 	public  float g_btn_tool0_y=84;
+	public  float g_btn_tool1_x=517;
+	public  float g_btn_tool1_y=84;
 	public  float g_board_x=107;
 	public  float g_board_y=74;
 	public  float g_board_x_m=133;
@@ -21,6 +23,16 @@ public class Config {
 	public int main_menu_btn3_y=424;
 	public int main_menu_btn4_y=569;
 	public int main_menu_btn5_y=714;
+	
+	public int topbar_btn_bangzhu_x=4;
+	public int topbar_btn_bangzhu_y=5;
+	public int topbar_btn_yuezhan_x=516;
+	public int topbar_btn_yuezhan_y=5;
+	public int game_pic_topbar_x=14;
+	public int game_pic_topbar_y=11;
+	
+	public int game_siglemessage_x=19;
+	public int game_siglemessage_y=881;
 	
 	
 	public String basedir="assets/640_960/";
@@ -46,6 +58,17 @@ public class Config {
 		this.menu_btn_shezhi2=basedir+"menu_btn_shezhi2.png";
 		this.menu_btn_chengjiu1=basedir+"menu_btn_chenjiu1.png";
 		this.menu_btn_chengjiu2=basedir+"menu_btn_chenjiu2.png";
+		
+		this.topbar_btn_bangzhu1=basedir+"topbar_btn_bangzhu1.png";
+		this.topbar_btn_bangzhu2=basedir+"topbar_btn_bangzhu2.png";
+		this.topbar_btn_yuezhan1=basedir+"topbar_btn_yuezhan1.png";
+		this.topbar_btn_yuezhan2=basedir+"topbar_btn_yuezhan2.png";
+		this.topbar_btn_zhanting1=basedir+"topbar_btn_zhanting1.png";
+		this.topbar_btn_zhanting2=basedir+"topbar_btn_zhanting2.png";
+		
+		this.game_pic_topbar=basedir+"game_pic_topbar.png";
+		this.game_siglemessage=basedir+"game_siglemessage.png";
+		this.speechbubble2=basedir+"speechbubble2.png";
 	}
 	public String game_board=null;
 	public String bg_001_light=null;
@@ -63,6 +86,18 @@ public class Config {
 	public String menu_btn_shezhi2=null;
 	public String menu_btn_chengjiu1=null;
 	public String menu_btn_chengjiu2=null;
+	
+	public String topbar_btn_bangzhu1=null;
+	public String topbar_btn_bangzhu2=null;
+	public String topbar_btn_yuezhan1=null;
+	public String topbar_btn_yuezhan2=null;
+	public String topbar_btn_zhanting1=null;
+	public String topbar_btn_zhanting2=null;
+	
+	public String game_pic_topbar=null;
+	public String game_siglemessage=null;
+	public String speechbubble2=null;
+	
 	
 	
 	

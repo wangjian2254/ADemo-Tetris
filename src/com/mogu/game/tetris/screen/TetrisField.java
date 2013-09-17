@@ -259,7 +259,7 @@ public class TetrisField {
 		return gameFieldStones;
 	}
 
-	public void draw(GLEx g, LTexture[] stones,float x,float y,float w,float h,int b) {
+	public void drawTexture(GLEx g, LTexture[] stones,float x,float y,float w,float h,int b) {
 		int nextStone = getNextStone();
 		switch (nextStone) {
 		case 1:
