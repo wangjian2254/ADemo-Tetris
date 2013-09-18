@@ -523,7 +523,7 @@ public class LImage implements LRelease {
 	}
 
 	public static LImage createImage(String fileName) {
-		return GraphicsUtils.loadImage(fileName);
+		return GraphicsUtils.load8888Image(fileName);
 	}
 
 	/**

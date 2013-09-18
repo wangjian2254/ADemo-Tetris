@@ -1,8 +1,11 @@
 package com.mogu.game.tetris.screen;
 
+
 import loon.core.graphics.LColor;
+import loon.core.graphics.LImage;
 import loon.core.graphics.Screen;
 import loon.core.graphics.component.LButton;
+import loon.core.graphics.opengl.GL;
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
 import loon.core.graphics.opengl.LTexture.Format;
@@ -17,6 +20,7 @@ import com.mogu.game.tetris.config.ConfigTool;
 public class MainMenu extends Screen {
 	
 	private LButton danren,duoren,daoju,shezhi,chengjiu,bangzhu,yuezhan;
+	private LTexture lt;
 //	private LPanel  background;
 
 	@Override
@@ -49,12 +53,16 @@ public class MainMenu extends Screen {
 	@Override
 	public void draw(GLEx g) {
 		// TODO Auto-generated method stub
+		g.setBlendMode(GL.MODE_SPEED);
+		g.drawTexture(lt, 210, 30);
 	}
 	
 	
 	
 	@Override
 	public void onLoad() {
+//		LImage.createImage(fileName)
+		lt = new LTexture(LImage.createImage("assets/metalayer.png"));
 //		background = new LPanel(0, 0, (int)ConfigTool.getConfig().all_w, (int)ConfigTool.getConfig().all_h);
 //		background.setBackground(LImage.createImage(ConfigTool.getConfig().bg_001_light).getTexture());
 		LTexture b=new LTexture(ConfigTool.getConfig().menu_btn_danren1);
