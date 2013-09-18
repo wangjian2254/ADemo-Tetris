@@ -17,7 +17,6 @@ import loon.core.graphics.LImage;
 import loon.core.graphics.device.LTrans;
 import loon.jni.NativeSupport;
 import loon.utils.MathUtils;
-
 import android.util.Log;
 
 /**
@@ -480,8 +479,10 @@ public final class GLEx implements LTrans {
 		GLUtils.disableTexColorArray(gl10);
 		// 禁用纹理贴图
 		GLUtils.disableTextures(gl10);
-		// 设定画布渲染模式为默认
-		this.setBlendMode(GL.MODE_NORMAL);
+//		// 设定画布渲染模式为默认
+//		this.setBlendMode(GL.MODE_NORMAL);
+		// 设定画布渲染模式为speed模式（png半透明显示出来）
+		this.setBlendMode(GL.MODE_SPEED);
 		// 支持VBO则启用VBO加速
 		if (GLEx.vboOn) {
 			try {

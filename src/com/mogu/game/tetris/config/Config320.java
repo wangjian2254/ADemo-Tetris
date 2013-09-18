@@ -30,6 +30,20 @@ public class Config320 extends Config {
 		
 		this.game_pic_topbar_x=7;
 		this.game_pic_topbar_y=5;
+		
+		this.g_p_t_1_x=7;
+		this.g_p_t_1_w=50;
+		this.g_p_t_2_w=45;
+		this.g_p_t_2_x=62;
+		this.g_p_t_3_w=147;
+		this.g_p_t_3_x=110;
+		
+		this.hold_w=62;
+		this.hold_x=1;
+		this.hold_y=101;
+		this.next_x=258;
+		this.hold_f_s=15;
+		
 		this.game_siglemessage_x=10;
 		this.game_siglemessage_y=440;
 		

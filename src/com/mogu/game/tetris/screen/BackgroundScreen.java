@@ -1,6 +1,6 @@
 ﻿package com.mogu.game.tetris.screen;
 
-import com.mogu.game.tetris.config.ConfigTool;
+import com.mogu.game.tetris.config.CT;
 
 import loon.action.sprite.SpriteBatch;
 import loon.core.graphics.opengl.LTexture;
@@ -27,7 +27,7 @@ public class BackgroundScreen extends GameScreen {
 
 	@Override
 	public void LoadContent() {
-		this.background = LTextures.loadTexture(ConfigTool.getConfig().bg_001_light);
+		this.background = LTextures.loadTexture(CT.gC().bg_001_light);
 	}
 
 	@Override

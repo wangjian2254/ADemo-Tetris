@@ -31,6 +31,20 @@ public class Config {
 	public int game_pic_topbar_x=14;
 	public int game_pic_topbar_y=11;
 	
+	public int g_p_t_1_x=14;
+	public int g_p_t_1_w=100;
+	public int g_p_t_2_w=90;
+	public int g_p_t_2_x=124;
+	public int g_p_t_3_w=294;
+	public int g_p_t_3_x=220;
+	
+	public int hold_w=124;
+	public int hold_x=2;
+	public int hold_y=202;
+	public int next_x=517;
+	public int hold_f_s=30;
+	
+	
 	public int game_siglemessage_x=19;
 	public int game_siglemessage_y=881;
 	

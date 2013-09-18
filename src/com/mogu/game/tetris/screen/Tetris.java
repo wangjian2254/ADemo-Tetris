@@ -4,8 +4,10 @@ package com.mogu.game.tetris.screen;
 
 
 import loon.core.graphics.LColor;
+import loon.core.graphics.LFont;
 import loon.core.graphics.Screen;
 import loon.core.graphics.component.LButton;
+import loon.core.graphics.component.LMessage;
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
 import loon.core.graphics.opengl.LTexture.Format;
@@ -13,7 +15,7 @@ import loon.core.input.LTouch;
 import loon.core.timer.LTimer;
 import loon.core.timer.LTimerContext;
 
-import com.mogu.game.tetris.config.ConfigTool;
+import com.mogu.game.tetris.config.CT;
 
 
 
@@ -54,24 +56,9 @@ public class Tetris extends Screen {
 	public Tetris() {
 		
 		
-//		showJieMian();
 	}
 	
-	public void showJieMian(){
-		switch (jiemian) {
-		case 0:
-			if(mainMenu==null){
-				mainMenu=new MainMenu();
-			}
-			setScreen(mainMenu);
-			
-			break;
 
-		case 1:
-			setScreen(this);
-			break;
-		}
-	}
 
 	public void initialize() {
 		if(gameStart){
@@ -144,26 +131,74 @@ public class Tetris extends Screen {
 //
 //	}
 
+	
+	public void drawText(GLEx g,String text,int x,int y,int w,int h,LColor c){
+		LFont old = g.getFont();
+		LFont font=LFont.getFont(h/2);
+		g.setFont(font);
+		if(c==null){
+			g.setColor(LColor.white);
+		}
+		g.drawString(
+				text,
+				x + (w - font.stringWidth(text)) / 2,
+				y + (h - font.getLineHeight()) / 2
+						+ font.getLineHeight());
+		g.setFont(old);
+		g.resetColor();
+	}
+	public void drawHNText(GLEx g,String text,int x,int y,int w,int h,LColor c){
+		LFont old = g.getFont();
+		LFont font=LFont.getFont(h);
+		g.setFont(font);
+		if(c==null){
+			c=LColor.white;
+		}
+		g.drawStyleString(
+				text,
+				x + (w - font.stringWidth(text)) / 2,
+				y + font.getLineHeight(),c,c);
+		g.setFont(old);
+		g.resetColor();
+	}
+	
 	public void drawBackground(GLEx g){
-		g.drawTexture(game_pic_topbar, ConfigTool.getConfig().game_pic_topbar_x, ConfigTool.getConfig().game_pic_topbar_y);
-		g.drawTexture(game_siglemessage, ConfigTool.getConfig().game_siglemessage_x, ConfigTool.getConfig().game_siglemessage_y);
-		g.drawTexture(brand, ConfigTool.getConfig().g_board_x,ConfigTool.getConfig().g_board_y);
-		g.drawTexture(styleImage, ConfigTool.getConfig().g_btn_tool0_x, ConfigTool.getConfig().g_btn_tool0_y);
-		g.drawTexture(styleImage, ConfigTool.getConfig().g_btn_tool1_x, ConfigTool.getConfig().g_btn_tool1_y);
+		g.drawTexture(game_pic_topbar, CT.gC().game_pic_topbar_x, CT.gC().game_pic_topbar_y);
+		g.drawTexture(game_siglemessage, CT.gC().game_siglemessage_x, CT.gC().game_siglemessage_y);
+		g.drawTexture(brand, CT.gC().g_board_x,CT.gC().g_board_y);
+		g.drawTexture(styleImage, CT.gC().g_btn_tool0_x, CT.gC().g_btn_tool0_y);
+		g.drawTexture(styleImage, CT.gC().g_btn_tool1_x, CT.gC().g_btn_tool1_y);
+		drawHNText(g,"HOLD",CT.gC().hold_x,CT.gC().hold_y,CT.gC().hold_w,CT.gC().hold_f_s,null);
+		drawHNText(g,"NEXT",CT.gC().next_x,CT.gC().hold_y,CT.gC().hold_w,CT.gC().hold_f_s,null);
+		drawText(g,"房主",CT.gC().g_p_t_1_x,
+				CT.gC().game_pic_topbar_y,CT.gC().g_p_t_1_w,game_pic_topbar.getHeight(),null);
+		int lv=0;
+		int point=0;
+		if(gameField!=null){
+			lv=gameField.getLevel();
+			point=gameField.getPoints();
+		}
+		drawText(g,"Lv" + Integer.toString(lv),CT.gC().g_p_t_2_x,
+				CT.gC().game_pic_topbar_y,CT.gC().g_p_t_2_w,game_pic_topbar.getHeight(),null);
+		
+		drawText(g,Integer.toString(point),CT.gC().g_p_t_3_x,
+				CT.gC().game_pic_topbar_y,CT.gC().g_p_t_3_w,game_pic_topbar.getHeight(),null);
+		
+//		g.drawString("Lv" + Integer.toString(gameField.getLevel()), ConfigTool.getConfig().game_pic_topbar_x,
+//				ConfigTool.getConfig().game_pic_topbar_y);
+//		g.drawString("房主", ConfigTool.getConfig().game_pic_topbar_x,
+//				ConfigTool.getConfig().game_pic_topbar_y);
+//		g.drawString( Integer.toString(gameField.getPoints()), ConfigTool.getConfig().game_pic_topbar_x+game_pic_topbar.getWidth()/2,
+//				ConfigTool.getConfig().game_pic_topbar_y);
+		
 	}
     
 	public void drawGameBackground(GLEx g){
 		
 		// 绘制游戏方块
-		gameField.drawTexture(g, stonesMin,ConfigTool.getConfig().g_btn_tool1_x,ConfigTool.getConfig().g_btn_tool1_y,styleImage.getWidth(),styleImage.getHeight(),ConfigTool.getConfig().blockSizeMin);
+		gameField.drawTexture(g, stonesMin,CT.gC().g_btn_tool1_x,CT.gC().g_btn_tool1_y,styleImage.getWidth(),styleImage.getHeight(),CT.gC().blockSizeMin);
 		
-		g.setColor(LColor.white);
-		g.drawString("等级:" + Integer.toString(gameField.getLevel()), ConfigTool.getConfig().all_w-80,
-				220);
-		g.drawString("消层:" + Integer.toString(gameField.getLines()), ConfigTool.getConfig().all_w-80,
-				260);
-		g.drawString("得分:" + Integer.toString(gameField.getPoints()), ConfigTool.getConfig().all_w-80,
-				300);
+		
 	}
 
 	@Override
@@ -186,7 +221,7 @@ public class Tetris extends Screen {
 //					g.drawRect(x * blockSize, y * blockSize, blockSize, blockSize);
 					if (arrayStones[x][y] != 0) {
 						
-						g.drawTexture(stones[arrayStones[x][y]], x * ConfigTool.getConfig().blockSize+ConfigTool.getConfig().g_board_x_m, y * ConfigTool.getConfig().blockSize+ConfigTool.getConfig().g_board_y_m);
+						g.drawTexture(stones[arrayStones[x][y]], x * CT.gC().blockSize+CT.gC().g_board_x_m, y * CT.gC().blockSize+CT.gC().g_board_y_m);
 					}
 				}
 			}
@@ -234,7 +269,7 @@ public class Tetris extends Screen {
 	public void touchMove(LTouch e) {
 		move=true;
 		// TODO Auto-generated method stub
-		if(Math.abs(e.getX()-positionX)>ConfigTool.getConfig().movepoint){
+		if(Math.abs(e.getX()-positionX)>CT.gC().movepoint){
 //			int num=(int)(Math.abs(e.getX()-positionX)-ConfigTool.getConfig().movepoint)/ConfigTool.getConfig().movepoint;
 //			for(int i=0;i<num;i++){
 				if(e.getX()-positionX>0){
@@ -254,30 +289,30 @@ public class Tetris extends Screen {
 
 	@Override
 	public void onLoad() {
-		brand = new LTexture(ConfigTool.getConfig().game_board);
+		brand = new LTexture(CT.gC().game_board);
 		
-		LTexture[] btn1={new LTexture(ConfigTool.getConfig().topbar_btn_zhanting1),new LTexture(ConfigTool.getConfig().topbar_btn_zhanting2)};
-		zanting=new  LButton(btn1, null, btn1[0].getWidth(), btn1[0].getHeight(), ConfigTool.getConfig().topbar_btn_yuezhan_x, ConfigTool.getConfig().topbar_btn_yuezhan_y){
+		LTexture[] btn1={new LTexture(CT.gC().topbar_btn_zhanting1),new LTexture(CT.gC().topbar_btn_zhanting2)};
+		zanting=new  LButton(btn1, null, btn1[0].getWidth(), btn1[0].getHeight(), CT.gC().topbar_btn_yuezhan_x, CT.gC().topbar_btn_yuezhan_y){
 			@Override
 			public void doClick(){
 			}
 		};
 		add(zanting);
 		
-		game_pic_topbar = new LTexture(ConfigTool.getConfig().game_pic_topbar);
-		game_siglemessage = new LTexture(ConfigTool.getConfig().game_siglemessage);
+		game_pic_topbar = new LTexture(CT.gC().game_pic_topbar);
+		game_siglemessage = new LTexture(CT.gC().game_siglemessage);
 		// 提示背景
-		styleImage = new LTexture(ConfigTool.getConfig().game_btn_tools1);
-		LTexture b=new LTexture(ConfigTool.getConfig().pic_fangkuai_highlight);
-		LTexture b2=new LTexture(ConfigTool.getConfig().pic_fangkuai_med);
+		styleImage = new LTexture(CT.gC().game_btn_tools1);
+		LTexture b=new LTexture(CT.gC().pic_fangkuai_highlight);
+		LTexture b2=new LTexture(CT.gC().pic_fangkuai_med);
 		// 俄罗斯方块小图
 //				LImage[] blocks = new LTexture(8, blockSize, blockSize, true);
 		for (int i = 0; i < 8; i++) {
-			stones[i + 1] = b.getSubTexture(i*ConfigTool.getConfig().blockSize, 0, ConfigTool.getConfig().blockSize, ConfigTool.getConfig().blockSize);
-			stonesMin[i + 1] = b2.getSubTexture(i*ConfigTool.getConfig().blockSizeMin, 0, ConfigTool.getConfig().blockSizeMin, ConfigTool.getConfig().blockSizeMin);
+			stones[i + 1] = b.getSubTexture(i*CT.gC().blockSize, 0, CT.gC().blockSize, CT.gC().blockSize);
+			stonesMin[i + 1] = b2.getSubTexture(i*CT.gC().blockSizeMin, 0, CT.gC().blockSizeMin, CT.gC().blockSizeMin);
 		}
 		delay = new LTimer(100);
-		setBackground(ConfigTool.getConfig().bg_001_light);
+		setBackground(CT.gC().bg_001_light);
 	}
 
 	@Override
