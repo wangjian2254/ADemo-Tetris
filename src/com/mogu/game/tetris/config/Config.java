@@ -2,18 +2,20 @@ package com.mogu.game.tetris.config;
 
 public class Config {
 
-	public  float all_w=640;
-	public  float all_h=960;
+	public  int all_w=640;
+	public  int all_h=960;
 	public int movepoint=64;
 	public int blockSize=38;
 	public int blockSizeMin=20;
-	public  float g_btn_tool0_x=2;
-	public  float g_btn_tool0_y=84;
-	public  float g_btn_tool1_x=517;
-	public  float g_btn_tool1_y=84;
-	public  float g_board_x=107;
+	public  float g_hold_x=2;
+	public  float g_hold_y=84;
+	public  float g_next_x=517;
+	public  float g_btn_tool0_y=227;
+	public  float g_btn_tool1_y=351;
+	public  float g_btn_tool2_y=475;
+	public  float g_board_x=107;//格子板x
 	public  float g_board_y=74;
-	public  float g_board_x_m=133;
+	public  float g_board_x_m=133;//方块起始x
 	public  float g_board_y_m=100;
 	
 	public int main_menu_btn_x=99;
@@ -28,6 +30,16 @@ public class Config {
 	public int topbar_btn_bangzhu_y=5;
 	public int topbar_btn_yuezhan_x=516;
 	public int topbar_btn_yuezhan_y=5;
+	
+	public int h_b_x=54;
+	public int h_b_y=90;
+	public int h_c_x=85;
+	public int h_c_y=117;
+	public int h_c_y2=207;
+	public int h_c_w=480;
+	public int h_c_h0=90;
+	public int h_c_h=630;
+	
 	public int game_pic_topbar_x=14;
 	public int game_pic_topbar_y=11;
 	
@@ -42,11 +54,26 @@ public class Config {
 	public int hold_x=2;
 	public int hold_y=202;
 	public int next_x=517;
-	public int hold_f_s=30;
+	public int hold_f_s=28;
 	
 	
 	public int game_siglemessage_x=19;
 	public int game_siglemessage_y=881;
+	
+	
+	public int zt_board_x=84;
+	public int zt_board_y=113;
+	
+	public int zt_btn_w=309;
+	public int zt_btn_h=100;
+	public int zt_btn_x=168;
+	public int zt_btn1_y=164;
+	public int zt_btn2_y=266;
+	public int zt_btn3_y=368;
+	public int zt_btn4_y=470;
+	public int zt_btn5_y=572;
+	public int zt_btn6_y=674;
+	
 	
 	
 	public String basedir="assets/640_960/";
@@ -80,9 +107,28 @@ public class Config {
 		this.topbar_btn_zhanting1=basedir+"topbar_btn_zhanting1.png";
 		this.topbar_btn_zhanting2=basedir+"topbar_btn_zhanting2.png";
 		
+		this.topbar_btn_fanhui1=basedir+"topbar_btn_fanhui1.png";
+		this.topbar_btn_fanhui2=basedir+"topbar_btn_fanhui2.png";
+		this.help_block=basedir+"help_kuang.png";
+		
 		this.game_pic_topbar=basedir+"game_pic_topbar.png";
 		this.game_siglemessage=basedir+"game_siglemessage.png";
 		this.speechbubble2=basedir+"speechbubble2.png";
+		
+		this.zt_block=basedir+"pic_fangkuai_block.png";
+		this.zt_ban=basedir+"pause_ban.png";
+		this.zt_btn1_1=basedir+"pause_btn_jixu1.png";
+		this.zt_btn1_2=basedir+"pause_btn_jixu2.png";
+		this.zt_btn2_1=basedir+"pause_btn_chongzhi1.png";
+		this.zt_btn2_2=basedir+"pause_btn_chongzhi2.png";
+		this.zt_btn3_1=basedir+"pause_btn_bangzhu1.png";
+		this.zt_btn3_2=basedir+"pause_btn_bangzhu2.png";
+		this.zt_btn4_1=basedir+"pause_btn_shezhi1.png";
+		this.zt_btn4_2=basedir+"pause_btn_shezhi2.png";
+		this.zt_btn5_1=basedir+"pause_btn_daoju1.png";
+		this.zt_btn5_2=basedir+"pause_btn_daoju2.png";
+		this.zt_btn6_1=basedir+"pause_btn_zhucai1.png";
+		this.zt_btn6_2=basedir+"pause_btn_zhucai2.png";
 	}
 	public String game_board=null;
 	public String bg_001_light=null;
@@ -107,10 +153,29 @@ public class Config {
 	public String topbar_btn_yuezhan2=null;
 	public String topbar_btn_zhanting1=null;
 	public String topbar_btn_zhanting2=null;
+	public String topbar_btn_fanhui1=null;
+	public String topbar_btn_fanhui2=null;
+	
+	public String help_block=null;
 	
 	public String game_pic_topbar=null;
 	public String game_siglemessage=null;
 	public String speechbubble2=null;
+	
+	public String zt_block="pic_fangkuai_block.png";
+	public String zt_ban="pause_ban.png";
+	public String zt_btn1_1="pause_btn_jixu1.png";
+	public String zt_btn1_2="pause_btn_jixu2.png";
+	public String zt_btn2_1="pause_btn_chongzhi1.png";
+	public String zt_btn2_2="pause_btn_chongzhi2.png";
+	public String zt_btn3_1="pause_btn_bangzhu1.png";
+	public String zt_btn3_2="pause_btn_bangzhu2.png";
+	public String zt_btn4_1="pause_btn_shezhi1.png";
+	public String zt_btn4_2="pause_btn_shezhi2.png";
+	public String zt_btn5_1="pause_btn_daoju1.png";
+	public String zt_btn5_2="pause_btn_daoju2.png";
+	public String zt_btn6_1="pause_btn_zhucai1.png";
+	public String zt_btn6_2="pause_btn_zhucai2.png";
 	
 	
 	

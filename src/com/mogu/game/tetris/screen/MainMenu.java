@@ -1,6 +1,8 @@
 package com.mogu.game.tetris.screen;
 
 
+import loon.LSetting;
+import loon.core.LSystem;
 import loon.core.graphics.Screen;
 import loon.core.graphics.component.LButton;
 import loon.core.graphics.opengl.GLEx;
@@ -8,8 +10,11 @@ import loon.core.graphics.opengl.LTexture;
 import loon.core.graphics.opengl.LTextures;
 import loon.core.input.LTouch;
 import loon.core.timer.LTimerContext;
+import android.content.Intent;
+import android.os.Bundle;
 import android.util.Log;
 
+import com.mogu.game.tetris.MainMenuActivity;
 import com.mogu.game.tetris.config.CT;
 
 public class MainMenu extends Screen {
@@ -86,14 +91,17 @@ public class MainMenu extends Screen {
 		chengjiu=new  LButton(btn5, null, btn1[0].getWidth(), btn1[0].getHeight(), CT.gC().main_menu_btn_x, CT.gC().main_menu_btn5_y){
 			@Override
 			public void doClick(){
-				Log.d("game_btn", "5");
+				Intent mainIntent = new Intent(LSystem.screenActivity,MainMenuActivity.class);
+		    	Bundle extras=new Bundle();
+		    	mainIntent.putExtras(extras);
+		    	LSystem.screenActivity.startActivity(mainIntent); 
 			}
 		};
 		LTexture[] btn6={new LTexture(CT.gC().topbar_btn_bangzhu1),new LTexture(CT.gC().topbar_btn_bangzhu2)};
 		bangzhu=new  LButton(btn6, null, btn6[0].getWidth(), btn6[0].getHeight(), CT.gC().topbar_btn_bangzhu_x, CT.gC().topbar_btn_bangzhu_y){
 			@Override
 			public void doClick(){
-				Log.d("game_btn", "6");
+				replaceScreen(new Help(MainMenu.this), MoveMethod.FROM_RIGHT);
 			}
 		};
 		LTexture[] btn7={new LTexture(CT.gC().topbar_btn_yuezhan1),new LTexture(CT.gC().topbar_btn_yuezhan2)};

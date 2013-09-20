@@ -46,8 +46,8 @@ public class MainActivity extends LGame {
 		LSetting setting = new LSetting();
 		setting.mode=LMode.Fill;
 		setting.showMemory=false;
-		setting.width = w;
-		setting.height = h;
+		setting.width = CT.gC().all_w;
+		setting.height = CT.gC().all_h;
 		setting.showFPS = false;
 		setting.fps = 10;
 		setting.landscape = false;

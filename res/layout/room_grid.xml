@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+				android:layout_width="fill_parent"
+			    android:layout_height="fill_parent">
+			
+			    <GridView android:id="@+id/gridAppView"
+				android:layout_width="fill_parent"
+			    android:layout_height="fill_parent"
+			    android:drawSelectorOnTop="false"
+			    android:columnWidth="115dip" 
+			    android:numColumns="3" 
+			    android:verticalSpacing="5dip" 
+			    android:horizontalSpacing="0px" 
+			    android:stretchMode="columnWidth" 
+			    android:gravity="center|center" 
+			    />
+			   
+	
+</LinearLayout>

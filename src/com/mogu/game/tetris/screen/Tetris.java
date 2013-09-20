@@ -6,11 +6,14 @@ package com.mogu.game.tetris.screen;
 import loon.core.graphics.LColor;
 import loon.core.graphics.LFont;
 import loon.core.graphics.Screen;
+import loon.core.graphics.Screen.MoveMethod;
 import loon.core.graphics.component.LButton;
 import loon.core.graphics.component.LMessage;
+import loon.core.graphics.opengl.GL;
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
 import loon.core.graphics.opengl.LTexture.Format;
+import loon.core.graphics.opengl.LTextures;
 import loon.core.input.LTouch;
 import loon.core.timer.LTimer;
 import loon.core.timer.LTimerContext;
@@ -27,7 +30,7 @@ public class Tetris extends Screen {
 
 	private boolean gameStart=false;
 
-//	private final static LColor emptyColor = new LColor(120, 120, 190,90),
+	private final static LColor emptyColor = new LColor(0f, 0f, 0f,0.3f);
 //			gridColor = new LColor(255, 255, 255,25);
 
 	private LTimer delay;
@@ -37,9 +40,9 @@ public class Tetris extends Screen {
 	private LTexture[] stones = new LTexture[9];
 	private LTexture[] stonesMin = new LTexture[9];
 
-	private LTexture  styleImage,brand,game_pic_topbar,game_siglemessage;
+	private LTexture  styleImage,pause_btn,brand,game_pic_topbar,game_siglemessage,pause_board,black_block;
 	
-	private LButton zanting;
+	private LButton zanting,jixu,reset,bangzhu,shezhi,daoju,mainmenu;
 	
 
 //	public int xm=Config.getW(106+26);
@@ -49,6 +52,7 @@ public class Tetris extends Screen {
 	public float positionY;
 	public boolean move=false;
 	
+	public boolean isDo=false;
 	public int jiemian=0;
 	
 	public MainMenu mainMenu=null;
@@ -98,39 +102,6 @@ public class Tetris extends Screen {
 
 	
 
-	/**
-	 * 点击键盘
-	 */
-//	public void onKey(KeyEvent e) {
-//		int key = e.getKeyCode();
-//	if (gameStart) {
-//		// 转换方向
-//		if (key == KeyEvent.VK_UP) {
-//			gameField.rotateStone();
-//			// 向右
-//		} else if (key == KeyEvent.VK_RIGHT) {
-//			gameField.rightPositionX();
-//			// 向左
-//		} else if (key == KeyEvent.VK_LEFT) {
-//			gameField.leftPositionX();
-//			// 加速向下
-//		} else if (key == KeyEvent.VK_DOWN) {
-//			gameField.incrementPositionY(true);
-//			// 重启游戏
-//		} else if (key == KeyEvent.VK_ESCAPE) {
-//			if (gameField != null && gameField.isGameOver()) {
-//				initialize();
-//			}
-//		}
-//	} else {
-//		// 开始游戏
-//		if (key == KeyEvent.VK_ENTER) {
-//			initialize();
-//		}
-//	}
-//
-//	}
-
 	
 	public void drawText(GLEx g,String text,int x,int y,int w,int h,LColor c){
 		LFont old = g.getFont();
@@ -164,10 +135,16 @@ public class Tetris extends Screen {
 	
 	public void drawBackground(GLEx g){
 		g.drawTexture(game_pic_topbar, CT.gC().game_pic_topbar_x, CT.gC().game_pic_topbar_y);
+		g.drawTexture(pause_btn, CT.gC().topbar_btn_yuezhan_x, CT.gC().topbar_btn_yuezhan_y);
+		
 		g.drawTexture(game_siglemessage, CT.gC().game_siglemessage_x, CT.gC().game_siglemessage_y);
 		g.drawTexture(brand, CT.gC().g_board_x,CT.gC().g_board_y);
-		g.drawTexture(styleImage, CT.gC().g_btn_tool0_x, CT.gC().g_btn_tool0_y);
-		g.drawTexture(styleImage, CT.gC().g_btn_tool1_x, CT.gC().g_btn_tool1_y);
+		g.drawTexture(styleImage, CT.gC().g_hold_x, CT.gC().g_hold_y);
+		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_hold_y);
+		
+		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_btn_tool0_y);
+		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_btn_tool1_y);
+		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_btn_tool2_y);
 		drawHNText(g,"HOLD",CT.gC().hold_x,CT.gC().hold_y,CT.gC().hold_w,CT.gC().hold_f_s,null);
 		drawHNText(g,"NEXT",CT.gC().next_x,CT.gC().hold_y,CT.gC().hold_w,CT.gC().hold_f_s,null);
 		drawText(g,"房主",CT.gC().g_p_t_1_x,
@@ -196,8 +173,18 @@ public class Tetris extends Screen {
 	public void drawGameBackground(GLEx g){
 		
 		// 绘制游戏方块
-		gameField.drawTexture(g, stonesMin,CT.gC().g_btn_tool1_x,CT.gC().g_btn_tool1_y,styleImage.getWidth(),styleImage.getHeight(),CT.gC().blockSizeMin);
+		gameField.drawTexture(g, stonesMin,CT.gC().g_next_x,CT.gC().g_hold_y,styleImage.getWidth(),styleImage.getHeight(),CT.gC().blockSizeMin);
 		
+		if(gameStart&&!delay.isActive()){
+//			int old=g.getBlendMode();
+//			g.setBlendMode(GL.MODE_NORMAL);
+//			g.setColor(emptyColor);
+//			g.fillRect(0,0,CT.gC().all_w,CT.gC().all_h);
+//			g.drawClear(emptyColor);
+//			g.setBlendMode(old);
+			g.drawTexture(black_block, 0, 0);
+			g.drawTexture(pause_board, CT.gC().zt_board_x, CT.gC().zt_board_y);
+		}
 		
 	}
 
@@ -246,6 +233,11 @@ public class Tetris extends Screen {
 		positionX=e.getX();
 		positionY=e.getY();
 		move=false;
+		if(positionX>CT.gC().g_board_x&&positionX<CT.gC().g_next_x&&positionY>CT.gC().g_board_y){
+			isDo=true;
+		}else{
+			isDo=false;
+		}
 	}
 
 	@Override
@@ -253,7 +245,7 @@ public class Tetris extends Screen {
 		// TODO Auto-generated method stub
 		if(gameStart&&!gameField.isGameOver()){
 			
-			if(!move){
+			if(!move&&isDo){
 				gameField.rotateStone();
 			}
 			
@@ -263,42 +255,114 @@ public class Tetris extends Screen {
 		}
 		positionX=0;
 		positionY=0;
+		isDo=false;
 	}
 
 	@Override
 	public void touchMove(LTouch e) {
-		move=true;
-		// TODO Auto-generated method stub
-		if(Math.abs(e.getX()-positionX)>CT.gC().movepoint){
-//			int num=(int)(Math.abs(e.getX()-positionX)-ConfigTool.getConfig().movepoint)/ConfigTool.getConfig().movepoint;
-//			for(int i=0;i<num;i++){
-				if(e.getX()-positionX>0){
-					
-					gameField.rightPositionX();
-				}else{
-					gameField.leftPositionX();
+		if(isDo){
+			move=true;
+			// TODO Auto-generated method stub
+			if(Math.abs(e.getX()-positionX)>CT.gC().movepoint){
+					if(e.getX()-positionX>0){
+						
+						gameField.rightPositionX();
+					}else{
+						gameField.leftPositionX();
+					}
+			}else if(Math.abs(e.getY()-positionY)>CT.gC().movepoint){
+				if(e.getY()-positionY>0){
+					gameField.incrementPositionY(true);
 				}
-//			}
-				positionX=e.getX();
-				positionY=e.getY();
+			}else{
+				return;
+			}
+			positionX=e.getX();
+			positionY=e.getY();
 		}
-		
 	}
 
+	public void setShowPause(boolean v){
+		zanting.setVisible(!v);
+		jixu.setVisible(v);
+		reset.setVisible(v);
+		bangzhu.setVisible(v);
+		shezhi.setVisible(v);
+		daoju.setVisible(v);
+		mainmenu.setVisible(v);
+	}
 	
 
 	@Override
 	public void onLoad() {
 		brand = new LTexture(CT.gC().game_board);
+		black_block = LTextures.loadTexture(CT.gC().zt_block).getSubTexture(19, 0, 19, 19).scale(CT.gC().all_w, CT.gC().all_h);
+		
+		pause_btn=LTextures.loadTexture(CT.gC().topbar_btn_zhanting1);
 		
 		LTexture[] btn1={new LTexture(CT.gC().topbar_btn_zhanting1),new LTexture(CT.gC().topbar_btn_zhanting2)};
 		zanting=new  LButton(btn1, null, btn1[0].getWidth(), btn1[0].getHeight(), CT.gC().topbar_btn_yuezhan_x, CT.gC().topbar_btn_yuezhan_y){
 			@Override
 			public void doClick(){
+				delay.stop();
+				setShowPause(true);
+				
 			}
 		};
 		add(zanting);
 		
+		LTexture[] ztn1={LTextures.loadTexture(CT.gC().zt_btn1_1),LTextures.loadTexture(CT.gC().zt_btn1_2)};
+		jixu=new LButton(ztn1,null,CT.gC().zt_btn_w,CT.gC().zt_btn_h,CT.gC().zt_btn_x,CT.gC().zt_btn1_y){
+			@Override
+			public void doClick(){
+				delay.start();
+				setShowPause(false);
+			}
+		};
+		
+		LTexture[] ztn2={LTextures.loadTexture(CT.gC().zt_btn2_1),LTextures.loadTexture(CT.gC().zt_btn2_2)};
+		reset=new LButton(ztn2,null,CT.gC().zt_btn_w,CT.gC().zt_btn_h,CT.gC().zt_btn_x,CT.gC().zt_btn2_y){
+			@Override
+			public void doClick(){
+			}
+		};
+		LTexture[] ztn3={LTextures.loadTexture(CT.gC().zt_btn3_1),LTextures.loadTexture(CT.gC().zt_btn3_2)};
+		bangzhu=new LButton(ztn3,null,CT.gC().zt_btn_w,CT.gC().zt_btn_h,CT.gC().zt_btn_x,CT.gC().zt_btn3_y){
+			@Override
+			public void doClick(){
+				replaceScreen(new Help(Tetris.this), MoveMethod.FROM_RIGHT);
+			}
+		};
+		LTexture[] ztn4={LTextures.loadTexture(CT.gC().zt_btn4_1),LTextures.loadTexture(CT.gC().zt_btn4_2)};
+		shezhi=new LButton(ztn4,null,CT.gC().zt_btn_w,CT.gC().zt_btn_h,CT.gC().zt_btn_x,CT.gC().zt_btn4_y){
+			@Override
+			public void doClick(){
+			}
+		};
+		LTexture[] ztn5={LTextures.loadTexture(CT.gC().zt_btn5_1),LTextures.loadTexture(CT.gC().zt_btn5_2)};
+		daoju=new LButton(ztn5,null,CT.gC().zt_btn_w,CT.gC().zt_btn_h,CT.gC().zt_btn_x,CT.gC().zt_btn5_y){
+			@Override
+			public void doClick(){
+			}
+		};
+		LTexture[] ztn6={LTextures.loadTexture(CT.gC().zt_btn6_1),LTextures.loadTexture(CT.gC().zt_btn6_2)};
+		mainmenu=new LButton(ztn6,null,CT.gC().zt_btn_w,CT.gC().zt_btn_h,CT.gC().zt_btn_x,CT.gC().zt_btn6_y){
+			@Override
+			public void doClick(){
+			}
+		};
+		
+		add(jixu);
+		add(reset);
+		add(bangzhu);
+		add(shezhi);
+		add(daoju);
+		add(mainmenu);
+		//
+		
+		
+		
+		pause_board = new LTexture(CT.gC().zt_ban);
 		game_pic_topbar = new LTexture(CT.gC().game_pic_topbar);
 		game_siglemessage = new LTexture(CT.gC().game_siglemessage);
 		// 提示背景
@@ -313,6 +377,8 @@ public class Tetris extends Screen {
 		}
 		delay = new LTimer(100);
 		setBackground(CT.gC().bg_001_light);
+		
+		setShowPause(false);
 	}
 
 	@Override
