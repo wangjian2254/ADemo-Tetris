@@ -46,7 +46,10 @@ public class MainMenuActivity extends Activity {
 		    	startActivity(mainIntent); 
 				break;
 			case R.id.duoren:
-				
+				Intent mainIntent2 = new Intent(this,GameDaTing.class);
+		    	Bundle extras2=new Bundle();
+		    	mainIntent2.putExtras(extras2);
+		    	startActivity(mainIntent2); 
 				break;
 			case R.id.daoju:
 				

@@ -3,7 +3,7 @@
 				android:layout_width="fill_parent"
 			    android:layout_height="fill_parent">
 			
-			    <GridView android:id="@+id/gridAppView"
+			    <GridView android:id="@+id/gridRoomView"
 				android:layout_width="fill_parent"
 			    android:layout_height="fill_parent"
 			    android:drawSelectorOnTop="false"

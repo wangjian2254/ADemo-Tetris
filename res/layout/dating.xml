@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:background="@drawable/bg_001_light"
     android:orientation="vertical" >
      <RelativeLayout 
-        
+         android:id="@+id/top_btn"
+        android:layout_alignParentTop="true"
         android:layout_width="fill_parent"
     android:layout_height="wrap_content">
         <Button 
@@ -27,35 +28,77 @@
 	    android:onClick="onBtnClick"
 	    />
     </RelativeLayout>
-     <LinearLayout
+    <LinearLayout  
+        android:layout_below="@id/top_btn"
+        android:id="@+id/natv"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
+        android:orientation="horizontal" 
+        android:gravity="center|center"
+        >
+        <ImageView 
+            android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="100dip"
+            android:src="@drawable/lobby_btn_new2"
+            />
+        <ImageView 
+            android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="100dip"
+            android:src="@drawable/lobby_btn_open1"
+            />
+        <ImageView 
+            android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="100dip"
+            android:src="@drawable/lobby_btn_all1"
+            />
+    </LinearLayout>
+     <LinearLayout
+         android:layout_below="@id/natv"
+         android:layout_above="@+id/viewGroup"
+        android:id="@+id/viewpager"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
         android:orientation="vertical" >
-	    
-	    <android.support.v4.view.ViewPager
-	        android:id="@+id/guidePages"
-	        android:layout_width="fill_parent"
-	        android:layout_height="wrap_content"/>
+
+         <android.support.v4.view.ViewPager
+             android:id="@+id/guidePages"
+             android:layout_width="fill_parent"
+             android:layout_height="fill_parent" >
+         </android.support.v4.view.ViewPager>
     	
 	   </LinearLayout>
 	   
-    <LinearLayout
-        android:id="@+id/linearLayout01"
+   
+    <LinearLayout  
+        android:id="@+id/viewGroup"  
+        android:layout_above="@+id/linearLayout01"
+        android:layout_width="fill_parent"  
+        android:layout_height="20dip"  
+        android:gravity="center|center"  
+        android:orientation="horizontal" >  
+        
+    </LinearLayout> 
+     <LinearLayout
+        android:id="@id/linearLayout01"
+        android:layout_alignParentBottom="true"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:gravity="center|bottom"
-        android:orientation="vertical" >
+        android:orientation="horizontal" >
         
-  
+  <Button 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/lobby_btn_chuangjianfangjian"
+            />
+        <Button 
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/lobby_btn_kuaishuyouxi"
+            />
         
-    <LinearLayout  
-        android:id="@+id/viewGroup"  
-        android:layout_width="fill_parent"  
-        android:layout_height="wrap_content"  
-        android:layout_marginBottom="40dp"  
-        android:gravity="center_horizontal"  
-        android:orientation="horizontal" >  
-        
-    </LinearLayout>  
-    </LinearLayout>
-</FrameLayout>
+    </LinearLayout> 
+</RelativeLayout>
