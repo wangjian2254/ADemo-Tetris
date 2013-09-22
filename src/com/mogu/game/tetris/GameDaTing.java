@@ -9,6 +9,7 @@ import org.apache.http.message.BasicNameValuePair;
 import com.liyu.pluginframe.beans.UserInfo;
 import com.liyu.pluginframe.util.UrlSync;
 import com.liyu.pluginframe.util.UrlTask;
+import com.mogu.game.tetris.adapter.RoomAdapter;
 import com.mogu.game.tetris.model.Player;
 import com.mogu.game.tetris.model.Room;
 import com.mogu.game.tetris.util.RoomSync;

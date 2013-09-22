@@ -1,4 +1,4 @@
-package com.mogu.game.tetris;
+package com.mogu.game.tetris.adapter;
 
 import java.util.List;
 
@@ -10,6 +10,10 @@ import android.widget.BaseAdapter;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.mogu.game.tetris.R;
+import com.mogu.game.tetris.R.id;
+import com.mogu.game.tetris.R.layout;
+import com.mogu.game.tetris.R.style;
 import com.mogu.game.tetris.model.Player;
 import com.mogu.game.tetris.model.Room;
 

@@ -129,6 +129,9 @@ public class Config {
 		this.zt_btn5_2=basedir+"pause_btn_daoju2.png";
 		this.zt_btn6_1=basedir+"pause_btn_zhucai1.png";
 		this.zt_btn6_2=basedir+"pause_btn_zhucai2.png";
+		
+		
+		this.tools_pic_boom=basedir+"tools_pic_boom.png";
 	}
 	public String game_board=null;
 	public String bg_001_light=null;
@@ -176,6 +179,9 @@ public class Config {
 	public String zt_btn5_2="pause_btn_daoju2.png";
 	public String zt_btn6_1="pause_btn_zhucai1.png";
 	public String zt_btn6_2="pause_btn_zhucai2.png";
+	
+	
+	public String tools_pic_boom=null;
 	
 	
 	

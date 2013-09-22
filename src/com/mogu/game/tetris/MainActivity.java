@@ -51,7 +51,7 @@ public class MainActivity extends LGame {
 		setting.showFPS = false;
 		setting.fps = 10;
 		setting.landscape = false;
-		register(setting, MainMenu.class);
+		register(setting, Tetris.class);
 		
 	}
 

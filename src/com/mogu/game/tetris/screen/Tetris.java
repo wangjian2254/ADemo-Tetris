@@ -19,6 +19,8 @@ import loon.core.timer.LTimer;
 import loon.core.timer.LTimerContext;
 
 import com.mogu.game.tetris.config.CT;
+import com.mogu.game.tetris.model.DaoJu;
+import com.mogu.game.tetris.model.ZhaDan;
 
 
 
@@ -57,9 +59,16 @@ public class Tetris extends Screen {
 	
 	public MainMenu mainMenu=null;
 	
+	public DaoJu[] djs=new DaoJu[3];
+	
 	public Tetris() {
 		
-		
+		djs[0]=new ZhaDan();
+		djs[0].setPos(CT.gC().g_next_x,CT.gC().g_btn_tool0_y,CT.gC().hold_w,CT.gC().hold_w);
+		djs[1]=new ZhaDan();
+		djs[1].setPos(CT.gC().g_next_x,CT.gC().g_btn_tool1_y,CT.gC().hold_w,CT.gC().hold_w);
+		djs[2]=new ZhaDan();
+		djs[2].setPos(CT.gC().g_next_x,CT.gC().g_btn_tool2_y,CT.gC().hold_w,CT.gC().hold_w);
 	}
 	
 
@@ -77,7 +86,7 @@ public class Tetris extends Screen {
 	
 	public void alter(LTimerContext timer) {
 		// 自动计时
-		if (delay.action(timer.getTimeSinceLastUpdate())) {
+		if (delay!=null&&delay.action(timer.getTimeSinceLastUpdate())) {
 			// 已初始化并且非游戏失败
 			if (gameStart && !gameField.isGameOver()) {
 				if (!gameField.incrementPositionY(true)) {
@@ -145,6 +154,9 @@ public class Tetris extends Screen {
 		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_btn_tool0_y);
 		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_btn_tool1_y);
 		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_btn_tool2_y);
+		for(DaoJu d:djs){
+			g.drawTexture(d.getImg(), d.getX0(), d.getY0());
+		}
 		drawHNText(g,"HOLD",CT.gC().hold_x,CT.gC().hold_y,CT.gC().hold_w,CT.gC().hold_f_s,null);
 		drawHNText(g,"NEXT",CT.gC().next_x,CT.gC().hold_y,CT.gC().hold_w,CT.gC().hold_f_s,null);
 		drawText(g,"房主",CT.gC().g_p_t_1_x,
