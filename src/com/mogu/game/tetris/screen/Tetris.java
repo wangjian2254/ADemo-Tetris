@@ -60,6 +60,7 @@ public class Tetris extends Screen {
 	public MainMenu mainMenu=null;
 	
 	public DaoJu[] djs=new DaoJu[3];
+	public DaoJu currentDaoJu=null;
 	
 	public Tetris() {
 		
@@ -96,7 +97,11 @@ public class Tetris extends Screen {
 						curLevel = gameField.getLevel();
 					}
 				}
-				delay.setDelay(300 / curLevel);
+				delay.setDelay(1000 / curLevel);
+				
+				if(currentDaoJu!=null&&currentDaoJu.getUsed()==0){
+					currentDaoJu.setUsed(1);
+				}
 			}else if(gameField!=null&&gameField.isGameOver()){
 				if(jiemian==0){
 					replaceScreen(new MainMenu(), MoveMethod.FROM_LEFT);
@@ -155,7 +160,10 @@ public class Tetris extends Screen {
 		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_btn_tool1_y);
 		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_btn_tool2_y);
 		for(DaoJu d:djs){
-			g.drawTexture(d.getImg(), d.getX0(), d.getY0());
+			if(d!=null){
+				
+				g.drawTexture(d.getImg(), d.getX0(), d.getY0());
+			}
 		}
 		drawHNText(g,"HOLD",CT.gC().hold_x,CT.gC().hold_y,CT.gC().hold_w,CT.gC().hold_f_s,null);
 		drawHNText(g,"NEXT",CT.gC().next_x,CT.gC().hold_y,CT.gC().hold_w,CT.gC().hold_f_s,null);
@@ -188,14 +196,17 @@ public class Tetris extends Screen {
 		gameField.drawTexture(g, stonesMin,CT.gC().g_next_x,CT.gC().g_hold_y,styleImage.getWidth(),styleImage.getHeight(),CT.gC().blockSizeMin);
 		
 		if(gameStart&&!delay.isActive()){
-//			int old=g.getBlendMode();
-//			g.setBlendMode(GL.MODE_NORMAL);
-//			g.setColor(emptyColor);
-//			g.fillRect(0,0,CT.gC().all_w,CT.gC().all_h);
-//			g.drawClear(emptyColor);
-//			g.setBlendMode(old);
+
 			g.drawTexture(black_block, 0, 0);
 			g.drawTexture(pause_board, CT.gC().zt_board_x, CT.gC().zt_board_y);
+		}
+		if(currentDaoJu!=null){
+			if(currentDaoJu.getUsed()==1){
+				currentDaoJu.commit(g,gameField);
+			}
+			if(currentDaoJu.getUsed()==2){
+				currentDaoJu=null;
+			}
 		}
 		
 	}
@@ -233,8 +244,8 @@ public class Tetris extends Screen {
 			drawGameBackground(g);
 		} else {
 			g.setColor(LColor.white);
-			g.drawString("GAME START", 110, 160);
-			g.drawString("请按下 [ENTER]", 105, 200);
+//			g.drawString("", 110, 160);
+			g.drawString("轻触屏幕，游戏开始", 105, 200);
 		}
 		}
 	}
@@ -259,6 +270,21 @@ public class Tetris extends Screen {
 			
 			if(!move&&isDo){
 				gameField.rotateStone();
+			}
+			if(!move){
+				
+				int i=0;
+				for(DaoJu d:djs){
+					if(d.isClick(e.getX(), e.getY())){
+						currentDaoJu=d;
+						break;
+					}
+					i++;
+				}
+				if(currentDaoJu!=null){
+					djs[i]=null;
+				}
+				
 			}
 			
 		}else{
@@ -387,7 +413,7 @@ public class Tetris extends Screen {
 			stones[i + 1] = b.getSubTexture(i*CT.gC().blockSize, 0, CT.gC().blockSize, CT.gC().blockSize);
 			stonesMin[i + 1] = b2.getSubTexture(i*CT.gC().blockSizeMin, 0, CT.gC().blockSizeMin, CT.gC().blockSizeMin);
 		}
-		delay = new LTimer(100);
+		delay = new LTimer(1000);
 		setBackground(CT.gC().bg_001_light);
 		
 		setShowPause(false);

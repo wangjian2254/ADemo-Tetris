@@ -216,7 +216,7 @@ public class TetrisField {
 			curLines += Quantity;
 			curLevel = Math.round(curLines / row) + 1;
 
-			// ���ȼ�Ϊ20
+			// 最大等级20
 			if (curLevel > 20) {
 				curLevel = 20;
 			}
