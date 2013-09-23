@@ -20,6 +20,7 @@ import loon.core.timer.LTimerContext;
 
 import com.mogu.game.tetris.config.CT;
 import com.mogu.game.tetris.model.DaoJu;
+import com.mogu.game.tetris.model.MiWu;
 import com.mogu.game.tetris.model.ZhaDan;
 
 
@@ -64,12 +65,14 @@ public class Tetris extends Screen {
 	
 	public Tetris() {
 		
-		djs[0]=new ZhaDan();
+		djs[0]=new MiWu();
+		djs[0].setImg(LTextures.loadTexture(CT.gC().tools_pic_wu));
 		djs[0].setPos(CT.gC().g_next_x,CT.gC().g_btn_tool0_y,CT.gC().hold_w,CT.gC().hold_w);
 		djs[1]=new ZhaDan();
+		djs[1].setImg(LTextures.loadTexture(CT.gC().tools_pic_boom));
 		djs[1].setPos(CT.gC().g_next_x,CT.gC().g_btn_tool1_y,CT.gC().hold_w,CT.gC().hold_w);
-		djs[2]=new ZhaDan();
-		djs[2].setPos(CT.gC().g_next_x,CT.gC().g_btn_tool2_y,CT.gC().hold_w,CT.gC().hold_w);
+//		djs[2]=new ZhaDan();
+//		djs[2].setPos(CT.gC().g_next_x,CT.gC().g_btn_tool2_y,CT.gC().hold_w,CT.gC().hold_w);
 	}
 	
 
@@ -90,6 +93,18 @@ public class Tetris extends Screen {
 		if (delay!=null&&delay.action(timer.getTimeSinceLastUpdate())) {
 			// 已初始化并且非游戏失败
 			if (gameStart && !gameField.isGameOver()) {
+				
+				//炸弹道具
+				if(currentDaoJu!=null){
+					
+					if(currentDaoJu.getUsed()==0){
+						currentDaoJu.commit(gameField);
+					}
+					if(currentDaoJu.getUsed()==2){
+						currentDaoJu=null;
+					}
+				}
+				
 				if (!gameField.incrementPositionY(true)) {
 					gameField.createCurrentStone(((int) Math.round(Math
 							.random() * 6) + 1));
@@ -99,9 +114,7 @@ public class Tetris extends Screen {
 				}
 				delay.setDelay(1000 / curLevel);
 				
-				if(currentDaoJu!=null&&currentDaoJu.getUsed()==0){
-					currentDaoJu.setUsed(1);
-				}
+				
 			}else if(gameField!=null&&gameField.isGameOver()){
 				if(jiemian==0){
 					replaceScreen(new MainMenu(), MoveMethod.FROM_LEFT);
@@ -201,13 +214,9 @@ public class Tetris extends Screen {
 			g.drawTexture(pause_board, CT.gC().zt_board_x, CT.gC().zt_board_y);
 		}
 		if(currentDaoJu!=null){
-			if(currentDaoJu.getUsed()==1){
-				currentDaoJu.commit(g,gameField);
-			}
-			if(currentDaoJu.getUsed()==2){
-				currentDaoJu=null;
-			}
+			currentDaoJu.commit(g);
 		}
+		
 		
 	}
 
@@ -221,7 +230,7 @@ public class Tetris extends Screen {
 			
 			int x, y;
 			// 默认游戏区域（网格）大小为横10,竖24
-			int[][] arrayStones = gameField.getStonePosition();
+			int[][] arrayStones = gameField.getAllStonePosition();
 //			g.setColor(emptyColor);
 //			g.fillRect(0,0,gameField.getRow() * blockSize, gameField.getCol() * blockSize);
 			for (x = 0; x < gameField.getRow(); x++) {
@@ -275,7 +284,7 @@ public class Tetris extends Screen {
 				
 				int i=0;
 				for(DaoJu d:djs){
-					if(d.isClick(e.getX(), e.getY())){
+					if(d!=null&&d.isClick(e.getX(), e.getY())){
 						currentDaoJu=d;
 						break;
 					}

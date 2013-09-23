@@ -1,5 +1,8 @@
 package com.mogu.game.tetris.model;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import com.mogu.game.tetris.screen.TetrisField;
 
 import loon.core.graphics.opengl.GLEx;
@@ -7,13 +10,11 @@ import loon.core.graphics.opengl.LTexture;
 import loon.core.graphics.opengl.LTextures;
 import loon.core.timer.LTimer;
 
-public abstract class DaoJu {
+public  class DaoJu {
 
-	private float x0,y0;//贴图位置
-	private float x1,y1,x2,y2;//贴图位置
+	public float x0=0,y0=0;//贴图位置
+	public float x1,y1,x2,y2;//贴图位置
 	
-	private LTexture img;
-	private String image;
 	private LTimer delay;//持续时间
 	private int used;//道具状态
 	private int time;//道具显示回合
@@ -32,7 +33,12 @@ public abstract class DaoJu {
 		this.type = type;
 	}
 	
-	public abstract  void commit(GLEx g,TetrisField gameField);//道具行为
+	public   void commit(TetrisField gameField){
+		
+	};//道具行为
+	public   void commit(GLEx g){
+		
+	};//道具行为
 	public LTimer getDelay() {
 		return delay;
 	}
@@ -63,26 +69,14 @@ public abstract class DaoJu {
 	public void setY0(float y0) {
 		this.y0 = y0;
 	}
-	public String getImage() {
-		return image;
-	}
-	public void setImage(String image) {
-		this.image = image;
-		this.img=LTextures.loadTexture(this.image);
+	public void setPos(float x,float y,int w,int h){
+		
 	}
 	public LTexture getImg() {
-		return img;
+		return null;
 	}
-	
-	public void setPos(float x,float y,int w,int h){
-		this.x0=x+(w-this.img.getWidth())/2;
-		this.y0=y+(h-this.img.getHeight())/2;
-		this.x1=x;
-		this.y1=y;
-		this.x2=x+w;
-		this.y2=y+h;
+	public void setImg(LTexture i){
 	}
-	
 	public boolean isClick(float x,float y){
 		if(x>x1&&x<x2&&y>y1&&y<y2){
 			return true;

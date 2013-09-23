@@ -9,6 +9,7 @@ public class TetrisField {
 	private Block stoneNext;
 
 	private int[][] stonePosition;
+	
 
 	private int[][] gameFieldStones;
 
@@ -254,9 +255,13 @@ public class TetrisField {
 		}
 	}
 
-	public int[][] getStonePosition() {
+	public int[][] getAllStonePosition() {
 
 		return gameFieldStones;
+	}
+	
+	public void setStonePositionValue(int x,int y,int v){
+		gameFieldStones[x][y]=v;
 	}
 
 	public void drawTexture(GLEx g, LTexture[] stones,float x,float y,float w,float h,int b) {
@@ -684,6 +689,10 @@ public class TetrisField {
 		public int getBlockID() {
 			return blockID;
 		}
+	}
+
+	public int[][] getStoneCurrent() {
+		return stonePosition;
 	}
 
 }

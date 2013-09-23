@@ -132,6 +132,7 @@ public class Config {
 		
 		
 		this.tools_pic_boom=basedir+"tools_pic_boom.png";
+		this.tools_pic_wu=basedir+"tools_pic_wu.png";
 	}
 	public String game_board=null;
 	public String bg_001_light=null;
@@ -182,6 +183,7 @@ public class Config {
 	
 	
 	public String tools_pic_boom=null;
+	public String tools_pic_wu=null;
 	
 	
 	
