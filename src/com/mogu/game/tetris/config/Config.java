@@ -11,6 +11,8 @@ public class Config {
 	public  float g_hold_y=84;
 	public  float g_next_x=517;
 	public  float g_btn_tool0_y=227;
+	public  int g_btn_tool0_w=227;
+	public  int g_btn_tool0_h=227;
 	public  float g_btn_tool1_y=351;
 	public  float g_btn_tool2_y=475;
 	public  float g_board_x=107;//格子板x
@@ -74,6 +76,10 @@ public class Config {
 	public int zt_btn5_y=572;
 	public int zt_btn6_y=674;
 	
+	public int t_p_dj_w=93;
+	public int t_p_dj_h=75;
+	
+	
 	
 	
 	public String basedir="assets/640_960/";
@@ -115,7 +121,7 @@ public class Config {
 		this.game_siglemessage=basedir+"game_siglemessage.png";
 		this.speechbubble2=basedir+"speechbubble2.png";
 		
-		this.zt_block=basedir+"pic_fangkuai_block.png";
+		this.zt_block=basedir+"fullscreen_shadow.png";
 		this.zt_ban=basedir+"pause_ban.png";
 		this.zt_btn1_1=basedir+"pause_btn_jixu1.png";
 		this.zt_btn1_2=basedir+"pause_btn_jixu2.png";
@@ -133,6 +139,7 @@ public class Config {
 		
 		this.tools_pic_boom=basedir+"tools_pic_boom.png";
 		this.tools_pic_wu=basedir+"tools_pic_wu.png";
+		this.tools_pic_fanghuzhao=basedir+"tools_pic_fanghuzhao.png";
 	}
 	public String game_board=null;
 	public String bg_001_light=null;
@@ -184,6 +191,7 @@ public class Config {
 	
 	public String tools_pic_boom=null;
 	public String tools_pic_wu=null;
+	public String tools_pic_fanghuzhao=null;
 	
 	
 	

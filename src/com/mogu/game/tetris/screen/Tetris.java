@@ -6,22 +6,16 @@ package com.mogu.game.tetris.screen;
 import loon.core.graphics.LColor;
 import loon.core.graphics.LFont;
 import loon.core.graphics.Screen;
-import loon.core.graphics.Screen.MoveMethod;
 import loon.core.graphics.component.LButton;
-import loon.core.graphics.component.LMessage;
-import loon.core.graphics.opengl.GL;
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
-import loon.core.graphics.opengl.LTexture.Format;
 import loon.core.graphics.opengl.LTextures;
 import loon.core.input.LTouch;
 import loon.core.timer.LTimer;
 import loon.core.timer.LTimerContext;
-import android.util.Log;
 
 import com.mogu.game.tetris.config.CT;
 import com.mogu.game.tetris.model.DaoJu;
-import com.mogu.game.tetris.model.DaoJuTools;
 import com.mogu.game.tetris.model.MiWu;
 import com.mogu.game.tetris.model.ZhaDan;
 
@@ -44,7 +38,7 @@ public class Tetris extends Screen {
 	private LTexture[] stones = new LTexture[9];
 	private LTexture[] stonesMin = new LTexture[9];
 
-	private LTexture  zd,w,styleImage,pause_btn,brand,game_pic_topbar,game_siglemessage,pause_board,black_block;
+	private LTexture  zd,w,fanghuzhao,styleImage,pause_btn,brand,game_pic_topbar,game_siglemessage,pause_board,black_block;
 	
 	private LButton zanting,jixu,reset,bangzhu,shezhi,daoju,mainmenu;
 	
@@ -67,7 +61,7 @@ public class Tetris extends Screen {
 	
 	public Tetris() {
 		
-		djs[0]=new MiWu();
+		djs[0]=new ZhaDan();
 		djs[0].setPos(CT.gC().g_next_x,CT.gC().g_btn_tool0_y,CT.gC().hold_w,CT.gC().hold_w);
 		djs[1]=new ZhaDan();
 		djs[1].setPos(CT.gC().g_next_x,CT.gC().g_btn_tool1_y,CT.gC().hold_w,CT.gC().hold_w);
@@ -170,20 +164,18 @@ public class Tetris extends Screen {
 		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_hold_y);
 		
 		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_btn_tool0_y);
-		g.drawTexture(zd, CT.gC().g_next_x, CT.gC().g_btn_tool0_y);
 		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_btn_tool1_y);
-		g.drawTexture(w, CT.gC().g_next_x, CT.gC().g_btn_tool1_y);
 		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_btn_tool2_y);
-		g.drawTexture(zd, CT.gC().g_next_x, CT.gC().g_btn_tool2_y);
-//		for(int i=0;i<djs.length;i++){
-//			if(djs[i]!=null){
-//				if(djs[i].getType()==1){
-//				}
-//				if(djs[i].getType()==2){
-//					g.drawTexture(w, djs[i].getX0(), djs[i].getY0());
-//				}
-//			}
-//		}
+		
+		for(int i=0;i<djs.length;i++){
+			if(djs[i]!=null){
+				g.drawTexture(getDJ(djs[i].getType()), djs[i].getX0(), djs[i].getY0());
+			}
+		}
+		
+		if(currentDaoJu!=null){
+			currentDaoJu.commit(g);
+		}
 		drawHNText(g,"HOLD",CT.gC().hold_x,CT.gC().hold_y,CT.gC().hold_w,CT.gC().hold_f_s,null);
 		drawHNText(g,"NEXT",CT.gC().next_x,CT.gC().hold_y,CT.gC().hold_w,CT.gC().hold_f_s,null);
 		drawText(g,"房主",CT.gC().g_p_t_1_x,
@@ -416,6 +408,7 @@ public class Tetris extends Screen {
 		
 		zd=LTextures.loadTexture(CT.gC().tools_pic_boom);
 		w=LTextures.loadTexture(CT.gC().tools_pic_wu);
+		fanghuzhao=LTextures.loadTexture(CT.gC().tools_pic_fanghuzhao);
 		pause_board = new LTexture(CT.gC().zt_ban);
 		game_pic_topbar = new LTexture(CT.gC().game_pic_topbar);
 		game_siglemessage = new LTexture(CT.gC().game_siglemessage);
@@ -441,7 +434,24 @@ public class Tetris extends Screen {
 		
 	}
 
-	
+	public LTexture getDJ(int i){
+		LTexture l=null;
+		switch (i) {
+		case 1:
+			l=zd;
+			break;
+		case 2:
+			l=w;
+			break;
+		case 3:
+			l=fanghuzhao;
+			break;
+
+		default:
+			break;
+		}
+		return l;
+	}
 
 //	public static void main(String[] args) {
 //		GameScene frame = new GameScene("����˹����", 320, 480);

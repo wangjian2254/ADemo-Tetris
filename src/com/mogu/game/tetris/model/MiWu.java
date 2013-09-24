@@ -13,7 +13,7 @@ public class MiWu extends DaoJu {
 		this.setName("迷雾");
 		this.setTime(4);
 		this.setUsed(0);
-		this.setImage(CT.gC().tools_pic_wu);
+//		this.setImage(CT.gC().tools_pic_wu);
 	}
 	@Override
 	public void commit(TetrisField gameField) {

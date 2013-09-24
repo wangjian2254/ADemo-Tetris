@@ -1,5 +1,6 @@
 package com.mogu.game.tetris.model;
 
+import com.mogu.game.tetris.config.CT;
 import com.mogu.game.tetris.screen.TetrisField;
 
 import loon.core.graphics.opengl.GLEx;
@@ -9,7 +10,7 @@ import loon.core.timer.LTimer;
 
 public abstract class DaoJu {
 
-	private float x0,y0;//贴图位置
+	private float x0,y0,w,h;//贴图位置
 	private float x1,y1,x2,y2;//贴图位置
 	
 	private LTexture img;
@@ -77,8 +78,11 @@ public abstract class DaoJu {
 	}
 	
 	public void setPos(float x,float y,int w,int h){
-		this.x0=x+(w-this.img.getWidth())/2;
-		this.y0=y+(h-this.img.getHeight())/2;
+		
+		this.w=CT.gC().t_p_dj_w;
+		this.h=CT.gC().t_p_dj_h;
+		this.x0=x+(w-this.w)/2;
+		this.y0=y+(h-this.h)/2;
 		this.x1=x;
 		this.y1=y;
 		this.x2=x+w;
@@ -93,3 +97,9 @@ public abstract class DaoJu {
 		}
 	}
 }
+
+
+
+
+
+

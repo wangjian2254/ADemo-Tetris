@@ -29,6 +29,13 @@ android:layout_width="fill_parent"
 	    android:onClick="onBtnClick"
 	    />
     </RelativeLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:orientation="vertical"
+        android:gravity="center|center"
+         >
+        
 	<Button 
 	    android:id="@+id/danren"
 	    style="@style/MenuBtn"
@@ -60,4 +67,5 @@ android:layout_width="fill_parent"
 	    android:onClick="onBtnClick"
 	    />
 
+    </LinearLayout>
 </LinearLayout>

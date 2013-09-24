@@ -70,6 +70,9 @@ public class Config320 extends Config {
 		this.zt_btn5_y=286;
 		this.zt_btn6_y=337;
 		
+		this.t_p_dj_w=46;
+		this.t_p_dj_h=37;
+		
 		
 		this.basedir="assets/320_480/";
 		getPic();

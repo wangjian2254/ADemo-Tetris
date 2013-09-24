@@ -18,6 +18,7 @@ public class ZhaDan extends DaoJu {
 		this.setName("炸弹");
 		this.setTime(2);
 		this.setUsed(0);
+//		this.setImage(CT.gC().tools_pic_boom);
 	}
 	@Override
 	public void commit(TetrisField gameField) {
@@ -83,34 +84,12 @@ public class ZhaDan extends DaoJu {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	public String getImage() {
-		return image;
+	@Override
+	public void commit(GLEx g, TetrisField gameField) {
+		// TODO Auto-generated method stub
+		
 	}
 	
-	public LTexture getImg() {
-		return img;
-	}
 	
-	public void setImg(LTexture i){
-		this.img=i;
-	}
-	
-	public void setPos(float x,float y,int w,int h){
-		this.x0=x+(w-this.getImg().getWidth())/2;
-		this.y0=y+(h-this.getImg().getHeight())/2;
-		this.x1=x;
-		this.y1=y;
-		this.x2=x+w;
-		this.y2=y+h;
-	}
-	
-	public boolean isClick(float x,float y){
-		if(x>x1&&x<x2&&y>y1&&y<y2){
-			return true;
-		}else{
-			return false;
-		}
-	}
 
 }

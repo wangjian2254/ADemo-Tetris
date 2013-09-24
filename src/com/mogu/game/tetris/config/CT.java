@@ -10,6 +10,14 @@ public class CT {
 			c=new Config();
 			return;
 		}
+		if(w==480&&h==800){
+			c=new Config480();
+			return;
+		}
+		if(w==480){
+			c=new Config480();
+			return;
+		}
 		if(w==320&&h==480){
 			c=new Config320();
 			return;
