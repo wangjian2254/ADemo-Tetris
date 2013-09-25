@@ -6,6 +6,7 @@ public class Config {
 	public  int all_h=960;
 	public int movepoint=64;
 	public int blockSize=38;
+	public int zhadanXm=6;
 	public int blockSizeMin=20;
 	public  float g_hold_x=2;
 	public  float g_hold_y=84;
@@ -140,6 +141,7 @@ public class Config {
 		this.tools_pic_boom=basedir+"tools_pic_boom.png";
 		this.tools_pic_wu=basedir+"tools_pic_wu.png";
 		this.tools_pic_fanghuzhao=basedir+"tools_pic_fanghuzhao.png";
+		this.pic_fangkuai_baozha=basedir+"pic_fangkuai_baozha.png";
 	}
 	public String game_board=null;
 	public String bg_001_light=null;
@@ -192,6 +194,7 @@ public class Config {
 	public String tools_pic_boom=null;
 	public String tools_pic_wu=null;
 	public String tools_pic_fanghuzhao=null;
+	public String pic_fangkuai_baozha=null;
 	
 	
 	

@@ -263,6 +263,12 @@ public class TetrisField {
 	public void setStonePositionValue(int x,int y,int v){
 		gameFieldStones[x][y]=v;
 	}
+	public boolean getStonePositionValue(int[] p,int v){
+		if(p==null){
+			return false;
+		}
+		return gameFieldStones[p[0]][p[1]]==v;
+	}
 
 	public void drawTexture(GLEx g, LTexture[] stones,float x,float y,float w,float h,int b) {
 		int nextStone = getNextStone();

@@ -8,6 +8,7 @@ public class Config480 extends Config {
 		this.movepoint=48;
 		this.blockSize=28;
 		this.blockSizeMin=16;
+		
 		this.g_hold_x=1;
 		this.g_hold_y=82;
 		this.g_next_x=386;

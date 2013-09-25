@@ -5,6 +5,7 @@ import loon.core.graphics.opengl.LTexture;
 
 import com.mogu.game.tetris.config.CT;
 import com.mogu.game.tetris.screen.TetrisField;
+import com.mogu.game.tetris.sprite.ZhaDanSprite;
 
 public class MiWu extends DaoJu {
 
@@ -33,6 +34,11 @@ public class MiWu extends DaoJu {
 	
 	@Override
 	public void commit(GLEx g, TetrisField gameField) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void commit(TetrisField gameField, ZhaDanSprite z) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -2,6 +2,7 @@ package com.mogu.game.tetris.model;
 
 import com.mogu.game.tetris.config.CT;
 import com.mogu.game.tetris.screen.TetrisField;
+import com.mogu.game.tetris.sprite.ZhaDanSprite;
 
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
@@ -36,6 +37,7 @@ public abstract class DaoJu {
 	public abstract  void commit(GLEx g,TetrisField gameField);//道具行为
 	public abstract  void commit(GLEx g);//道具行为
 	public abstract  void commit(TetrisField gameField);//道具行为
+	public abstract  void commit(TetrisField gameField,ZhaDanSprite z);//道具行为
 	public LTimer getDelay() {
 		return delay;
 	}

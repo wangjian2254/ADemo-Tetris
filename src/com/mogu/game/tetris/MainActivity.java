@@ -3,6 +3,7 @@ package com.mogu.game.tetris;
 import loon.LGame;
 import loon.LSetting;
 import loon.core.graphics.LColor;
+import loon.core.graphics.Screen.MoveMethod;
 import loon.core.graphics.opengl.GL;
 import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
@@ -42,6 +43,7 @@ public class MainActivity extends LGame {
 		int w=disp.getWidth();
 		int h=disp.getHeight();
 		CT.init(w, h);
+		setDestroy(false);
 		LTexture.ALL_LINEAR = true;
 		LSetting setting = new LSetting();
 		setting.mode=LMode.Fill;
@@ -49,7 +51,7 @@ public class MainActivity extends LGame {
 		setting.width = CT.gC().all_w;
 		setting.height = CT.gC().all_h;
 		setting.showFPS = false;
-		setting.fps = 10;
+		setting.fps = 30;
 		setting.landscape = false;
 		register(setting, Tetris.class);
 		
