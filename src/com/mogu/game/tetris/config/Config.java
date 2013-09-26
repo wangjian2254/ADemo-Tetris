@@ -6,6 +6,7 @@ public class Config {
 	public  int all_h=960;
 	public int movepoint=64;
 	public int blockSize=38;
+	public int zhadanW=50;
 	public int zhadanXm=6;
 	public int blockSizeMin=20;
 	public  float g_hold_x=2;

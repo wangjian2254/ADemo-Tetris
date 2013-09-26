@@ -15,6 +15,7 @@ import com.mogu.game.tetris.config.CT;
 import com.mogu.game.tetris.screen.MainGame;
 import com.mogu.game.tetris.screen.MainMenu;
 import com.mogu.game.tetris.screen.Tetris;
+import com.umeng.analytics.MobclickAgent;
 
 
 public class MainActivity extends LGame {
@@ -47,14 +48,23 @@ public class MainActivity extends LGame {
 		LTexture.ALL_LINEAR = true;
 		LSetting setting = new LSetting();
 		setting.mode=LMode.Fill;
-		setting.showMemory=false;
+		setting.showMemory=true;
 		setting.width = CT.gC().all_w;
 		setting.height = CT.gC().all_h;
-		setting.showFPS = false;
+		setting.showFPS = true;
 		setting.fps = 30;
 		setting.landscape = false;
 		register(setting, Tetris.class);
 		
 	}
+	
+	public void onResume(){
+    	super.onResume();
+    	MobclickAgent.onResume(this);
+    }
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 
 }

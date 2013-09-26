@@ -6,6 +6,10 @@ public class CT {
 		return c;
 	}
 	public static void init(int w,int h){
+		if(w==720&&h==1280){
+			c=new Config();
+			return;
+		}
 		if(w==640&&h==960){
 			c=new Config();
 			return;

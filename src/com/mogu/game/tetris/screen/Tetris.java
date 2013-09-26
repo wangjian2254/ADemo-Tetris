@@ -65,9 +65,9 @@ public class Tetris extends Screen {
 	   
 	private Sprites sprMgr = null;  /* 精灵管理器 */  
 	
-	private String[] msg={"宝贝儿~~ 我爱你~~","宝贝儿~~ 好想你","亲爱的~~ 亲亲","最爱我的宝宝了","最喜欢我的宝宝了","宝贝儿，好喜欢你哦~~","爱你一万年宝贝儿~~","亲亲我的宝贝儿~~","宝贝儿 我要亲亲你","来宝贝儿 ，Kiss一个"};
-	private int num=0;
-	private int num1=0;
+//	private String[] msg={"宝贝儿~~ 我爱你~~","宝贝儿~~ 好想你","亲爱的~~ 亲亲","最爱我的宝宝了","最喜欢我的宝宝了","宝贝儿，好喜欢你哦~~","爱你一万年宝贝儿~~","亲亲我的宝贝儿~~","宝贝儿 我要亲亲你","来宝贝儿 ，Kiss一个"};
+//	private int num=0;
+//	private int num1=0;
 	Random random = new Random();
 	@Override
 	public LTransition onTransition() {
@@ -174,7 +174,7 @@ public class Tetris extends Screen {
 		
 		/* 加载精灵资源 炸弹 */  
 		   
-		zhadan = new ZhaDanSprite(CT.gC().pic_fangkuai_baozha, 40, 40);  
+		zhadan = new ZhaDanSprite(CT.gC().pic_fangkuai_baozha, CT.gC().zhadanW, CT.gC().zhadanW);  
 		   
 		    
 		   
@@ -219,10 +219,10 @@ public class Tetris extends Screen {
 		}
 		// 自动计时
 		if (delay!=null&&delay.action(timer.getTimeSinceLastUpdate())) {
-			if(num%20==0){
-				num1=Math.abs(random.nextInt())%10;
-			}
-			num++;
+//			if(num%20==0){
+//				num1=Math.abs(random.nextInt())%10;
+//			}
+//			num++;
 			// 已初始化并且非游戏失败
 			if (gameStart && !gameField.isGameOver()) {
 				
@@ -298,7 +298,7 @@ public class Tetris extends Screen {
 		g.drawTexture(pause_btn, CT.gC().topbar_btn_yuezhan_x, CT.gC().topbar_btn_yuezhan_y);
 		
 		g.drawTexture(game_siglemessage, CT.gC().game_siglemessage_x, CT.gC().game_siglemessage_y);
-		drawText(g,msg[num1],CT.gC().game_siglemessage_x, CT.gC().game_siglemessage_y,game_siglemessage.getWidth(),game_siglemessage.getHeight(),null);
+//		drawText(g,msg[num1],CT.gC().game_siglemessage_x, CT.gC().game_siglemessage_y,game_siglemessage.getWidth(),game_siglemessage.getHeight(),null);
 		g.drawTexture(brand, CT.gC().g_board_x,CT.gC().g_board_y);
 		g.drawTexture(styleImage, CT.gC().g_hold_x, CT.gC().g_hold_y);
 		g.drawTexture(styleImage, CT.gC().g_next_x, CT.gC().g_hold_y);
@@ -498,6 +498,8 @@ public class Tetris extends Screen {
 		}
 		
 	}
+	
+	
 
 	public LTexture getDJ(int i){
 		LTexture l=null;

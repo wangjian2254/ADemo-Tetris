@@ -14,6 +14,7 @@ import com.mogu.game.tetris.model.Player;
 import com.mogu.game.tetris.model.Room;
 import com.mogu.game.tetris.util.RoomSync;
 import com.mogu.game.tetris.util.TetrisConvert;
+import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -246,4 +247,13 @@ public class GameDaTing extends Activity {
             }
         }  
     } 
+    
+    public void onResume(){
+    	super.onResume();
+    	MobclickAgent.onResume(this);
+    }
+    public void onPause() {
+        super.onPause();
+        MobclickAgent.onPause(this);
+    }
 }
