@@ -5,6 +5,7 @@ package com.mogu.game.tetris.screen;
 
 import java.util.Random;
 
+import loon.LGame;
 import loon.action.sprite.Sprites;
 import loon.core.LSystem;
 import loon.core.graphics.LColor;
@@ -19,6 +20,7 @@ import loon.core.input.LTransition;
 import loon.core.timer.LTimer;
 import loon.core.timer.LTimerContext;
 
+import com.liyu.pluginframe.util.MainDataTool;
 import com.mogu.game.tetris.config.CT;
 import com.mogu.game.tetris.model.DaoJu;
 import com.mogu.game.tetris.model.ZhaDan;
@@ -33,6 +35,7 @@ public class Tetris extends Screen {
 	private int curLevel = 1;
 
 	private boolean gameStart=false;
+	private boolean writeresult=false;
 
 	private final static LColor emptyColor = new LColor(0f, 0f, 0f,0.3f);
 //			gridColor = new LColor(255, 255, 255,25);
@@ -211,6 +214,8 @@ public class Tetris extends Screen {
 		zhadan.setTF(gameField);
 		gameField.createNextStone(((int) Math.round(Math.random() * 6) + 1));
 		gameField.createCurrentStone(((int) Math.round(Math.random() * 6) + 1));
+		
+		writeresult=false;
 	}
 	
 	public void alter(LTimerContext timer) {
@@ -386,6 +391,9 @@ public class Tetris extends Screen {
 				}
 			}
 			if (gameField.isGameOver()) {
+				if(!writeresult){
+//					MainDataTool.setResultString(LSystem.screenActivity, data);
+				}
 				g.setColor(LColor.white);
 				g.drawString("GAME OVER", 120, 160);
 				return;
