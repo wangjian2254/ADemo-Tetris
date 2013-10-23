@@ -392,7 +392,8 @@ public class Tetris extends Screen {
 			}
 			if (gameField.isGameOver()) {
 				if(!writeresult){
-//					MainDataTool.setResultString(LSystem.screenActivity, data);
+					MainDataTool.setResultString1(LSystem.screenActivity, gameField.getPoints(),"俄罗斯方块获取新的积分！");
+					writeresult=true;
 				}
 				g.setColor(LColor.white);
 				g.drawString("GAME OVER", 120, 160);
