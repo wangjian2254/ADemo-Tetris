@@ -2,18 +2,10 @@ package com.mogu.game.tetris;
 
 import loon.LGame;
 import loon.LSetting;
-import loon.core.graphics.LColor;
-import loon.core.graphics.Screen.MoveMethod;
-import loon.core.graphics.opengl.GL;
-import loon.core.graphics.opengl.GLEx;
 import loon.core.graphics.opengl.LTexture;
-import android.graphics.Color;
-import android.os.Bundle;
 import android.view.Display;
 
 import com.mogu.game.tetris.config.CT;
-import com.mogu.game.tetris.screen.MainGame;
-import com.mogu.game.tetris.screen.MainMenu;
 import com.mogu.game.tetris.screen.Tetris;
 import com.umeng.analytics.MobclickAgent;
 
