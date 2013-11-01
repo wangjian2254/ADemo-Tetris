@@ -6,8 +6,6 @@ import java.util.List;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import com.liyu.pluginframe.beans.UserInfo;
-import com.liyu.pluginframe.util.UrlSync;
 import com.mogu.game.tetris.model.Room;
 
 import android.os.Message;

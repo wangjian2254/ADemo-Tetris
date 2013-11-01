@@ -1,19 +1,10 @@
 package com.mogu.game.tetris;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.apache.http.NameValuePair;
-import org.apache.http.message.BasicNameValuePair;
-
-import com.liyu.pluginframe.beans.UserInfo;
-import com.liyu.pluginframe.util.UrlSync;
-import com.liyu.pluginframe.util.UrlTask;
 import com.mogu.game.tetris.adapter.RoomAdapter;
 import com.mogu.game.tetris.model.Player;
 import com.mogu.game.tetris.model.Room;
-import com.mogu.game.tetris.util.RoomSync;
-import com.mogu.game.tetris.util.TetrisConvert;
 import com.umeng.analytics.MobclickAgent;
 
 import android.app.Activity;
@@ -27,7 +18,6 @@ import android.support.v4.view.ViewPager.OnPageChangeListener;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewGroup.LayoutParams;
 import android.widget.GridView;
 import android.widget.ImageView;
 
@@ -47,7 +37,6 @@ public class GameDaTing extends Activity {
 	 
 	 private View romgrid;
 	 public Handler roomDataHandler;
-	 private UserInfo user;
 	 private GridView grid;
 	 LayoutInflater inflater;
 	@Override
@@ -101,23 +90,23 @@ public class GameDaTing extends Activity {
 	}
 	
 	public void getRoomData(){
-		UrlSync us=new RoomSync();
-		us.setMainContext(this);
-		us.setModth(UrlSync.POST);
-		us.setToast(true);
-			
-			us.setToastContentSu("验证信息成功。");
-			us.setToastContentFa("验证信息失败。");
-		us.setUser(user);
-		us.setUri(TetrisConvert.hosturl+"/game/getGameRoom/");
-		List<NameValuePair> param=new ArrayList<NameValuePair>();
-    	param.add(new BasicNameValuePair("appcode",getPackageName()));
-    	param.add(new BasicNameValuePair("username",user.getUsername()));
-    	us.setPrarm(param);
-		us.setHandler(roomDataHandler);
-		UrlTask ut=new UrlTask(this);
-		ut.setUrlSync(us);
-		ut.start();
+//		UrlSync us=new RoomSync();
+//		us.setMainContext(this);
+//		us.setModth(UrlSync.POST);
+//		us.setToast(true);
+//
+//			us.setToastContentSu("验证信息成功。");
+//			us.setToastContentFa("验证信息失败。");
+//		us.setUser(user);
+//		us.setUri(TetrisConvert.hosturl+"/game/getGameRoom/");
+//		List<NameValuePair> param=new ArrayList<NameValuePair>();
+//    	param.add(new BasicNameValuePair("appcode",getPackageName()));
+//    	param.add(new BasicNameValuePair("username",user.getUsername()));
+//    	us.setPrarm(param);
+//		us.setHandler(roomDataHandler);
+//		UrlTask ut=new UrlTask(this);
+//		ut.setUrlSync(us);
+//		ut.start();
 	}
 	
 	

@@ -142,6 +142,7 @@ public class Tetris extends Screen {
 		mainmenu=new LButton(ztn6,null,CT.gC().zt_btn_w,CT.gC().zt_btn_h,CT.gC().zt_btn_x,CT.gC().zt_btn6_y){
 			@Override
 			public void doClick(){
+                LSystem.screenActivity.finish();
 			}
 		};
 		setShowPause(false);
@@ -323,7 +324,7 @@ public class Tetris extends Screen {
 		}
 		drawHNText(g,"HOLD",CT.gC().hold_x,CT.gC().hold_y,CT.gC().hold_w,CT.gC().hold_f_s,null);
 		drawHNText(g,"NEXT",CT.gC().next_x,CT.gC().hold_y,CT.gC().hold_w,CT.gC().hold_f_s,null);
-		drawText(g,"房主",CT.gC().g_p_t_1_x,
+		drawText(g,MainDataTool.getUserInfo().getNickname(),CT.gC().g_p_t_1_x,
 				CT.gC().game_pic_topbar_y,CT.gC().g_p_t_1_w,game_pic_topbar.getHeight(),null);
 		int lv=0;
 		int point=0;
@@ -396,7 +397,7 @@ public class Tetris extends Screen {
 					writeresult=true;
 				}
 				g.setColor(LColor.white);
-				g.drawString("GAME OVER", 120, 160);
+				g.drawString("游戏结束，恭喜 "+MainDataTool.getUserInfo().getNickname()+" 获得积分："+gameField.getPoints(), 120, 160);
 				return;
 			}
 			

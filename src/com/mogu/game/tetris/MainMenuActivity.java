@@ -7,7 +7,11 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 
+import com.liyu.pluginframe.util.MainDataTool;
+import com.liyu.pluginframe.util.UserInfo;
 import com.umeng.analytics.MobclickAgent;
+import org.json.JSONException;
+import org.json.JSONObject;
 
 public class MainMenuActivity extends Activity {
 	
@@ -20,6 +24,8 @@ public class MainMenuActivity extends Activity {
         con=this;
         MobclickAgent.onError(this);
         setContentView(R.layout.app_list);
+        MainDataTool.getUserInfoJSON(this);
+
 		
     }
     
