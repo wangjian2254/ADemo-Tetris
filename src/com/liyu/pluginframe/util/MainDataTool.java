@@ -65,7 +65,8 @@ public class MainDataTool {
             userInfo.setNickname(j.optString("nickname","蘑菇玩家"));
             userInfo.setJid(j.optString("jid",null));
             userInfo.setNewroom(j.optBoolean("newroom",false));
-            userInfo.setC_name(j.optString("c_name",null));
+            userInfo.setC_nickname(j.optString("c_nickname",null));
+            userInfo.setC_username(j.optString("c_userkname",null));
             userInfo.setC_jid(j.optString("c_jid",null));
             userInfo.setChallengr(j.optBoolean("challenger",false));
         }
