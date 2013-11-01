@@ -13,7 +13,25 @@ public class UserInfo {
     private String jid=null;
     private boolean newroom=false;
     private boolean challengr=false;
-    private String c_name=null;
+
+    public String getC_nickname() {
+        return c_nickname;
+    }
+
+    public void setC_nickname(String c_nickname) {
+        this.c_nickname = c_nickname;
+    }
+
+    public String getC_username() {
+        return c_username;
+    }
+
+    public void setC_username(String c_username) {
+        this.c_username = c_username;
+    }
+
+    private String c_nickname=null;
+    private String c_username=null;
     private String c_jid=null;
 
     public String getUsername() {
@@ -56,13 +74,7 @@ public class UserInfo {
         this.challengr = challengr;
     }
 
-    public String getC_name() {
-        return c_name;
-    }
 
-    public void setC_name(String c_name) {
-        this.c_name = c_name;
-    }
 
     public String getC_jid() {
         return c_jid;
