@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="moguplugin">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/libs/moguplugin.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
