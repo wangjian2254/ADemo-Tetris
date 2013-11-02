@@ -7,9 +7,16 @@ import org.json.JSONObject;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class MainDataTool {
 	private final static String RESULTDATA="resultData";
 	private final static String DATA="data";
+    private static DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//默认应用中的时间格式化
+
+
 
     public static UserInfo getUserInfo() {
         return userInfo;
@@ -17,7 +24,9 @@ public class MainDataTool {
 
     private static UserInfo userInfo=new UserInfo();
 
-	public static void setResultString1(Context con,int jf,String message){
+    public static enum Model{NORMAL,DAILY,WEEKLY,MONTHLY,YEAR};
+
+	public static void setResultString1(Context con,int jf,String message,Model model){
 		SharedPreferences resp = con.getSharedPreferences(RESULTDATA, 0); 
 		String pjs=resp.getString(DATA,null);  
 		int totaljf=jf;
@@ -36,7 +45,26 @@ public class MainDataTool {
 		JSONObject j=new JSONObject();
 		try {
 			j.put("version", 1);
+            switch (model){
+                case NORMAL:
+                    j.put("model","normal");
+                    break;
+                case DAILY:
+                    j.put("model","daily");
+                    break;
+                case WEEKLY:
+                    j.put("model","weekly");
+                    break;
+                case MONTHLY:
+                    j.put("model","monthly");
+                    break;
+                case YEAR:
+                    j.put("model","year");
+                    break;
+            }
+
 			j.put("appcode", con.getPackageName());
+            j.put("datetime",format1.format(new Date()));
 			j.put("appname", con.getPackageManager().getApplicationLabel(con.getApplicationInfo()));
 			j.put("newresult", totaljf);
 			j.put("message", message);
