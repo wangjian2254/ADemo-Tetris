@@ -60,14 +60,14 @@ public class Tetris extends Screen {
 	public boolean isDo=false;
 	public int jiemian=0;
 	
-	public MainMenu mainMenu=null;
-	
+
 	public DaoJu[] djs=new DaoJu[3];
 	public DaoJu currentDaoJu=null;
-	private ZhaDanSprite zhadan = null; /* 精灵：炸弹 */  
+	private ZhaDanSprite zhadan = null; /* 精灵：炸弹 */
+
+    private boolean fasttools=false;
 	   
-	private Sprites sprMgr = null;  /* 精灵管理器 */  
-	
+
 //	private String[] msg={"宝贝儿~~ 我爱你~~","宝贝儿~~ 好想你","亲爱的~~ 亲亲","最爱我的宝宝了","最喜欢我的宝宝了","宝贝儿，好喜欢你哦~~","爱你一万年宝贝儿~~","亲亲我的宝贝儿~~","宝贝儿 我要亲亲你","来宝贝儿 ，Kiss一个"};
 //	private int num=0;
 //	private int num1=0;
@@ -188,22 +188,10 @@ public class Tetris extends Screen {
 		   
 		    
 		   
-		/* 将精灵加入精灵管理器 */  
-	   
-//		sprMgr = new Sprites();  
-//	   
-//		sprMgr.add(zhadan);  
+
 		
 	}
-	
-//	public void setZhaDanLocation(int x,int y,boolean show){
-//		zhadan.setVisible(show);
-//		zhadan.setLocation(x, y);
-//	}
-//	
-//	public void setHidden(Sprite s){
-//		s.setVisible(false);
-//	}
+
 
 	public void initialize() {
 		if(gameStart){
@@ -244,13 +232,23 @@ public class Tetris extends Screen {
 					}
 				}
 				if (!gameField.incrementPositionY(true)) {
+                    fasttools = false;
 					gameField.createCurrentStone(((int) Math.round(Math
 							.random() * 6) + 1));
 					if (gameField.hasLines()) {
 						curLevel = gameField.getLevel();
 					}
 				}
-				delay.setDelay(1000 / curLevel);
+                if(fasttools){
+                    delay.setDelay(50);
+                } else{
+                    if(curLevel>7){
+                        delay.setDelay(300);
+                    } else{
+                        delay.setDelay(1000 - curLevel*100);
+                    }
+
+                }
 				
 				
 			}else if(gameField!=null&&gameField.isGameOver()){
@@ -415,7 +413,9 @@ public class Tetris extends Screen {
 		if(!start){
 			return;
 		}
-		// TODO Auto-generated method stub
+        if(fasttools){
+            return;
+        }
 		positionX=e.getX();
 		positionY=e.getY();
 		move=false;
@@ -431,6 +431,9 @@ public class Tetris extends Screen {
 		if(!start){
 			return;
 		}
+        if(fasttools){
+            return;
+        }
 		if(gameStart&&!gameField.isGameOver()){
 			
 			if(!move&&isDo){
@@ -466,9 +469,11 @@ public class Tetris extends Screen {
 		if(!start){
 			return;
 		}
+        if(fasttools){
+           return;
+        }
 		if(isDo){
 			move=true;
-			// TODO Auto-generated method stub
 			if(Math.abs(e.getX()-positionX)>CT.gC().movepoint){
 					if(e.getX()-positionX>0){
 						
@@ -479,6 +484,7 @@ public class Tetris extends Screen {
 			}else if(Math.abs(e.getY()-positionY)>CT.gC().movepoint){
 				if(e.getY()-positionY>0){
 					gameField.incrementPositionY(true);
+                    fasttools=true;
 				}
 			}else{
 				return;
