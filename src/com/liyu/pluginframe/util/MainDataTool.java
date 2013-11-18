@@ -79,6 +79,9 @@ public class MainDataTool {
 
     public static void getUserInfoJSON(Activity mainactivity){
         JSONObject j=null;
+        if(mainactivity.getIntent()==null||mainactivity.getIntent().getExtras()==null){
+            return;
+        }
         String result = mainactivity.getIntent().getExtras().getString("user");
         if(result!=null){
             try {
