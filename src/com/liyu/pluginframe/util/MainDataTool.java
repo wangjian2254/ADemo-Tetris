@@ -15,7 +15,7 @@ public class MainDataTool {
 	private final static String RESULTDATA="resultData";
 	private final static String DATA="data";
     private static DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//默认应用中的时间格式化
-
+    private static Context con;
 
 
     public static UserInfo getUserInfo() {
@@ -26,7 +26,7 @@ public class MainDataTool {
 
     public static enum Model{NORMAL,DAILY,WEEKLY,MONTHLY,YEAR};
 
-	public static void setResultString1(Context con,int jf,String message,Model model){
+	public static void setResultString1(int jf,String message,Model model){
 		SharedPreferences resp = con.getSharedPreferences(RESULTDATA, 0); 
 		String pjs=resp.getString(DATA,null);  
 		int totaljf=jf;
@@ -78,10 +78,8 @@ public class MainDataTool {
 	}
 
     public static void getUserInfoJSON(Activity mainactivity){
+        con = mainactivity.getApplicationContext();
         JSONObject j=null;
-        if(mainactivity.getIntent()==null||mainactivity.getIntent().getExtras()==null){
-            return;
-        }
         String result = mainactivity.getIntent().getExtras().getString("user");
         if(result!=null){
             try {
