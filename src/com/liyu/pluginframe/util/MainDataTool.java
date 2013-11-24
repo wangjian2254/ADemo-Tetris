@@ -1,6 +1,10 @@
 package com.liyu.pluginframe.util;
 
 import android.app.Activity;
+import android.os.Handler;
+import android.os.Message;
+import android.view.Gravity;
+import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -16,6 +20,10 @@ public class MainDataTool {
 	private final static String DATA="data";
     private static DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//默认应用中的时间格式化
     private static Context con;
+
+    private static boolean debug=false;
+
+    private static Handler mMainHandler =null;
 
 
     public static UserInfo getUserInfo() {
@@ -33,7 +41,7 @@ public class MainDataTool {
 		if(pjs!=null){
 			try{
 				JSONObject js=new JSONObject(pjs);
-				if(js.optInt("newresult", 0)>0){
+				if(js.optString("model","normal").equals("normal")&&js.optInt("newresult", 0)>0){
 					totaljf+=js.getInt("newresult");
 				}
 			}catch(Exception e){
@@ -67,14 +75,37 @@ public class MainDataTool {
             j.put("datetime",format1.format(new Date()));
 			j.put("appname", con.getPackageManager().getApplicationLabel(con.getApplicationInfo()));
 			j.put("newresult", totaljf);
+
+            j.put("jf",jf);
+
 			j.put("message", message);
 		} catch (JSONException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		sharedata.putString(DATA,j.toString());  
+		sharedata.putString(DATA,j.toString());
 		sharedata.commit();
+        if(!debug){
+           return;
+        }
+
+
+//        Toast.makeText(con,""+jf,Toast.LENGTH_LONG).show();
+        String log=null;
+        for(int k=0;k<100;k++){
+            log = resp.getString(DATA+k,null);
+            if(log==null){
+                sharedata.putString(DATA+k,j.toString());
+                sharedata.commit();
+                break;
+            }
+        }
+        try{
+            mMainHandler.obtainMessage(0,""+jf).sendToTarget();
+        } catch (Exception e){
+
+        }
 	}
 
     public static void getUserInfoJSON(Activity mainactivity){
@@ -98,6 +129,21 @@ public class MainDataTool {
             userInfo.setC_username(j.optString("c_username",null));
             userInfo.setC_jid(j.optString("c_jid",null));
             userInfo.setChallengr(j.optBoolean("challenger",false));
+            debug = j.optBoolean("debug",false);
+
+            if(debug){
+                mMainHandler = new Handler(){
+                    @Override
+                    public void handleMessage(Message msg) {
+
+
+                        // 接收子线程的消息
+                        Toast.makeText(con, msg.obj.toString(), Toast.LENGTH_SHORT).show();
+
+//                        NHelper.getNHelper().showStatus(context, msg.obj.toString(), true, true, NHelper.SHORT);
+                    }
+                };
+            }
         }
 
     }

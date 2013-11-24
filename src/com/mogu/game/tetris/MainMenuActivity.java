@@ -35,7 +35,8 @@ public class MainMenuActivity extends Activity {
 				Intent mainIntent = new Intent(this,MainActivity.class);
 		    	Bundle extras=new Bundle();
 		    	mainIntent.putExtras(extras);
-		    	startActivity(mainIntent); 
+		    	startActivity(mainIntent);
+//                finish();
 				break;
 			case R.id.duoren:
 				Intent mainIntent2 = new Intent(this,GameDaTing.class);
