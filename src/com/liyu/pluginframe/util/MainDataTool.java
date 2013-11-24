@@ -3,7 +3,6 @@ package com.liyu.pluginframe.util;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
-import android.view.Gravity;
 import android.widget.Toast;
 import org.json.JSONException;
 import org.json.JSONObject;
