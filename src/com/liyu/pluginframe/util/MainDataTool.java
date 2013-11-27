@@ -24,6 +24,9 @@ public class MainDataTool {
 
     private static Handler mMainHandler =null;
 
+    private static String appcode=null;
+    private static String appname=null;
+
 
     public static UserInfo getUserInfo() {
         return userInfo;
@@ -70,9 +73,9 @@ public class MainDataTool {
                     break;
             }
 
-			j.put("appcode", con.getPackageName());
+			j.put("appcode", appcode);
             j.put("datetime",format1.format(new Date()));
-			j.put("appname", con.getPackageManager().getApplicationLabel(con.getApplicationInfo()));
+			j.put("appname", appname);
 			j.put("newresult", totaljf);
 
             j.put("jf",jf);
@@ -109,6 +112,8 @@ public class MainDataTool {
 
     public static void getUserInfoJSON(Activity mainactivity){
         con = mainactivity.getApplicationContext();
+        appcode = con.getPackageName();
+        appname =  con.getPackageManager().getApplicationLabel(con.getApplicationInfo()).toString();
         JSONObject j=null;
         String result = mainactivity.getIntent().getExtras().getString("user");
         if(result!=null){
