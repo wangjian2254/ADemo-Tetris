@@ -15,7 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MainDataTool {
-	private final static String RESULTDATA="resultData";
+//	private final static String RESULTDATA="resultData";
 	private final static String DATA="data";
     private static DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//默认应用中的时间格式化
     private static Context con;
@@ -37,7 +37,7 @@ public class MainDataTool {
     public static enum Model{NORMAL,DAILY,WEEKLY,MONTHLY,YEAR};
 
 	public static void setResultString1(int jf,String message,Model model){
-		SharedPreferences resp = con.getSharedPreferences(RESULTDATA, 0); 
+		SharedPreferences resp = con.getSharedPreferences(appcode, 0);
 		String pjs=resp.getString(DATA,null);  
 		int totaljf=jf;
 		if(pjs!=null){
@@ -51,7 +51,7 @@ public class MainDataTool {
 			}
 		}
 		
-		SharedPreferences.Editor sharedata = con.getSharedPreferences(RESULTDATA, 0).edit();  
+		SharedPreferences.Editor sharedata = con.getSharedPreferences(appcode, 0).edit();
 		JSONObject j=new JSONObject();
 		try {
 			j.put("version", 1);
