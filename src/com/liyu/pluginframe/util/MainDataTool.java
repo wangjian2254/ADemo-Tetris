@@ -46,6 +46,11 @@ public class MainDataTool {
 				if(js.optString("model","normal").equals("normal")&&js.optInt("newresult", 0)>0){
 					totaljf+=js.getInt("newresult");
 				}
+                if(!js.optString("model","normal").equals("normal")){
+                    if(js.getInt("newresult")>=totaljf){
+                        totaljf=js.getInt("newresult");
+                    }
+                }
 			}catch(Exception e){
 				
 			}
