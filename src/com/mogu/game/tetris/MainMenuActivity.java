@@ -45,7 +45,7 @@ public class MainMenuActivity extends Activity {
 		    	startActivity(mainIntent2); 
 				break;
 			case R.id.daoju:
-				
+                MainDataTool.setResultString1(20,"俄罗斯方块获取新的积分！", MainDataTool.Model.WEEKLY);
 				break;
 			case R.id.shezhi:
 				
