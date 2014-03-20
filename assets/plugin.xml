@@ -2,7 +2,7 @@
 <!-- 插件提供的功能(类) -->
 <plugin-features>
     <!-- version 为plugin 版本，目前值固定为1 -->
-    <version>1</version>
+    <version>2</version>
 	<!-- intent 为Activity，key =main 为插件入口-->
 	<intent action="com.mogu.game.tetris.MainMenuActivity" key="main">
 	    俄罗斯方块入口
@@ -12,5 +12,7 @@
 	<code>a4-s2</code>
 	<!-- type 为插件的类型 game 为游戏类型 -->
 	<type>game</type>
-	
+	<gameroom>true</gameroom>
+	<maxusers>8</maxusers>
+
 </plugin-features>
