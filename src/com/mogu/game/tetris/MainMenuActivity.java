@@ -36,6 +36,7 @@ public class MainMenuActivity extends Activity {
 		    	Bundle extras=new Bundle();
 		    	mainIntent.putExtras(extras);
 		    	startActivity(mainIntent);
+
 //                finish();
 				break;
 			case R.id.duoren:
@@ -45,7 +46,7 @@ public class MainMenuActivity extends Activity {
 		    	startActivity(mainIntent2); 
 				break;
 			case R.id.daoju:
-                MainDataTool.setResultString1(20,"俄罗斯方块获取新的积分！", MainDataTool.Model.WEEKLY);
+                MainDataTool.setResultString1(35,"俄罗斯方块获取新的积分！", MainDataTool.Model.WEEKLY);
 				break;
 			case R.id.shezhi:
 				
@@ -68,6 +69,7 @@ public class MainMenuActivity extends Activity {
     public void onResume(){
     	super.onResume();
     	MobclickAgent.onResume(this);
+        MainDataTool.stopGetPoint();
     }
     public void onPause() {
         super.onPause();

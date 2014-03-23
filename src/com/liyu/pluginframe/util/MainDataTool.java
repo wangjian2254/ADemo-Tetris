@@ -3,7 +3,25 @@ package com.liyu.pluginframe.util;
 import android.app.Activity;
 import android.os.Handler;
 import android.os.Message;
+import android.util.Log;
 import android.widget.Toast;
+import loon.utils.collection.Array;
+import org.apache.http.HttpHost;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.DefaultHttpClient;
+import org.apache.http.message.BasicNameValuePair;
+import org.apache.http.params.CoreConnectionPNames;
+import org.apache.http.params.CoreProtocolPNames;
+import org.apache.http.protocol.BasicHttpContext;
+import org.apache.http.protocol.ExecutionContext;
+import org.apache.http.protocol.HTTP;
+import org.apache.http.protocol.HttpContext;
+import org.apache.http.util.EntityUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -12,7 +30,7 @@ import android.content.SharedPreferences;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Date;
+import java.util.*;
 
 public class MainDataTool {
 //	private final static String RESULTDATA="resultData";
@@ -27,6 +45,159 @@ public class MainDataTool {
     private static String appcode=null;
     private static String appname=null;
 
+
+    private static int version=0;
+    private static String spaceid=null;
+    private static String author=null;
+    private static String gameroomurl=null;
+    private static ArrayList<String> userlist=new ArrayList<String>();
+
+    private static Map<String,String> userPointMap = new HashMap<String, String>();
+    private static List<BasicNameValuePair> getPointList = new ArrayList< BasicNameValuePair >();
+
+    private static boolean runing=false;
+
+    private static   Thread th = new Thread()
+    {
+        public void run()
+        {
+            while (runing){
+                try{
+                    HttpPost postMet = new HttpPost(gameroomurl+"/GetAllPoint");
+
+                    postMet.setEntity(new UrlEncodedFormEntity(getPointList, HTTP.UTF_8));
+
+                    Log.e("request", gameroomurl+"/GetAllPoint");
+                    DefaultHttpClient client = new DefaultHttpClient();
+                    HttpContext httpContext=new BasicHttpContext();
+                    client.getParams().setParameter(
+                            CoreConnectionPNames.CONNECTION_TIMEOUT, 30000);
+                    client.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 30000);
+                    client.getParams().setParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
+
+
+                    HttpResponse httpResponse = client.execute(postMet,httpContext);
+
+
+
+                    int statusCode=httpResponse.getStatusLine().getStatusCode();
+
+                    if (statusCode == 200) {
+                        // 取出回应字串
+                        setPoint(EntityUtils.toString(httpResponse.getEntity()));
+                    }
+                }
+                catch (Exception e)
+                {
+
+                }
+
+                try {
+                    sleep(5000);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+
+
+        }
+    };
+
+    private static void setPoint(String result){
+        JSONObject jsonobj= null;
+        try {
+            jsonobj = new JSONObject(result);
+            int status=jsonobj.getInt("status");
+            if(status==200){
+                JSONArray jsonArray= jsonobj.getJSONArray("result");
+                JSONObject userp = null;
+                for(int i=0;i<jsonArray.length();i++){
+                    userp = jsonArray.getJSONObject(i);
+                    userPointMap.put(userp.optString("username"),userp.optString("point",""));
+                    if(debug){
+                        try{
+                            mMainHandler.obtainMessage(0,""+userp.optString("username")+":"+userp.optString("point","初始化")).sendToTarget();
+                        } catch (Exception e){
+
+                        }
+                    }
+
+                }
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    public static void startGetPoint(){
+        try{
+            runing=true;
+            uploadPoint("");
+            th.start();
+        }catch (Exception e){
+
+        }
+    }
+    public static void stopGetPoint(){
+        runing=false;
+    }
+
+    public static void uploadPoint(String point){
+        if(getPointList.size()==4){
+            getPointList.remove(3);
+        }
+        getPointList.add(new BasicNameValuePair("point",point));
+        if(debug){
+            try{
+                mMainHandler.obtainMessage(0,"发送积分："+userInfo.getUsername()+":"+point).sendToTarget();
+            } catch (Exception e){
+
+            }
+        }
+        Thread th2 = new Thread()
+        {
+            public void run()
+            {
+                String strResult=null;
+                try{
+                    HttpPost postMet = new HttpPost(gameroomurl+"/UploadPoint");
+
+                    postMet.setEntity(new UrlEncodedFormEntity(getPointList, HTTP.UTF_8));
+
+                    Log.e("request", gameroomurl+"/UploadPoint");
+                    DefaultHttpClient client = new DefaultHttpClient();
+                    HttpContext httpContext=new BasicHttpContext();
+                    client.getParams().setParameter(
+                            CoreConnectionPNames.CONNECTION_TIMEOUT, 30000);
+                    client.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 30000);
+                    client.getParams().setParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
+
+
+                    HttpResponse httpResponse = client.execute(postMet,httpContext);
+
+
+
+                    int statusCode=httpResponse.getStatusLine().getStatusCode();
+
+                    if (statusCode == 200) {
+                        // 取出回应字串
+
+
+                        strResult = EntityUtils.toString(httpResponse.getEntity());
+                        setPoint(strResult);
+
+                    }
+                }
+                catch (Exception e)
+                {
+
+                }
+
+            }
+        };
+        th2.start();
+    }
 
     public static UserInfo getUserInfo() {
         return userInfo;
@@ -87,7 +258,6 @@ public class MainDataTool {
 
 			j.put("message", message);
 		} catch (JSONException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
@@ -98,7 +268,6 @@ public class MainDataTool {
         }
 
 
-//        Toast.makeText(con,""+jf,Toast.LENGTH_LONG).show();
         String log=null;
         for(int k=0;k<100;k++){
             log = resp.getString(DATA+k,null);
@@ -139,6 +308,25 @@ public class MainDataTool {
             userInfo.setC_jid(j.optString("c_jid",null));
             userInfo.setChallengr(j.optBoolean("challenger",false));
             debug = j.optBoolean("debug",false);
+            if(j.has("version")&&j.optInt("version",1)==2){
+                version = j.optInt("version");
+                spaceid = j.optString("spaceid","");
+                author = j.optString("author","");
+                gameroomurl = j.optString("gameroom","");
+                try {
+                    JSONArray jsonArray = j.getJSONArray("userlist");
+                    for(int i=0;i<jsonArray.length();i++){
+                       userlist.add(jsonArray.getString(i));
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                getPointList.add(new BasicNameValuePair("username", userInfo.getUsername()));
+                getPointList.add(new BasicNameValuePair("appcode",appcode));
+                getPointList.add(new BasicNameValuePair("spaceid",spaceid));
+
+            }
 
             if(debug){
                 mMainHandler = new Handler(){

@@ -1,5 +1,6 @@
 package com.mogu.game.tetris;
 
+import com.liyu.pluginframe.util.MainDataTool;
 import loon.LGame;
 import loon.LSetting;
 import loon.core.graphics.opengl.LTexture;
@@ -47,6 +48,7 @@ public class MainActivity extends LGame {
 		setting.fps = 30;
 		setting.landscape = false;
 		register(setting, Tetris.class);
+        MainDataTool.startGetPoint();
 		
 	}
 	

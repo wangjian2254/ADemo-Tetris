@@ -219,7 +219,8 @@ public class Tetris extends Screen {
 //			num++;
 			// 已初始化并且非游戏失败
 			if (gameStart && !gameField.isGameOver()) {
-				
+
+
 				//炸弹道具
 				if(currentDaoJu!=null){
 					
@@ -238,6 +239,7 @@ public class Tetris extends Screen {
 					if (gameField.hasLines()) {
 						curLevel = gameField.getLevel();
 					}
+                    MainDataTool.uploadPoint(String.valueOf(gameField.getPoints()));
 				}
                 if(fasttools){
                     delay.setDelay(50);
