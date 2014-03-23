@@ -144,10 +144,11 @@ public class MainDataTool {
     }
 
     public static void uploadPoint(String point){
-        if(getPointList.size()==4){
-            getPointList.remove(3);
-        }
-        getPointList.add(new BasicNameValuePair("point",point));
+        final List<BasicNameValuePair> tempPointList = new ArrayList< BasicNameValuePair >();
+        tempPointList.add(new BasicNameValuePair("username", userInfo.getUsername()));
+        tempPointList.add(new BasicNameValuePair("appcode",appcode));
+        tempPointList.add(new BasicNameValuePair("spaceid",spaceid));
+        tempPointList.add(new BasicNameValuePair("point",point));
         if(debug){
             try{
                 mMainHandler.obtainMessage(0,"发送积分："+userInfo.getUsername()+":"+point).sendToTarget();
@@ -163,7 +164,7 @@ public class MainDataTool {
                 try{
                     HttpPost postMet = new HttpPost(gameroomurl+"/UploadPoint");
 
-                    postMet.setEntity(new UrlEncodedFormEntity(getPointList, HTTP.UTF_8));
+                    postMet.setEntity(new UrlEncodedFormEntity(tempPointList, HTTP.UTF_8));
 
                     Log.e("request", gameroomurl+"/UploadPoint");
                     DefaultHttpClient client = new DefaultHttpClient();
