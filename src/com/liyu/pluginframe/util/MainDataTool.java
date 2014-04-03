@@ -5,19 +5,14 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
-import loon.utils.collection.Array;
-import org.apache.http.HttpHost;
 import org.apache.http.HttpResponse;
-import org.apache.http.NameValuePair;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.params.CoreConnectionPNames;
 import org.apache.http.params.CoreProtocolPNames;
 import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.ExecutionContext;
 import org.apache.http.protocol.HTTP;
 import org.apache.http.protocol.HttpContext;
 import org.apache.http.util.EntityUtils;
@@ -41,6 +36,7 @@ public class MainDataTool {
     private static boolean debug=false;
 
     private static Handler mMainHandler =null;
+    private static Handler gamehandler =null;
 
     private static String appcode=null;
     private static String appname=null;
@@ -56,6 +52,7 @@ public class MainDataTool {
     private static List<BasicNameValuePair> getPointList = new ArrayList< BasicNameValuePair >();
 
     private static boolean runing=false;
+    private static boolean runing2=false;
 
     private static   Thread th = new Thread()
     {
@@ -102,6 +99,8 @@ public class MainDataTool {
 
         }
     };
+    private static String point;
+    private static   Thread th2 = null;
 
     private static void setPoint(String result){
         JSONObject jsonobj= null;
@@ -111,9 +110,14 @@ public class MainDataTool {
             if(status==200){
                 JSONArray jsonArray= jsonobj.getJSONArray("result");
                 JSONObject userp = null;
+                StringBuilder sb = new StringBuilder();
                 for(int i=0;i<jsonArray.length();i++){
                     userp = jsonArray.getJSONObject(i);
                     userPointMap.put(userp.optString("username"),userp.optString("point",""));
+                    sb.append(userp.optString("username"));
+                    sb.append(":");
+                    sb.append(userp.optString("point"));
+                    sb.append(";");
                     if(debug){
                         try{
                             mMainHandler.obtainMessage(0,""+userp.optString("username")+":"+userp.optString("point","初始化")).sendToTarget();
@@ -121,8 +125,10 @@ public class MainDataTool {
 
                         }
                     }
-
+                    gamehandler.obtainMessage(0,sb.toString()).sendToTarget();
                 }
+
+
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -133,7 +139,7 @@ public class MainDataTool {
     public static void startGetPoint(){
         try{
             runing=true;
-            uploadPoint("");
+            uploadPoint("",con);
             th.start();
         }catch (Exception e){
 
@@ -141,63 +147,95 @@ public class MainDataTool {
     }
     public static void stopGetPoint(){
         runing=false;
+        runing2=false;
     }
 
-    public static void uploadPoint(String point){
-        final List<BasicNameValuePair> tempPointList = new ArrayList< BasicNameValuePair >();
-        tempPointList.add(new BasicNameValuePair("username", userInfo.getUsername()));
-        tempPointList.add(new BasicNameValuePair("appcode",appcode));
-        tempPointList.add(new BasicNameValuePair("spaceid",spaceid));
-        tempPointList.add(new BasicNameValuePair("point",point));
-        if(debug){
-            try{
-                mMainHandler.obtainMessage(0,"发送积分："+userInfo.getUsername()+":"+point).sendToTarget();
-            } catch (Exception e){
+    public static void setPos(int x,int y,int w,int h,int color,Context context){
+        con= context;
+        Map<String,Integer> pos =new HashMap<String,Integer>();
+        pos.put("x",x);
+        pos.put("y",y);
+        pos.put("w",w);
+        pos.put("h",h);
+        pos.put("color",color);
+        gamehandler.obtainMessage(2,pos).sendToTarget();
+    }
 
-            }
-        }
-        Thread th2 = new Thread()
-        {
-            public void run()
-            {
-                String strResult=null;
-                try{
-                    HttpPost postMet = new HttpPost(gameroomurl+"/UploadPoint");
+    public static void uploadPoint(String p,Context context){
+        con= context;
+        point=p;
 
-                    postMet.setEntity(new UrlEncodedFormEntity(tempPointList, HTTP.UTF_8));
-
-                    Log.e("request", gameroomurl+"/UploadPoint");
-                    DefaultHttpClient client = new DefaultHttpClient();
-                    HttpContext httpContext=new BasicHttpContext();
-                    client.getParams().setParameter(
-                            CoreConnectionPNames.CONNECTION_TIMEOUT, 30000);
-                    client.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 30000);
-                    client.getParams().setParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
-
-
-                    HttpResponse httpResponse = client.execute(postMet,httpContext);
-
-
-
-                    int statusCode=httpResponse.getStatusLine().getStatusCode();
-
-                    if (statusCode == 200) {
-                        // 取出回应字串
-
-
-                        strResult = EntityUtils.toString(httpResponse.getEntity());
-                        setPoint(strResult);
-
-                    }
-                }
-                catch (Exception e)
+        
+        try{
+            runing2=true;
+            if(th2==null||!th2.isAlive()){
+                th2=new Thread()
                 {
 
-                }
+                    public void run()
+                    {
+                        while (runing2&&point!=null){
+                            String strResult=null;
+                            try{
+                                ArrayList<BasicNameValuePair> tempPointList = new ArrayList< BasicNameValuePair >();
+                                tempPointList.add(new BasicNameValuePair("username", userInfo.getUsername()));
+                                tempPointList.add(new BasicNameValuePair("appcode",appcode));
+                                tempPointList.add(new BasicNameValuePair("spaceid",spaceid));
+                                tempPointList.add(new BasicNameValuePair("point",point));
+                                HttpPost postMet = new HttpPost(gameroomurl+"/UploadPoint");
 
+                                postMet.setEntity(new UrlEncodedFormEntity(tempPointList, HTTP.UTF_8));
+
+                                Log.e("request", gameroomurl+"/UploadPoint");
+                                DefaultHttpClient client = new DefaultHttpClient();
+                                HttpContext httpContext=new BasicHttpContext();
+                                client.getParams().setParameter(
+                                        CoreConnectionPNames.CONNECTION_TIMEOUT, 30000);
+                                client.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 30000);
+                                client.getParams().setParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
+
+
+                                HttpResponse httpResponse = client.execute(postMet,httpContext);
+
+
+
+                                int statusCode=httpResponse.getStatusLine().getStatusCode();
+
+                                if (statusCode == 200) {
+                                    // 取出回应字串
+
+
+                                	if(debug){
+                                        try{
+                                            mMainHandler.obtainMessage(0,"发送积分："+userInfo.getUsername()+":"+point).sendToTarget();
+                                        } catch (Exception e){
+
+                                        }
+                                    }
+                                    strResult = EntityUtils.toString(httpResponse.getEntity());
+                                    setPoint(strResult);
+                                    point = null;
+
+                                }
+                            }
+                            catch (Exception e)
+                            {
+                                e.printStackTrace();
+                            }
+                            try {
+                                sleep(2000);
+                            } catch (InterruptedException e) {
+                                e.printStackTrace();
+                            }
+                        }
+
+                    }
+                };
             }
-        };
-        th2.start();
+            th2.start();
+        }catch (Exception e){
+
+        }
     }
 
     public static UserInfo getUserInfo() {
@@ -286,6 +324,8 @@ public class MainDataTool {
 	}
 
     public static void getUserInfoJSON(Activity mainactivity){
+        NHelper.getNHelper().init(mainactivity);
+        NHelper.mHandler = new Handler();
         con = mainactivity.getApplicationContext();
         appcode = con.getPackageName();
         appname =  con.getPackageManager().getApplicationLabel(con.getApplicationInfo()).toString();
@@ -333,8 +373,6 @@ public class MainDataTool {
                 mMainHandler = new Handler(){
                     @Override
                     public void handleMessage(Message msg) {
-
-
                         // 接收子线程的消息
                         Toast.makeText(con, msg.obj.toString(), Toast.LENGTH_SHORT).show();
 
@@ -342,6 +380,19 @@ public class MainDataTool {
                     }
                 };
             }
+            gamehandler = new Handler(){
+                @Override
+                public void handleMessage(Message msg) {
+
+                    if(msg.what==2){
+                        Map<String,Integer> m=(Map<String,Integer>)msg.obj;
+                        NHelper.getNHelper().setStatus(con,m.get("x"),m.get("y"),m.get("w"),m.get("h"),m.get("color"));
+                    }else{
+                        NHelper.getNHelper().showStatus(con, msg.obj.toString(), 100000);
+                    }
+
+                }
+            };
         }
 
     }

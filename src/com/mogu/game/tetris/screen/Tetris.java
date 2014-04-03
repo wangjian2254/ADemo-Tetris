@@ -239,7 +239,8 @@ public class Tetris extends Screen {
 					if (gameField.hasLines()) {
 						curLevel = gameField.getLevel();
 					}
-                    MainDataTool.uploadPoint(String.valueOf(gameField.getPoints()));
+                        MainDataTool.setPos(CT.gC().game_siglemessage_x+gameField.getPoints(),CT.gC().game_siglemessage_y,180,40,0xFFFFFFFF,LSystem.screenActivity);
+                    MainDataTool.uploadPoint(String.valueOf(gameField.getPoints()),LSystem.screenActivity);
 				}
                 if(fasttools){
                     delay.setDelay(50);

@@ -12,7 +12,9 @@
 	<code>a4-s2</code>
 	<!-- type 为插件的类型 game 为游戏类型 -->
 	<type>game</type>
+    <!-- 是否支持蘑菇游戏房间 -->
 	<gameroom>true</gameroom>
+    <!-- 蘑菇游戏房间 最多人数 -->
 	<maxusers>8</maxusers>
 
 </plugin-features>

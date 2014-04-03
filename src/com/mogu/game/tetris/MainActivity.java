@@ -41,10 +41,10 @@ public class MainActivity extends LGame {
 		LTexture.ALL_LINEAR = true;
 		LSetting setting = new LSetting();
 		setting.mode=LMode.Fill;
-		setting.showMemory=true;
+		setting.showMemory=false;
 		setting.width = CT.gC().all_w;
 		setting.height = CT.gC().all_h;
-		setting.showFPS = true;
+		setting.showFPS = false;
 		setting.fps = 30;
 		setting.landscape = false;
 		register(setting, Tetris.class);
