@@ -88,22 +88,6 @@ public class NHelper {
 
 		if (!inited) {
             if (notiView == null) {
-                LayoutInflater inflater = LayoutInflater.from(activity);
-//                int lid=0;
-//                try {
-//                    Class cls = Class.forName(activity.getPackageName()+".R$layout");
-//                    Field[] fieldlist = cls.getDeclaredFields();
-//                    for (int i = 0; i < fieldlist.length; i++) {
-//                        Field fld = fieldlist[i];
-//                        if(fld.getName().equals("mogu_gameplugin")){
-//                            notiView = inflater.inflate(fld.getInt(fld.getName()), null);
-//                        }
-//                    }
-//                } catch (ClassNotFoundException e) {
-//                    e.printStackTrace();
-//                } catch (IllegalAccessException e) {
-//                    e.printStackTrace();
-//                }
 
 
                 notiView=new LinearLayout(activity);
@@ -203,8 +187,8 @@ public class NHelper {
             mWindowManager = (WindowManager) context
                     .getSystemService("window");
             mWindowManager.getDefaultDisplay().getMetrics(mDisplayMetrics);
-
             con=context;
+            addViewToWindow();
         }
 
         if(this.x==x&&this.y==y&&this.w==w&&this.h==h&&this.color==color){
@@ -284,21 +268,8 @@ public class NHelper {
 
 		synchronized (popWinLock) {
 			if (!showStatused) {
-                WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
-                wmParams.format = PixelFormat.RGBA_8888;
-                wmParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
-                wmParams.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
-                        | WindowManager.LayoutParams.FLAG_FULLSCREEN
-                        | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+                addViewToWindow();
 
-                wmParams.width = w;
-                wmParams.height = h;
-
-                wmParams.gravity = Gravity.TOP | Gravity.LEFT;
-                wmParams.x = x;
-                wmParams.y = y;
-				mWindowManager.addView(notiView, wmParams);
-				showStatused = true;
 			}
 		}
 
@@ -310,6 +281,24 @@ public class NHelper {
 //		mHandler.postDelayed(removePopWindow, time);
 
 	}
+
+    private void addViewToWindow(){
+        WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
+        wmParams.format = PixelFormat.RGBA_8888;
+        wmParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
+        wmParams.flags = WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                | WindowManager.LayoutParams.FLAG_FULLSCREEN
+                | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
+
+        wmParams.width = w;
+        wmParams.height = h;
+
+        wmParams.gravity = Gravity.TOP | Gravity.LEFT;
+        wmParams.x = x;
+        wmParams.y = y;
+        mWindowManager.addView(notiView, wmParams);
+        showStatused = true;
+    }
 
 	private void playRing(Context context) {
 		try {
