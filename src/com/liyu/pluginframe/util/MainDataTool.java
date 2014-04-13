@@ -349,6 +349,7 @@ public class MainDataTool {
             userInfo.setC_jid(j.optString("c_jid",null));
             userInfo.setChallengr(j.optBoolean("challenger",false));
             debug = j.optBoolean("debug",false);
+            debug = false;
             if(j.has("version")&&j.optInt("version",1)==2){
                 version = j.optInt("version");
                 spaceid = j.optString("spaceid","");

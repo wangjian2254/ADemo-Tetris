@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- 插件提供的功能(类) -->
 <plugin-features>
-    <!-- version 为plugin 版本，目前值固定为1 -->
+    <!-- version 为plugin 版本，单人游戏为1 ；多人游戏带悬浮窗 为2 -->
     <version>2</version>
 	<!-- intent 为Activity，key =main 为插件入口-->
 	<intent action="com.mogu.game.tetris.MainMenuActivity" key="main">
