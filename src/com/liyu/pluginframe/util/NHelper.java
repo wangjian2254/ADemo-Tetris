@@ -3,6 +3,7 @@ package com.liyu.pluginframe.util;
 import android.app.*;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.PixelFormat;
 import android.media.Ringtone;
@@ -16,13 +17,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 import android.widget.TextView;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 public class NHelper {
     public static  int SHORT=1000;
@@ -37,7 +42,8 @@ public class NHelper {
 
 	private int statusBarHeight;
 	private LinearLayout notiView;
-	private TextView tv;
+
+    private Map<String,TextView> userpoint=new HashMap<String, TextView>();
 	private boolean showStatused = false;
 	WindowManager mWindowManager;
     Context con;
@@ -53,7 +59,7 @@ public class NHelper {
     private int h=24;
     private int color =0;
 
-
+    private String headpic="com.mogu3.mainapp.im.util.HeaderPic";
 	/**
 	 * 单例类，
 	 */
@@ -94,8 +100,10 @@ public class NHelper {
                 notiView.setOrientation(0);
                 FrameLayout.LayoutParams params=new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
                 params.gravity=Gravity.BOTTOM|Gravity.RIGHT;
-                tv=new TextView(activity);
-                notiView.addView(tv, params);
+
+
+
+
 
                 statusBarHeight = getStatusBarHeight(activity);
                 mDisplayMetrics = new DisplayMetrics();
@@ -108,6 +116,39 @@ public class NHelper {
 			inited = true;
 		}
 	}
+
+    public void setHead(Context content,Map<String,Integer> userlist){
+        try {
+
+            Context targetContext=content.createPackageContext("com.mogu3.mainapp", Context.CONTEXT_INCLUDE_CODE|Context.CONTEXT_IGNORE_SECURITY);
+            Class<?> c;
+            c = targetContext.getClassLoader().loadClass(headpic);
+            Method m = c.getMethod("getHeader", new Class[] {int.class});
+            Object[] p=new Object[1];
+            TextView t=null;
+            ImageView imageView=null;
+            for (String u:userlist.keySet()){
+                t = new TextView(content);
+                t.setText(u);
+                imageView = new  ImageView(content);
+                imageView.setImageDrawable(targetContext.getResources().getDrawable((Integer)m.invoke(c, p)));
+                userpoint.put(u,t);
+                notiView.addView(t);
+                notiView.addView(imageView);
+            }
+
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+    }
 
 	/**
 	 * 判断是否为平板模式
@@ -203,7 +244,10 @@ public class NHelper {
 //        background.setBackgroundColor(color);
 //        TextView txtView = (TextView) notiView.findViewWithTag("title");
 //        TextView txtView = (TextView) notiView.findViewById(R.id.title);
-        tv.setTextColor(color);
+        for(String u:userpoint.keySet()){
+            userpoint.get(u).setTextColor(color);
+        }
+//        tv.setTextColor(color);
         synchronized (popWinLock) {
 //            if (showStatused) {
 //                mWindowManager.removeView(notiView);
@@ -239,7 +283,7 @@ public class NHelper {
 	 * @param context
 	 * @param message
 	 */
-	public void showStatus(Context context, String message, int time) {
+	public void showStatus(Context context,Map<String,String> up) {
         if(con!=context){
             synchronized (popWinLock) {
                 if (showStatused) {
@@ -260,7 +304,14 @@ public class NHelper {
 
 //		TextView txtView = (TextView) notiView.findViewById(R.id.title);
 //        TextView txtView = (TextView) notiView.findViewWithTag("title");
-		tv.setText(message);
+        for(String u:up.keySet()){
+            if(userpoint.containsKey(u)){
+                userpoint.get(u).setText(up.get(u));
+            }
+
+        }
+
+//		tv.setText(message);
 
 
 

@@ -46,13 +46,15 @@ public class MainDataTool {
     private static String spaceid=null;
     private static String author=null;
     private static String gameroomurl=null;
-    private static ArrayList<String> userlist=new ArrayList<String>();
+    private static Map<String,Integer> userlist=new HashMap<String, Integer>();
 
     private static Map<String,String> userPointMap = new HashMap<String, String>();
     private static List<BasicNameValuePair> getPointList = new ArrayList< BasicNameValuePair >();
 
     private static boolean runing=false;
     private static boolean runing2=false;
+
+    private static int x,y,w,h,c;
 
     private static   Thread th = new Thread()
     {
@@ -125,9 +127,14 @@ public class MainDataTool {
 
                         }
                     }
-                    gamehandler.obtainMessage(0,sb.toString()).sendToTarget();
-                }
 
+                }
+                userPointMap.put("test1","10");
+                userPointMap.put("test2","20");
+                userPointMap.put("test3","30");
+                userPointMap.put("test4","40");
+                userPointMap.put("test5","50");
+                gamehandler.obtainMessage(0).sendToTarget();
 
             }
         } catch (JSONException e) {
@@ -150,15 +157,23 @@ public class MainDataTool {
         runing2=false;
     }
 
-    public static void setPos(int x,int y,int w,int h,int color,Context context){
+    public static void setPos(int xx,int yy,int ww,int hh,int color,Context context){
+        if(x==xx&&y==yy&&w==ww&&h==hh&&c==color&&con==context){
+            return;
+        }
         con= context;
         Map<String,Integer> pos =new HashMap<String,Integer>();
-        pos.put("x",x);
-        pos.put("y",y);
-        pos.put("w",w);
-        pos.put("h",h);
+        pos.put("x",xx);
+        pos.put("y",yy);
+        pos.put("w",ww);
+        pos.put("h",hh);
         pos.put("color",color);
         gamehandler.obtainMessage(2,pos).sendToTarget();
+        x=xx;
+        y=yy;
+        w=ww;
+        h=hh;
+        c=color;
     }
 
     public static void uploadPoint(String p,Context context){
@@ -325,6 +340,7 @@ public class MainDataTool {
 
     public static void getUserInfoJSON(Activity mainactivity){
         NHelper.getNHelper().init(mainactivity);
+
         NHelper.mHandler = new Handler();
         con = mainactivity.getApplicationContext();
         appcode = con.getPackageName();
@@ -357,9 +373,17 @@ public class MainDataTool {
                 gameroomurl = j.optString("gameroom","");
                 try {
                     JSONArray jsonArray = j.getJSONArray("userlist");
+                    JSONObject ju=null;
                     for(int i=0;i<jsonArray.length();i++){
-                       userlist.add(jsonArray.getString(i));
+                        ju = jsonArray.getJSONObject(i);
+                       userlist.put(ju.getString("username"),ju.getInt("head"));
                     }
+                    userlist.put("test1",5);
+                    userlist.put("test2",4);
+                    userlist.put("test3",3);
+                    userlist.put("test4",2);
+                    userlist.put("test5",1);
+                    NHelper.getNHelper().setHead(mainactivity,userlist);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -389,7 +413,7 @@ public class MainDataTool {
                         Map<String,Integer> m=(Map<String,Integer>)msg.obj;
                         NHelper.getNHelper().setStatus(con,m.get("x"),m.get("y"),m.get("w"),m.get("h"),m.get("color"));
                     }else{
-                        NHelper.getNHelper().showStatus(con, msg.obj.toString(), 100000);
+                        NHelper.getNHelper().showStatus(con, userPointMap);
                     }
 
                 }
