@@ -27,7 +27,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 
 public class NHelper {
     public static  int SHORT=1000;
@@ -131,6 +130,7 @@ public class NHelper {
                 t = new TextView(content);
                 t.setText(u);
                 imageView = new  ImageView(content);
+                p[0]=userlist.get(u);
                 imageView.setImageDrawable(targetContext.getResources().getDrawable((Integer)m.invoke(c, p)));
                 userpoint.put(u,t);
                 notiView.addView(t);
@@ -281,7 +281,7 @@ public class NHelper {
 	 * 显示状态信息，不能点击
 	 * 
 	 * @param context
-	 * @param message
+	 * @param up
 	 */
 	public void showStatus(Context context,Map<String,String> up) {
         if(con!=context){

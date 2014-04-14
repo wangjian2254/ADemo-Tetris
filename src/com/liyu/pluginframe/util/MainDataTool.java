@@ -47,6 +47,7 @@ public class MainDataTool {
     private static String author=null;
     private static String gameroomurl=null;
     private static Map<String,Integer> userlist=new HashMap<String, Integer>();
+    private static Map<String,String> nicklist=new HashMap<String, String>();
 
     private static Map<String,String> userPointMap = new HashMap<String, String>();
     private static List<BasicNameValuePair> getPointList = new ArrayList< BasicNameValuePair >();
@@ -372,11 +373,15 @@ public class MainDataTool {
                 author = j.optString("author","");
                 gameroomurl = j.optString("gameroom","");
                 try {
-                    JSONArray jsonArray = j.getJSONArray("userlist");
+                    JSONArray jsonArray = new JSONArray(j.getString("userlist"));
+                    JSONArray nickArray = new JSONArray(j.getString("nicklist"));
                     JSONObject ju=null;
+                    JSONObject jn=null;
                     for(int i=0;i<jsonArray.length();i++){
                         ju = jsonArray.getJSONObject(i);
-                       userlist.put(ju.getString("username"),ju.getInt("head"));
+                        jn = nickArray.getJSONObject(i);
+                        userlist.put(ju.getString("username"),ju.getInt("head"));
+                        nicklist.put(jn.getString("username"),jn.getString("nickname"));
                     }
                     userlist.put("test1",5);
                     userlist.put("test2",4);
