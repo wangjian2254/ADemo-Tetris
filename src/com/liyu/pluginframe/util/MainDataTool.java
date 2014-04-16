@@ -388,7 +388,12 @@ public class MainDataTool {
                     userlist.put("test3",3);
                     userlist.put("test4",2);
                     userlist.put("test5",1);
-                    NHelper.getNHelper().setHead(mainactivity,userlist);
+                    nicklist.put("test1","Test1");
+                    nicklist.put("test2","Test2");
+                    nicklist.put("test3","Test1");
+                    nicklist.put("test4","Test4");
+                    nicklist.put("test5","Test5");
+                    NHelper.getNHelper().setHead(mainactivity,userlist,nicklist);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }

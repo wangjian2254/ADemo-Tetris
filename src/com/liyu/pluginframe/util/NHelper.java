@@ -116,7 +116,7 @@ public class NHelper {
 		}
 	}
 
-    public void setHead(Context content,Map<String,Integer> userlist){
+    public void setHead(Context content,Map<String,Integer> userlist,Map<String,String> nicklist){
         try {
 
             Context targetContext=content.createPackageContext("com.mogu3.mainapp", Context.CONTEXT_INCLUDE_CODE|Context.CONTEXT_IGNORE_SECURITY);
@@ -125,17 +125,41 @@ public class NHelper {
             Method m = c.getMethod("getHeader", new Class[] {int.class});
             Object[] p=new Object[1];
             TextView t=null;
+            TextView n=null;
             ImageView imageView=null;
+
+            LinearLayout headlinear=null;
+            LinearLayout pointlinear=null;
+            LinearLayout panellinear=new LinearLayout(content);
+            panellinear.setOrientation(LinearLayout.VERTICAL);
+
+
             for (String u:userlist.keySet()){
+                headlinear = new LinearLayout(content);
+                headlinear.setOrientation(LinearLayout.HORIZONTAL);
+                headlinear.setGravity(Gravity.CENTER_VERTICAL);
+                pointlinear = new LinearLayout(content);
+                pointlinear.setOrientation(LinearLayout.VERTICAL);
                 t = new TextView(content);
-                t.setText(u);
+                t.setText(nicklist.get(u));
+                n = new TextView(content);
+                n.setWidth(100);
+                n.setBackgroundColor(0xffff0000);
                 imageView = new  ImageView(content);
                 p[0]=userlist.get(u);
                 imageView.setImageDrawable(targetContext.getResources().getDrawable((Integer)m.invoke(c, p)));
-                userpoint.put(u,t);
-                notiView.addView(t);
-                notiView.addView(imageView);
+                imageView.setMaxWidth(40);
+                imageView.setMaxHeight(40);
+                userpoint.put(u, n);
+                headlinear.addView(imageView);
+                headlinear.addView(n);
+                pointlinear.addView(headlinear);
+                pointlinear.addView(t);
+                panellinear.addView(pointlinear);
+
+
             }
+            notiView.addView(panellinear);
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -302,11 +326,38 @@ public class NHelper {
 
 
 
-//		TextView txtView = (TextView) notiView.findViewById(R.id.title);
-//        TextView txtView = (TextView) notiView.findViewWithTag("title");
+        float max=0;
         for(String u:up.keySet()){
             if(userpoint.containsKey(u)){
-                userpoint.get(u).setText(up.get(u));
+//                userpoint.get(u).setText(up.get(u));
+                try{
+                    if(Integer.valueOf(up.get(u)).intValue()>max){
+                        max = Integer.valueOf(up.get(u)).intValue();
+                    }
+                }catch (Exception e){
+
+                }
+            }
+
+        }
+        float point=0;
+        for(String u:up.keySet()){
+            if(userpoint.containsKey(u)){
+                if(max==0){
+                    userpoint.get(u).setWidth(0);
+                }else{
+                    try{
+                        point=(Float.valueOf(up.get(u)).floatValue()/max*100);
+                        if(point>50||point==0.0){
+                            userpoint.get(u).setWidth((int)point);
+                        }else{
+                            userpoint.get(u).setWidth(5);
+                        }
+
+                    }catch (Exception e){
+                        userpoint.get(u).setWidth(0);
+                    }
+                }
             }
 
         }

@@ -184,12 +184,12 @@ public class Tetris extends Screen {
 		   
 		  /* 设置精灵初始位置 */  
 		   
-		zhadan.setLocation(50, 250);  
-		   
-		    
-		   
+		zhadan.setLocation(50, 250);
 
-		
+
+
+
+        MainDataTool.setPos(0,0,300,600,0xFFFFFFFF,LSystem.screenActivity);
 	}
 
 
@@ -239,7 +239,8 @@ public class Tetris extends Screen {
 					if (gameField.hasLines()) {
 						curLevel = gameField.getLevel();
 					}
-                        MainDataTool.setPos(CT.gC().game_siglemessage_x+gameField.getPoints(),CT.gC().game_siglemessage_y,180,40,0xFFFFFFFF,LSystem.screenActivity);
+//                        MainDataTool.setPos(CT.gC().game_siglemessage_x+gameField.getPoints(),CT.gC().game_siglemessage_y,180,40,0xFFFFFFFF,LSystem.screenActivity);
+
                     MainDataTool.uploadPoint(String.valueOf(gameField.getPoints()),LSystem.screenActivity);
 				}
                 if(fasttools){
