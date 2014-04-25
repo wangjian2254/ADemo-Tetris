@@ -48,6 +48,8 @@ public class MainDataTool {
     private static String gameroomurl=null;
     private static Map<String,Integer> userlist=new HashMap<String, Integer>();
     private static Map<String,String> nicklist=new HashMap<String, String>();
+    private static Map<Integer,String> shunxulist=new HashMap<Integer, String>();
+    private static Map<Integer,Map<String,Integer>> weizhilist=new HashMap<Integer, Map<String, Integer>>();
 
     private static Map<String,String> userPointMap = new HashMap<String, String>();
     private static List<BasicNameValuePair> getPointList = new ArrayList< BasicNameValuePair >();
@@ -55,7 +57,7 @@ public class MainDataTool {
     private static boolean runing=false;
     private static boolean runing2=false;
 
-    private static int x,y,w,h,c;
+    private static int x,y,w,h,c ;
 
     private static   Thread th = new Thread()
     {
@@ -158,10 +160,23 @@ public class MainDataTool {
         runing2=false;
     }
 
-    public static void setPos(int xx,int yy,int ww,int hh,int color,Context context){
-        if(x==xx&&y==yy&&w==ww&&h==hh&&c==color&&con==context){
-            return;
+    public static void setPos(int num,int xx,int yy,int ww,int color,Context context){
+        int hh=ww+24;
+        Map<String,Integer> numpos=weizhilist.get(num);
+        if (numpos!=null){
+            x=numpos.get("x");
+            y=numpos.get("y");
+            w=numpos.get("w");
+            h=numpos.get("h");
+            c = numpos.get("color");
+            if(x==xx&&y==yy&&w==ww&&h==hh&&c==color&&con==context){
+                return;
+            }
+        }else{
+            numpos = new HashMap<String, Integer>();
+            weizhilist.put(num,numpos);
         }
+
         con= context;
         Map<String,Integer> pos =new HashMap<String,Integer>();
         pos.put("x",xx);
@@ -169,12 +184,15 @@ public class MainDataTool {
         pos.put("w",ww);
         pos.put("h",hh);
         pos.put("color",color);
+        pos.put("num",num);
+
         gamehandler.obtainMessage(2,pos).sendToTarget();
-        x=xx;
-        y=yy;
-        w=ww;
-        h=hh;
-        c=color;
+        numpos.put("x",xx);
+        numpos.put("y",yy);
+        numpos.put("w",ww);
+        numpos.put("h",hh);
+        numpos.put("color",color);
+
     }
 
     public static void uploadPoint(String p,Context context){
@@ -372,6 +390,15 @@ public class MainDataTool {
                 spaceid = j.optString("spaceid","");
                 author = j.optString("author","");
                 gameroomurl = j.optString("gameroom","");
+                int face_board,n_1,n_2,n_3,n_4,n_5,n_6;
+                face_board = j.optInt("face_board");
+                n_1=j.optInt("n_1");
+                n_2=j.optInt("n_2");
+                n_3=j.optInt("n_3");
+                n_4=j.optInt("n_4");
+                n_5=j.optInt("n_5");
+                n_6=j.optInt("n_6");
+                NHelper.getNHelper().setResid(face_board,n_1,n_2,n_3,n_4,n_5,n_6);
                 try {
                     JSONArray jsonArray = new JSONArray(j.getString("userlist"));
                     JSONArray nickArray = new JSONArray(j.getString("nicklist"));
@@ -382,17 +409,18 @@ public class MainDataTool {
                         jn = nickArray.getJSONObject(i);
                         userlist.put(ju.getString("username"),ju.getInt("head"));
                         nicklist.put(jn.getString("username"),jn.getString("nickname"));
+                        shunxulist.put(i,ju.getString("username"));
                     }
                     userlist.put("test1",5);
                     userlist.put("test2",4);
                     userlist.put("test3",3);
                     userlist.put("test4",2);
                     userlist.put("test5",1);
-                    nicklist.put("test1","Test1");
-                    nicklist.put("test2","Test2");
-                    nicklist.put("test3","Test1");
-                    nicklist.put("test4","Test4");
-                    nicklist.put("test5","Test5");
+                    nicklist.put("test1","王总");
+                    nicklist.put("test2","奔波儿灞");
+                    nicklist.put("test3","霸波尔奔");
+                    nicklist.put("test4","秋香");
+                    nicklist.put("test5","沙和尚");
                     NHelper.getNHelper().setHead(mainactivity,userlist,nicklist);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -421,7 +449,7 @@ public class MainDataTool {
 
                     if(msg.what==2){
                         Map<String,Integer> m=(Map<String,Integer>)msg.obj;
-                        NHelper.getNHelper().setStatus(con,m.get("x"),m.get("y"),m.get("w"),m.get("h"),m.get("color"));
+                        NHelper.getNHelper().setStatus(con,m.get("num"),m.get("x"),m.get("y"),m.get("w"),m.get("h"),m.get("color"));
                     }else{
                         NHelper.getNHelper().showStatus(con, userPointMap);
                     }

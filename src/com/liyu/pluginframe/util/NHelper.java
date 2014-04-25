@@ -5,26 +5,22 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
-import android.graphics.PixelFormat;
+import android.graphics.*;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Vibrator;
 import android.util.DisplayMetrics;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.LinearLayout.LayoutParams;
-import android.widget.TextView;
+import android.view.*;
+import android.widget.*;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,9 +36,7 @@ public class NHelper {
 	private boolean inited = false;
 
 	private int statusBarHeight;
-	private LinearLayout notiView;
 
-    private Map<String,TextView> userpoint=new HashMap<String, TextView>();
 	private boolean showStatused = false;
 	WindowManager mWindowManager;
     Context con;
@@ -52,11 +46,26 @@ public class NHelper {
 
 	boolean getStatusing = false;
 
+    private static Map<Integer,Map<String,Integer>> weizhilist=new HashMap<Integer, Map<String, Integer>>();
+
+    private static Map<Integer,RelativeLayout> notiViewmap=new HashMap<Integer, RelativeLayout>();
+
+    private static Map<String,ImageView> paiming = new HashMap<String, ImageView>();
+    private static Map<String,TextView> jindulist = new HashMap<String, TextView>();
+    private static Map<String,Integer> wlist = new HashMap<String, Integer>();
+    private static  Map<String,Integer> userlist;
+    private static  Map<String,String> nicklist;
+
+
+
     private int x=0;
     private int y=0;
     private int w=120;
     private int h=24;
-    private int color =0;
+    private int c =0;
+
+    private int face_board=0;
+    private int[] nn =new int[6];
 
     private String headpic="com.mogu3.mainapp.im.util.HeaderPic";
 	/**
@@ -65,6 +74,17 @@ public class NHelper {
 	private NHelper() {
 
 	}
+
+    public void setResid(int f,int n1,int n2,int n3,int n4,int n5,int n6){
+        face_board=f;
+        nn[0]=n1;
+        nn[1]=n2;
+        nn[2]=n3;
+        nn[3]=n4;
+        nn[4]=n5;
+        nn[5]=n6;
+
+    }
 
 	public static NHelper getNHelper() {
 		if (instance == null) {
@@ -92,13 +112,13 @@ public class NHelper {
 	public void init(Activity activity) {
 
 		if (!inited) {
-            if (notiView == null) {
+//            if (notiView == null) {
 
 
-                notiView=new LinearLayout(activity);
-                notiView.setOrientation(0);
-                FrameLayout.LayoutParams params=new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-                params.gravity=Gravity.BOTTOM|Gravity.RIGHT;
+//                notiView=new LinearLayout(activity);
+//                notiView.setOrientation(0);
+//                FrameLayout.LayoutParams params=new FrameLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+//                params.gravity=Gravity.BOTTOM|Gravity.RIGHT;
 
 
 
@@ -110,16 +130,47 @@ public class NHelper {
         
 
 
-            }
+//            }
 
 			inited = true;
 		}
 	}
+    private static Bitmap drawableToBitmap(Drawable drawable) // drawable 转换成bitmap
+    {
+        int width = drawable.getIntrinsicWidth();   // 取drawable的长宽
+        int height = drawable.getIntrinsicHeight();
+        Bitmap.Config config = drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888:Bitmap.Config.RGB_565;         //取drawable的颜色格式
+        Bitmap bitmap = Bitmap.createBitmap(width, height, config);     // 建立对应bitmap
+        Canvas canvas = new Canvas(bitmap);         // 建立对应bitmap的画布
+        drawable.setBounds(0, 0, width, height);
+        drawable.draw(canvas);      // 把drawable内容画到画布中
+        return bitmap;
+    }
 
-    public void setHead(Context content,Map<String,Integer> userlist,Map<String,String> nicklist){
+    private static Bitmap zoomDrawable(Drawable drawable, int w, int h)
+    {
+        int width = drawable.getIntrinsicWidth();
+        int height= drawable.getIntrinsicHeight();
+        Bitmap oldbmp = drawableToBitmap(drawable); // drawable转换成bitmap
+        Matrix matrix = new Matrix();   // 创建操作图片用的Matrix对象
+        float scaleWidth = ((float)w / width);   // 计算缩放比例
+        float scaleHeight = ((float)h / height);
+        matrix.postScale(scaleWidth, scaleHeight);         // 设置缩放比例
+        Bitmap newbmp = Bitmap.createBitmap(oldbmp, 0, 0, width, height, matrix, true);       // 建立新的bitmap，其内容是对原bitmap的缩放后的图
+        return newbmp;       // 把bitmap转换成drawable并返回
+    }
+
+    public void setHead(Context content,Map<String,Integer> usermap,Map<String,String> nickmap){
+        con=content;
+        userlist = usermap;
+        nicklist = nickmap;
+        initHead();
+    }
+    private void initHead(){
+
         try {
 
-            Context targetContext=content.createPackageContext("com.mogu3.mainapp", Context.CONTEXT_INCLUDE_CODE|Context.CONTEXT_IGNORE_SECURITY);
+            Context targetContext=con.createPackageContext("com.mogu3.mainapp", Context.CONTEXT_INCLUDE_CODE|Context.CONTEXT_IGNORE_SECURITY);
             Class<?> c;
             c = targetContext.getClassLoader().loadClass(headpic);
             Method m = c.getMethod("getHeader", new Class[] {int.class});
@@ -128,38 +179,147 @@ public class NHelper {
             TextView n=null;
             ImageView imageView=null;
 
-            LinearLayout headlinear=null;
-            LinearLayout pointlinear=null;
-            LinearLayout panellinear=new LinearLayout(content);
-            panellinear.setOrientation(LinearLayout.VERTICAL);
+
+            RelativeLayout panellinear=null;
+            RelativeLayout panellinear1=null;
+            RelativeLayout panellinear2=null;
 
 
+            int num=0;
+            TextView t1;
             for (String u:userlist.keySet()){
-                headlinear = new LinearLayout(content);
-                headlinear.setOrientation(LinearLayout.HORIZONTAL);
-                headlinear.setGravity(Gravity.CENTER_VERTICAL);
-                pointlinear = new LinearLayout(content);
-                pointlinear.setOrientation(LinearLayout.VERTICAL);
-                t = new TextView(content);
-                t.setText(nicklist.get(u));
-                n = new TextView(content);
-                n.setWidth(100);
-                n.setBackgroundColor(0xffff0000);
-                imageView = new  ImageView(content);
-                p[0]=userlist.get(u);
-                imageView.setImageDrawable(targetContext.getResources().getDrawable((Integer)m.invoke(c, p)));
-                imageView.setMaxWidth(40);
-                imageView.setMaxHeight(40);
-                userpoint.put(u, n);
-                headlinear.addView(imageView);
-                headlinear.addView(n);
-                pointlinear.addView(headlinear);
-                pointlinear.addView(t);
-                panellinear.addView(pointlinear);
+                Map<String,Integer> numpos=weizhilist.get(num);
 
+                int face_board_w=80;
+                if (numpos!=null){
+                    face_board_w=numpos.get("w");
+                }
+                panellinear=notiViewmap.get(num);
+                if(panellinear==null){
+                    panellinear=new RelativeLayout(con);
+                }else{
+                    panellinear.removeAllViews();
+                }
+
+
+                panellinear1=new RelativeLayout(con);
+                panellinear1.setPadding(2,2,2,0);
+                RelativeLayout.LayoutParams n0=new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                n0.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                t = new TextView(con);
+                t.setHeight(26);
+                t.setPadding(0, 2, 0, 0);
+                t.setWidth(face_board_w-10);
+                t.setTextSize(12);
+                t.setId(num+200);
+                panellinear1.addView(t,n0);
+
+                panellinear2=new RelativeLayout(con);
+                imageView = new  ImageView(con);
+                imageView.setImageDrawable(targetContext.getResources().getDrawable(face_board));
+                panellinear.addView(imageView);
+                panellinear.addView(panellinear2);
+                panellinear.addView(panellinear1);
+
+                panellinear2.setPadding(5,5,5,5);
+
+                RelativeLayout.LayoutParams param=new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams nickparam=new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                RelativeLayout.LayoutParams paimingparam=new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+
+
+
+                t = new TextView(con);
+                t.setText(nicklist.get(u));
+                t.setHeight(21);
+                t.setPadding(0, 0, 0, 0);
+                t.setWidth(face_board_w-10);
+                t.setTextSize(12);
+                t.setId(num+1);
+
+                imageView = new  ImageView(con);
+                p[0]=userlist.get(u);
+//                BitmapFactory.decodeResource()
+                imageView.setImageBitmap(zoomDrawable(targetContext.getResources().getDrawable((Integer) m.invoke(c, p)), face_board_w-12, face_board_w-12));
+                imageView.setId(num+100);
+                param.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                param.addRule(RelativeLayout.CENTER_HORIZONTAL);
+                nickparam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                nickparam.addRule(RelativeLayout.CENTER_HORIZONTAL);
+
+                panellinear2.addView(imageView,param);
+                panellinear2.addView(t,nickparam);
+                imageView = new ImageView(con);
+                paimingparam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                paimingparam.addRule(RelativeLayout.ABOVE,num+1);
+
+
+                //进度条
+                RelativeLayout.LayoutParams j1=new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                j1.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                j1.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                t1 = new TextView(con);
+                t1.setWidth(0);
+                t1.setHeight(3);
+                t1.setBackgroundColor(0xfffff000);
+                panellinear1.addView(t1,j1);
+                jindulist.put(u+"_t",t1);
+                RelativeLayout.LayoutParams j2=new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                j2.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                j2.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                t1 = new TextView(con);
+                t1.setWidth(3);
+                t1.setHeight(0);
+                t1.setBackgroundColor(0xfffff000);
+                panellinear1.addView(t1,j2);
+                jindulist.put(u+"_r",t1);
+
+                RelativeLayout.LayoutParams j3=new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                j3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                j3.addRule(RelativeLayout.ABOVE,num+1);
+                t1 = new TextView(con);
+                t1.setWidth(0);
+                t1.setHeight(3);
+                t1.setBackgroundColor(0xfffff000);
+                panellinear2.addView(t1,j3);
+                jindulist.put(u+"_b",t1);
+
+                RelativeLayout.LayoutParams j4=new RelativeLayout.LayoutParams(
+                        ViewGroup.LayoutParams.WRAP_CONTENT,
+                        ViewGroup.LayoutParams.WRAP_CONTENT);
+                j4.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                j4.addRule(RelativeLayout.ABOVE,num+200);
+                t1 = new TextView(con);
+                t1.setWidth(3);
+                t1.setHeight(0);
+                t1.setBackgroundColor(0xfffff000);
+                panellinear1.addView(t1,j4);
+                jindulist.put(u+"_l",t1);
+                //进度条 end
+
+
+                paiming.put(u,imageView);
+                panellinear2.addView(imageView, paimingparam);
+                notiViewmap.put(num, panellinear);
+                wlist.put(u,face_board_w);
+                num++;
 
             }
-            notiView.addView(panellinear);
+            addViewToWindow();
 
         } catch (IllegalAccessException e) {
             e.printStackTrace();
@@ -228,20 +388,24 @@ public class NHelper {
 		}
 	}
 
-	Runnable removePopWindow = new Runnable() {
+//	Runnable removePopWindow = new Runnable() {
+//
+//		@Override
+//		public void run() {
+//			synchronized (popWinLock) {
+//				if (showStatused) {
+//					mWindowManager.removeView(notiView);
+//					showStatused = false;
+//				}
+//			}
+//		}
+//	};
 
-		@Override
-		public void run() {
-			synchronized (popWinLock) {
-				if (showStatused) {
-					mWindowManager.removeView(notiView);
-					showStatused = false;
-				}
-			}
-		}
-	};
-
-    public void setStatus(Context context,int x,int y,int w,int h,int color){
+    public void setStatus(Context context,int num,int xx,int yy,int ww,int hh,int color){
+        RelativeLayout notiView = notiViewmap.get(num);
+        if(notiView==null){
+            return;
+        }
         if(con!=context){
             synchronized (popWinLock) {
                 if (showStatused) {
@@ -256,25 +420,20 @@ public class NHelper {
             addViewToWindow();
         }
 
-        if(this.x==x&&this.y==y&&this.w==w&&this.h==h&&this.color==color){
-            return;
+        Map<String,Integer> numpos=weizhilist.get(num);
+        if (numpos==null){
+            numpos = new HashMap<String, Integer>();
+            weizhilist.put(num,numpos);
         }
-        this.x=x;
-        this.y=y;
-        this.w=w;
-        this.h=h;
-        this.color=color;
-//        RelativeLayout background = (RelativeLayout) notiView.findViewById(R.id.background);
-//        background.setBackgroundColor(color);
-//        TextView txtView = (TextView) notiView.findViewWithTag("title");
-//        TextView txtView = (TextView) notiView.findViewById(R.id.title);
-        for(String u:userpoint.keySet()){
-            userpoint.get(u).setTextColor(color);
-        }
-//        tv.setTextColor(color);
+
+        numpos.put("x",xx);
+        numpos.put("y",yy);
+        numpos.put("w",ww);
+        numpos.put("h",hh);
+        numpos.put("color",color);
+
+
         synchronized (popWinLock) {
-//            if (showStatused) {
-//                mWindowManager.removeView(notiView);
                 WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
                 wmParams.format = PixelFormat.RGBA_8888;
                 wmParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
@@ -282,22 +441,15 @@ public class NHelper {
                         | WindowManager.LayoutParams.FLAG_FULLSCREEN
                         | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 
-                wmParams.width = w;
-                wmParams.height = h;
-
-//		if (isTablet(context)) {
-//			wmParams.gravity = Gravity.BOTTOM | Gravity.LEFT;
-//			wmParams.y = -statusBarHeight;
-//			wmParams.x = (mDisplayMetrics.widthPixels - wmParams.width) / 2;
-//		} else {
+                wmParams.width = ww;
+                wmParams.height = hh;
                 wmParams.gravity = Gravity.TOP | Gravity.LEFT;
-                wmParams.x = x;
-                wmParams.y = y;
+                wmParams.x = xx;
+                wmParams.y = yy;
                 mWindowManager.updateViewLayout(notiView,wmParams);
-//                mWindowManager.addView(notiView, wmParams);
-//		}
-//            }
+
         }
+        initHead();
 //        showStatus(context, message, time);
     }
 
@@ -311,7 +463,9 @@ public class NHelper {
         if(con!=context){
             synchronized (popWinLock) {
                 if (showStatused) {
-                    mWindowManager.removeView(notiView);
+                    for (RelativeLayout notiView:notiViewmap.values()){
+                        mWindowManager.removeView(notiView);
+                    }
                     showStatused = false;
                 }
             }
@@ -320,16 +474,12 @@ public class NHelper {
             mWindowManager.getDefaultDisplay().getMetrics(mDisplayMetrics);
 
             con=context;
+            addViewToWindow();
         }
 
-
-
-
-
+        ///////////////////////////////////////////////////
         float max=0;
         for(String u:up.keySet()){
-            if(userpoint.containsKey(u)){
-//                userpoint.get(u).setText(up.get(u));
                 try{
                     if(Integer.valueOf(up.get(u)).intValue()>max){
                         max = Integer.valueOf(up.get(u)).intValue();
@@ -337,33 +487,115 @@ public class NHelper {
                 }catch (Exception e){
 
                 }
-            }
 
         }
         float point=0;
+        TextView t=null;
+        TextView r=null;
+        TextView b=null;
+        TextView l=null;
         for(String u:up.keySet()){
-            if(userpoint.containsKey(u)){
+            int face_board_w=80;
+            if (wlist.containsKey(u)){
+                face_board_w=wlist.get(u);
+            }
+              
+            t=jindulist.get(u+"_t");
+            r=jindulist.get(u+"_r");
+            b=jindulist.get(u+"_b");
+            l=jindulist.get(u+"_l");
+            if(t!=null&&r!=null&&b!=null&&l!=null){
                 if(max==0){
-                    userpoint.get(u).setWidth(0);
+                    t.setWidth(0);
+                    r.setHeight(0);
+                    b.setWidth(0);
+                    l.setHeight(0);
                 }else{
                     try{
                         point=(Float.valueOf(up.get(u)).floatValue()/max*100);
-                        if(point>50||point==0.0){
-                            userpoint.get(u).setWidth((int)point);
+                        if(point<25){
+                            t.setWidth((int)(point/25.0*face_board_w));
+                            r.setHeight(0);
+                            b.setWidth(0);
+                            l.setHeight(0);
                         }else{
-                            userpoint.get(u).setWidth(5);
+                            if(point>=25){
+                                t.setWidth(face_board_w);
+                                if(point>=50){
+                                    t.setWidth(face_board_w);
+                                    r.setHeight(face_board_w-5);
+
+                                    if(point>=75){
+
+                                        b.setWidth(face_board_w);
+                                        l.setHeight((int)((point-75.0)/25.0*(face_board_w-5)));
+                                    }else{
+                                        b.setWidth((int)((point-50.0)/25.0*face_board_w));
+                                        l.setHeight(0);
+                                    }
+                                }else{
+                                    r.setHeight((int)((point-25.0)/25.0*(face_board_w-5)));
+                                    b.setWidth(0);
+                                    l.setHeight(0);
+                                }
+
+
+                            }
+
                         }
 
+
                     }catch (Exception e){
-                        userpoint.get(u).setWidth(0);
+                        t.setWidth(0);
+                        r.setHeight(0);
+                        b.setWidth(0);
+                        l.setHeight(0);
                     }
                 }
             }
 
         }
+        ///////////////////////////////////////////////////////////////////
 
-//		tv.setText(message);
 
+
+
+
+
+        int index=0;
+        int[] sorts = new int[up.keySet().size()];
+        for(String u:up.keySet()){
+            try{
+            sorts[index]= Integer.valueOf(up.get(u));
+            }catch (Exception e){
+                sorts[index]=0;
+            }
+            index++;
+        }
+        Arrays.sort(sorts);
+
+        try {
+            Context targetContext=context.createPackageContext("com.mogu3.mainapp", Context.CONTEXT_INCLUDE_CODE|Context.CONTEXT_IGNORE_SECURITY);
+            for(int i=0;i<sorts.length;i++){
+                for(String u:up.keySet()){
+                    if(sorts[i]==0){
+                        if(up.get(u)==null||up.get(u).equals("0")||up.get(u).length()==0){
+                            paiming.get(u).setImageDrawable(targetContext.getResources().getDrawable(nn[sorts.length-i-1]));
+                            up.remove(u);
+                            break;
+                        }
+                    }else{
+                        if(up.get(u)!=null&&up.get(u).length()>0&&Integer.valueOf(up.get(u))==sorts[i]){
+                            paiming.get(u).setImageDrawable(targetContext.getResources().getDrawable(nn[sorts.length-i-1]));
+                            up.remove(u);
+                            break;
+                        }
+                    }
+                }
+            }
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
 
 
 
@@ -375,16 +607,12 @@ public class NHelper {
 			}
 		}
 
-//		if (ring)
-//			playRing(context);
-//		if (vibrat)
-//			vibrat(context);
-//		mHandler.removeCallbacks(removePopWindow);
-//		mHandler.postDelayed(removePopWindow, time);
-
 	}
 
     private void addViewToWindow(){
+        if(mWindowManager==null){
+            return;
+        }
         WindowManager.LayoutParams wmParams = new WindowManager.LayoutParams();
         wmParams.format = PixelFormat.RGBA_8888;
         wmParams.type = WindowManager.LayoutParams.TYPE_SYSTEM_OVERLAY;
@@ -398,7 +626,14 @@ public class NHelper {
         wmParams.gravity = Gravity.TOP | Gravity.LEFT;
         wmParams.x = x;
         wmParams.y = y;
-        mWindowManager.addView(notiView, wmParams);
+        for(RelativeLayout notiView:notiViewmap.values()){
+            try{
+            mWindowManager.addView(notiView, wmParams);
+            }catch (Exception e){
+
+            }
+        }
+
         showStatused = true;
     }
 

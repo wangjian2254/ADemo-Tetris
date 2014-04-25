@@ -189,7 +189,14 @@ public class Tetris extends Screen {
 
 
 
-        MainDataTool.setPos(0,0,300,600,0xFFFFFFFF,LSystem.screenActivity);
+        MainDataTool.setPos(0,10,220,80,0xFFFFFFFF,LSystem.screenActivity);
+        MainDataTool.setPos(1,10,324,100,0xFFFFFFFF,LSystem.screenActivity);
+        MainDataTool.setPos(2,10,448,80,0xFFFFFFFF,LSystem.screenActivity);
+        MainDataTool.setPos(3,10,552,100,0xFFFFFFFF,LSystem.screenActivity);
+
+        MainDataTool.setPos(4,390,476,100,0xFFFFFFFF,LSystem.screenActivity);
+        MainDataTool.setPos(5,390,602,80,0xFFFFFFFF,LSystem.screenActivity);
+
 	}
 
 
