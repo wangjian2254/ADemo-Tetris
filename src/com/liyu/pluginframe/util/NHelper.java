@@ -235,7 +235,8 @@ public class NHelper {
                         ViewGroup.LayoutParams.WRAP_CONTENT,
                         ViewGroup.LayoutParams.WRAP_CONTENT);
 
-
+                nickparam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                nickparam.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
                 t = new TextView(con);
                 t.setText(nicklist.get(u));
@@ -244,22 +245,19 @@ public class NHelper {
                 t.setWidth(face_board_w-10);
                 t.setTextSize(12);
                 t.setId(num+1);
+                panellinear2.addView(t,nickparam);
 
                 imageView = new  ImageView(con);
                 p[0]=userlist.get(u);
 //                BitmapFactory.decodeResource()
-                imageView.setImageBitmap(zoomDrawable(targetContext.getResources().getDrawable((Integer) m.invoke(c, p)), face_board_w-12, face_board_w-12));
+                imageView.setImageBitmap(zoomDrawable(targetContext.getResources().getDrawable((Integer) m.invoke(c, p)), face_board_w-(int)(face_board_w/80.0*10), face_board_w-(int)(face_board_w/80.0*12)));
                 imageView.setId(num+100);
                 param.addRule(RelativeLayout.ALIGN_PARENT_TOP);
                 param.addRule(RelativeLayout.CENTER_HORIZONTAL);
-                nickparam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                nickparam.addRule(RelativeLayout.CENTER_HORIZONTAL);
 
                 panellinear2.addView(imageView,param);
-                panellinear2.addView(t,nickparam);
-                imageView = new ImageView(con);
-                paimingparam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                paimingparam.addRule(RelativeLayout.ABOVE,num+1);
+
+
 
 
                 //进度条
@@ -295,6 +293,7 @@ public class NHelper {
                 t1.setWidth(0);
                 t1.setHeight(3);
                 t1.setBackgroundColor(0xfffff000);
+                t1.setId(num+1000);
                 panellinear2.addView(t1,j3);
                 jindulist.put(u+"_b",t1);
 
@@ -312,6 +311,10 @@ public class NHelper {
                 //进度条 end
 
 
+
+                imageView = new ImageView(con);
+                paimingparam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
+                paimingparam.addRule(RelativeLayout.ABOVE,num+1000);
                 paiming.put(u,imageView);
                 panellinear2.addView(imageView, paimingparam);
                 notiViewmap.put(num, panellinear);
