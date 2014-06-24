@@ -20,9 +20,7 @@ import android.widget.*;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class NHelper {
     public static  int SHORT=1000;
@@ -565,43 +563,37 @@ public class NHelper {
 
 
 
-        int index=0;
-        int[] sorts = new int[up.keySet().size()];
+        Map<String, Integer> map = new HashMap<String, Integer>();
         for(String u:up.keySet()){
             try{
-            sorts[index]= Integer.valueOf(up.get(u));
+                map.put(u, Integer.valueOf(up.get(u)));
             }catch (Exception e){
-                sorts[index]=0;
+                map.put(u,0);
             }
-            index++;
         }
-        Arrays.sort(sorts);
+
+        List<Map.Entry<String, Integer>> infoIds =
+                new ArrayList<Map.Entry<String, Integer>>(map.entrySet());
+
+
+        //排序
+        Collections.sort(infoIds, new Comparator<Map.Entry<String, Integer>>() {
+            public int compare(Map.Entry<String, Integer> o1, Map.Entry<String, Integer> o2) {
+                return (o2.getValue() - o1.getValue());
+            }
+        });
+
 
         try {
             Context targetContext=context.createPackageContext("com.mogu3.mainapp", Context.CONTEXT_INCLUDE_CODE|Context.CONTEXT_IGNORE_SECURITY);
-            for(int i=0;i<sorts.length;i++){
-                for(String u:up.keySet()){
-                    if(sorts[i]==0){
-                        if(up.get(u)==null||up.get(u).equals("0")||up.get(u).length()==0){
-                            paiming.get(u).setImageDrawable(targetContext.getResources().getDrawable(nn[sorts.length-i-1]));
-                            up.remove(u);
-                            break;
-                        }
-                    }else{
-                        if(up.get(u)!=null&&up.get(u).length()>0&&Integer.valueOf(up.get(u))==sorts[i]){
-                            paiming.get(u).setImageDrawable(targetContext.getResources().getDrawable(nn[sorts.length-i-1]));
-                            up.remove(u);
-                            break;
-                        }
-                    }
-                }
+            for (int i = 0; i < infoIds.size(); i++) {
+                paiming.get(infoIds.get(i).getKey()).setImageDrawable(targetContext.getResources().getDrawable(nn[i]));
             }
+
+
         } catch (PackageManager.NameNotFoundException e) {
             e.printStackTrace();
         }
-
-
-
 
 		synchronized (popWinLock) {
 			if (!showStatused) {

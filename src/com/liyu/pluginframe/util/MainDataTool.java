@@ -208,7 +208,7 @@ public class MainDataTool {
 
         try {
             c.put("from",userInfo.getUsername());
-            c.put("rid","game");
+            c.put("rid",spaceid.replace("-",""));
             c.put("content",p);
             c.put("target","*");
 
@@ -480,7 +480,7 @@ public class MainDataTool {
             };
 
             // pomelo demo
-            PomeloClient cl = new PomeloClient("192.168.101.18",3014);
+            PomeloClient cl = new PomeloClient("www.zxxsbook.com",3014);
             cl.init();
             JSONObject login=new JSONObject();
             try {
@@ -498,14 +498,14 @@ public class MainDataTool {
                             pomeloClient.init();
                             JSONObject c= new JSONObject();
                             c.put("username", userInfo.getUsername());
-                            c.put("rid","game");
+                            c.put("rid",spaceid.replace("-",""));
                             pomeloClient.request("connector.entryHandler.enter", c, new DataCallBack() {
                                 @Override
                                 public void responseData(JSONObject jsonObject) {
 //                                    JSONObject c = new JSONObject();
 //                                    try {
 //                                        c.put("from", userInfo.getUsername());
-//                                        c.put("rid", "game");
+//                                        c.put("rid", spaceid.replace("-",""));
 //                                        c.put("content", "sdf");
 //                                        c.put("target", "*");
 //                                    } catch (JSONException e) {
