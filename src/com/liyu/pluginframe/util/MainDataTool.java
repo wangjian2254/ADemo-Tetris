@@ -5,6 +5,10 @@ import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.widget.Toast;
+import com.netease.pomelo.DataCallBack;
+import com.netease.pomelo.DataEvent;
+import com.netease.pomelo.DataListener;
+import com.netease.pomelo.PomeloClient;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -58,6 +62,8 @@ public class MainDataTool {
     private static boolean runing2=false;
 
     private static int x,y,w,h,c ;
+
+    private static PomeloClient pomeloClient;
 
     private static   Thread th = new Thread()
     {
@@ -132,11 +138,7 @@ public class MainDataTool {
                     }
 
                 }
-                userPointMap.put("test1","10");
-                userPointMap.put("test2","20");
-                userPointMap.put("test3","30");
-                userPointMap.put("test4","40");
-                userPointMap.put("test5","50");
+
                 gamehandler.obtainMessage(0).sendToTarget();
 
             }
@@ -147,13 +149,14 @@ public class MainDataTool {
     }
 
     public static void startGetPoint(){
-        try{
-            runing=true;
-            uploadPoint("",con);
-            th.start();
-        }catch (Exception e){
-
-        }
+        uploadPoint("",con);
+//        try{
+//            runing=true;
+//            uploadPoint("",con);
+//            th.start();
+//        }catch (Exception e){
+//
+//        }
     }
     public static void stopGetPoint(){
         runing=false;
@@ -196,80 +199,107 @@ public class MainDataTool {
     }
 
     public static void uploadPoint(String p,Context context){
-        con= context;
-        point=p;
-
-        
-        try{
-            runing2=true;
-            if(th2==null||!th2.isAlive()){
-                th2=new Thread()
-                {
-
-                    public void run()
-                    {
-                        while (runing2&&point!=null){
-                            String strResult=null;
-                            try{
-                                ArrayList<BasicNameValuePair> tempPointList = new ArrayList< BasicNameValuePair >();
-                                tempPointList.add(new BasicNameValuePair("username", userInfo.getUsername()));
-                                tempPointList.add(new BasicNameValuePair("appcode",appcode));
-                                tempPointList.add(new BasicNameValuePair("spaceid",spaceid));
-                                tempPointList.add(new BasicNameValuePair("point",point));
-                                HttpPost postMet = new HttpPost(gameroomurl+"/UploadPoint");
-
-                                postMet.setEntity(new UrlEncodedFormEntity(tempPointList, HTTP.UTF_8));
-
-                                Log.e("request", gameroomurl+"/UploadPoint");
-                                DefaultHttpClient client = new DefaultHttpClient();
-                                HttpContext httpContext=new BasicHttpContext();
-                                client.getParams().setParameter(
-                                        CoreConnectionPNames.CONNECTION_TIMEOUT, 30000);
-                                client.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 30000);
-                                client.getParams().setParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
 
 
-                                HttpResponse httpResponse = client.execute(postMet,httpContext);
-
-
-
-                                int statusCode=httpResponse.getStatusLine().getStatusCode();
-
-                                if (statusCode == 200) {
-                                    // 取出回应字串
-
-
-                                	if(debug){
-                                        try{
-                                            mMainHandler.obtainMessage(0,"发送积分："+userInfo.getUsername()+":"+point).sendToTarget();
-                                        } catch (Exception e){
-
-                                        }
-                                    }
-                                    strResult = EntityUtils.toString(httpResponse.getEntity());
-                                    setPoint(strResult);
-                                    point = null;
-
-                                }
-                            }
-                            catch (Exception e)
-                            {
-                                e.printStackTrace();
-                            }
-                            try {
-                                sleep(2000);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
-                            }
-                        }
-
-                    }
-                };
-            }
-            th2.start();
-        }catch (Exception e){
-
+        if(pomeloClient==null){
+            return;
         }
+        JSONObject c= new JSONObject();
+
+        try {
+            c.put("from",userInfo.getUsername());
+            c.put("rid","game");
+            c.put("content",p);
+            c.put("target","*");
+
+            pomeloClient.request("chat.chatHandler.send", c, new DataCallBack() {
+                @Override
+                public void responseData(JSONObject msg) {
+
+                }
+            });
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        userPointMap.put(userInfo.getUsername(),p);
+        gamehandler.obtainMessage(0).sendToTarget();
+
+//
+//        con= context;
+//        point=p;
+//
+//
+//        try{
+//            runing2=true;
+//            if(th2==null||!th2.isAlive()){
+//                th2=new Thread()
+//                {
+//
+//                    public void run()
+//                    {
+//                        while (runing2&&point!=null){
+//                            String strResult=null;
+//                            try{
+//                                ArrayList<BasicNameValuePair> tempPointList = new ArrayList< BasicNameValuePair >();
+//                                tempPointList.add(new BasicNameValuePair("username", userInfo.getUsername()));
+//                                tempPointList.add(new BasicNameValuePair("appcode",appcode));
+//                                tempPointList.add(new BasicNameValuePair("spaceid",spaceid));
+//                                tempPointList.add(new BasicNameValuePair("point",point));
+//                                HttpPost postMet = new HttpPost(gameroomurl+"/UploadPoint");
+//
+//                                postMet.setEntity(new UrlEncodedFormEntity(tempPointList, HTTP.UTF_8));
+//
+//                                Log.e("request", gameroomurl+"/UploadPoint");
+//                                DefaultHttpClient client = new DefaultHttpClient();
+//                                HttpContext httpContext=new BasicHttpContext();
+//                                client.getParams().setParameter(
+//                                        CoreConnectionPNames.CONNECTION_TIMEOUT, 30000);
+//                                client.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 30000);
+//                                client.getParams().setParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
+//
+//
+//                                HttpResponse httpResponse = client.execute(postMet,httpContext);
+//
+//
+//
+//                                int statusCode=httpResponse.getStatusLine().getStatusCode();
+//
+//                                if (statusCode == 200) {
+//                                    // 取出回应字串
+//
+//
+//                                	if(debug){
+//                                        try{
+//                                            mMainHandler.obtainMessage(0,"发送积分："+userInfo.getUsername()+":"+point).sendToTarget();
+//                                        } catch (Exception e){
+//
+//                                        }
+//                                    }
+//                                    strResult = EntityUtils.toString(httpResponse.getEntity());
+//                                    setPoint(strResult);
+//                                    point = null;
+//
+//                                }
+//                            }
+//                            catch (Exception e)
+//                            {
+//                                e.printStackTrace();
+//                            }
+//                            try {
+//                                sleep(2000);
+//                            } catch (InterruptedException e) {
+//                                e.printStackTrace();
+//                            }
+//                        }
+//
+//                    }
+//                };
+//            }
+//            th2.start();
+//        }catch (Exception e){
+//
+//        }
     }
 
     public static UserInfo getUserInfo() {
@@ -411,16 +441,7 @@ public class MainDataTool {
                         nicklist.put(jn.getString("username"),jn.getString("nickname"));
                         shunxulist.put(i,ju.getString("username"));
                     }
-                    userlist.put("test1",5);
-                    userlist.put("test2",4);
-                    userlist.put("test3",3);
-                    userlist.put("test4",2);
-                    userlist.put("test5",1);
-                    nicklist.put("test1","王总");
-                    nicklist.put("test2","奔波儿灞");
-                    nicklist.put("test3","霸波尔奔");
-                    nicklist.put("test4","秋香");
-                    nicklist.put("test5","沙和尚");
+
                     NHelper.getNHelper().setHead(mainactivity,userlist,nicklist);
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -443,6 +464,7 @@ public class MainDataTool {
                     }
                 };
             }
+
             gamehandler = new Handler(){
                 @Override
                 public void handleMessage(Message msg) {
@@ -456,6 +478,77 @@ public class MainDataTool {
 
                 }
             };
+
+            // pomelo demo
+            PomeloClient cl = new PomeloClient("192.168.101.18",3014);
+            cl.init();
+            JSONObject login=new JSONObject();
+            try {
+                login.put("uid",userInfo.getUsername());
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+
+            cl.request("gate.gateHandler.queryEntry",login,new DataCallBack(){
+                @Override
+                public void responseData(JSONObject msg){
+                    try {
+                        if (msg.getInt("code")==200){
+                            pomeloClient = new PomeloClient(msg.getString("host"),msg.getInt("port"));
+                            pomeloClient.init();
+                            JSONObject c= new JSONObject();
+                            c.put("username", userInfo.getUsername());
+                            c.put("rid","game");
+                            pomeloClient.request("connector.entryHandler.enter", c, new DataCallBack() {
+                                @Override
+                                public void responseData(JSONObject jsonObject) {
+//                                    JSONObject c = new JSONObject();
+//                                    try {
+//                                        c.put("from", userInfo.getUsername());
+//                                        c.put("rid", "game");
+//                                        c.put("content", "sdf");
+//                                        c.put("target", "*");
+//                                    } catch (JSONException e) {
+//                                        e.printStackTrace();
+//                                    }
+//
+////                                    pomeloClient.inform("chat.chatHandler.send", c);
+//                                    pomeloClient.request("chat.chatHandler.send", c, new DataCallBack() {
+//                                        @Override
+//                                        public void responseData(JSONObject msg) {
+//
+//                                        }
+//                                    });
+                                }
+                            });
+
+                            pomeloClient.on("onChat", new DataListener() {
+                                @Override
+                                public void receiveData(DataEvent dataEvent) {
+                                    JSONObject msg = null;
+                                    try {
+                                        msg = dataEvent.getMessage().getJSONObject("body");
+                                        if (userlist.containsKey(msg.optString("from"))) {
+                                            userPointMap.put(msg.optString("from"), msg.optString("msg", ""));
+                                            gamehandler.obtainMessage(0).sendToTarget();
+                                        }
+                                    } catch (JSONException e) {
+                                        e.printStackTrace();
+                                    }
+
+
+                                }
+                            });
+
+
+
+                        }
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
+
         }
 
     }
