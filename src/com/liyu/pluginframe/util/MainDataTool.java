@@ -1,14 +1,13 @@
 package com.liyu.pluginframe.util;
 
 import android.app.Activity;
+import android.content.*;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
+import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
-import com.netease.pomelo.DataCallBack;
-import com.netease.pomelo.DataEvent;
-import com.netease.pomelo.DataListener;
-import com.netease.pomelo.PomeloClient;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
@@ -23,9 +22,6 @@ import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import android.content.Context;
-import android.content.SharedPreferences;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
@@ -47,7 +43,7 @@ public class MainDataTool {
 
 
     private static int version=0;
-    private static String spaceid=null;
+    private static String roomid =null;
     private static String author=null;
     private static String gameroomurl=null;
     private static Map<String,Integer> userlist=new HashMap<String, Integer>();
@@ -63,7 +59,8 @@ public class MainDataTool {
 
     private static int x,y,w,h,c ;
 
-    private static PomeloClient pomeloClient;
+    private static AIDLGameRoomService gameRoomService;
+
 
     private static   Thread th = new Thread()
     {
@@ -200,28 +197,15 @@ public class MainDataTool {
 
     public static void uploadPoint(String p,Context context){
 
-
-        if(pomeloClient==null){
+        if(roomid==null||userInfo.getUsername()==null||appcode==null){
             return;
         }
-        JSONObject c= new JSONObject();
 
         try {
-            c.put("from",userInfo.getUsername());
-            c.put("rid",spaceid.replace("-",""));
-            c.put("content",p);
-            c.put("target","*");
-
-            pomeloClient.request("chat.chatHandler.send", c, new DataCallBack() {
-                @Override
-                public void responseData(JSONObject msg) {
-
-                }
-            });
-        } catch (JSONException e) {
+            gameRoomService.uploadPoint(appcode,roomid,userInfo.getUsername(),p);
+        } catch (RemoteException e) {
             e.printStackTrace();
         }
-
         userPointMap.put(userInfo.getUsername(),p);
         gamehandler.obtainMessage(0).sendToTarget();
 
@@ -244,7 +228,7 @@ public class MainDataTool {
 //                                ArrayList<BasicNameValuePair> tempPointList = new ArrayList< BasicNameValuePair >();
 //                                tempPointList.add(new BasicNameValuePair("username", userInfo.getUsername()));
 //                                tempPointList.add(new BasicNameValuePair("appcode",appcode));
-//                                tempPointList.add(new BasicNameValuePair("spaceid",spaceid));
+//                                tempPointList.add(new BasicNameValuePair("roomid",roomid));
 //                                tempPointList.add(new BasicNameValuePair("point",point));
 //                                HttpPost postMet = new HttpPost(gameroomurl+"/UploadPoint");
 //
@@ -417,7 +401,7 @@ public class MainDataTool {
             debug = false;
             if(j.has("version")&&j.optInt("version",1)==2){
                 version = j.optInt("version");
-                spaceid = j.optString("spaceid","");
+                roomid = j.optString("spaceid","");
                 author = j.optString("author","");
                 gameroomurl = j.optString("gameroom","");
                 int face_board,n_1,n_2,n_3,n_4,n_5,n_6;
@@ -449,9 +433,10 @@ public class MainDataTool {
 
                 getPointList.add(new BasicNameValuePair("username", userInfo.getUsername()));
                 getPointList.add(new BasicNameValuePair("appcode",appcode));
-                getPointList.add(new BasicNameValuePair("spaceid",spaceid));
+                getPointList.add(new BasicNameValuePair("roomid", roomid));
 
             }
+            getServiceConnect(mainactivity.getApplicationContext());
 
             if(debug){
                 mMainHandler = new Handler(){
@@ -479,77 +464,82 @@ public class MainDataTool {
                 }
             };
 
-            // pomelo demo
-            PomeloClient cl = new PomeloClient("www.zxxsbook.com",3014);
-            cl.init();
-            JSONObject login=new JSONObject();
-            try {
-                login.put("uid",userInfo.getUsername());
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-            cl.request("gate.gateHandler.queryEntry",login,new DataCallBack(){
-                @Override
-                public void responseData(JSONObject msg){
-                    try {
-                        if (msg.getInt("code")==200){
-                            pomeloClient = new PomeloClient(msg.getString("host"),msg.getInt("port"));
-                            pomeloClient.init();
-                            JSONObject c= new JSONObject();
-                            c.put("username", userInfo.getUsername());
-                            c.put("rid",spaceid.replace("-",""));
-                            pomeloClient.request("connector.entryHandler.enter", c, new DataCallBack() {
-                                @Override
-                                public void responseData(JSONObject jsonObject) {
-//                                    JSONObject c = new JSONObject();
-//                                    try {
-//                                        c.put("from", userInfo.getUsername());
-//                                        c.put("rid", spaceid.replace("-",""));
-//                                        c.put("content", "sdf");
-//                                        c.put("target", "*");
-//                                    } catch (JSONException e) {
-//                                        e.printStackTrace();
-//                                    }
-//
-////                                    pomeloClient.inform("chat.chatHandler.send", c);
-//                                    pomeloClient.request("chat.chatHandler.send", c, new DataCallBack() {
-//                                        @Override
-//                                        public void responseData(JSONObject msg) {
-//
-//                                        }
-//                                    });
-                                }
-                            });
-
-                            pomeloClient.on("onChat", new DataListener() {
-                                @Override
-                                public void receiveData(DataEvent dataEvent) {
-                                    JSONObject msg = null;
-                                    try {
-                                        msg = dataEvent.getMessage().getJSONObject("body");
-                                        if (userlist.containsKey(msg.optString("from"))) {
-                                            userPointMap.put(msg.optString("from"), msg.optString("msg", ""));
-                                            gamehandler.obtainMessage(0).sendToTarget();
-                                        }
-                                    } catch (JSONException e) {
-                                        e.printStackTrace();
-                                    }
-
-
-                                }
-                            });
-
-
-
-                        }
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            });
-
         }
 
     }
+    private static void getServiceConnect(Context con)
+    {
+        Intent it = new Intent();
+        it.setAction("com.liyu.pluginframe.util.AIDLGameRoomService");
+        con.startService(it);
+        con.bindService(it, mserviceConnection, Context.BIND_AUTO_CREATE);
+    }
+
+    private static ServiceConnection mserviceConnection = new ServiceConnection()
+    {
+
+        @Override
+        public void onServiceDisconnected(ComponentName name)
+        {
+            Log.d("pomelo", "onServiceDisconnected");
+
+
+            gameRoomService = null;
+        }
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service)
+        {
+            Log.d("pomelo", "onServiceConnected");
+            //获取服务端传过来的IBinder对象,通过该对象调用服务端的方法
+            gameRoomService = AIDLGameRoomService.Stub.asInterface(service);
+            if (gameRoomService != null)
+            {
+                try {
+                    gameRoomService.addCB(mCallBack);
+                    gameRoomService.init(appcode);
+
+                } catch (RemoteException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    };
+    private static ICallBack.Stub mCallBack = new ICallBack.Stub()
+    {
+        //客户端回调方法的具体实现
+        @Override
+        public void handleByServer(String data) throws RemoteException {
+            JSONObject result = null;
+            try {
+                result = new JSONObject(data);
+            } catch (JSONException e) {
+                e.printStackTrace();
+            }
+            if(result.optInt("code")!=200&&mMainHandler!=null){
+                mMainHandler.obtainMessage(500,result.optString("message","房间服务器异常，请稍后再试。")).sendToTarget();
+                return;
+            }
+
+            if(result.optString("route","").equals("connect")){
+                if(result.optBoolean("success",false)){
+                }
+            }
+            if(result.optString("route","").equals("onChat")){
+                try{
+                    String from = result.getString("from");
+                    String msg = result.getString("msg");
+                    userPointMap.put(from,msg);
+                    gamehandler.obtainMessage(0).sendToTarget();
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            if(result.optString("route","").equals("uploadPoint")){
+
+            }
+
+        }
+    };
 }
