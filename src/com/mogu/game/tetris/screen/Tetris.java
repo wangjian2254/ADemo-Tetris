@@ -268,6 +268,7 @@ public class Tetris extends Screen {
 //					replaceScreen(new MainMenu(), MoveMethod.FROM_LEFT);
 //					setScreen(new MainMenu());
 					jiemian=1;
+                    MainDataTool.uploadEndPoint(String.valueOf(gameField.getPoints()),LSystem.screenActivity);
 				}
 			}
 		}

@@ -454,6 +454,17 @@ public class NHelper {
 //        showStatus(context, message, time);
     }
 
+    public void hiddenStatus(){
+        synchronized (popWinLock) {
+            if (showStatused) {
+                for (RelativeLayout notiView:notiViewmap.values()){
+                    mWindowManager.removeView(notiView);
+                }
+                showStatused = false;
+            }
+        }
+    }
+
 	/**
 	 * 显示状态信息，不能点击
 	 * 
@@ -462,14 +473,7 @@ public class NHelper {
 	 */
 	public void showStatus(Context context,Map<String,String> up) {
         if(con!=context){
-            synchronized (popWinLock) {
-                if (showStatused) {
-                    for (RelativeLayout notiView:notiViewmap.values()){
-                        mWindowManager.removeView(notiView);
-                    }
-                    showStatused = false;
-                }
-            }
+            hiddenStatus();
             mWindowManager = (WindowManager) context
                     .getSystemService("window");
             mWindowManager.getDefaultDisplay().getMetrics(mDisplayMetrics);
@@ -648,46 +652,6 @@ public class NHelper {
 		vib.vibrate(200);
 	}
 
-//	public int showNotification(Context context, int iconID, String title,
-//			String message, Intent intent, int notificationID, boolean ring,
-//			boolean vibrat, boolean onGoing) {
-//        NotificationManager nm = (NotificationManager) context
-//                .getSystemService(Context.NOTIFICATION_SERVICE);
-//
-//		if (notificationID == 0) {
-//			notificationID = ++mNotifacationIDIndex;
-//		}
-//
-//		if (intent != null) {
-//
-//			// 传递ID参数
-//			intent.putExtra(NOTIFICATIONID, notificationID);
-//		}
-//
-//		Notification notification = new Notification(iconID, title,
-//				System.currentTimeMillis());
-//		if (onGoing) {
-//			notification.flags |= Notification.FLAG_ONGOING_EVENT;
-//		} else {
-//			notification.flags = Notification.FLAG_AUTO_CANCEL;
-//		}
-//		if (ring&& SettingsUtil.getLing(context)) {
-//			notification.defaults |= Notification.DEFAULT_SOUND;
-//		} else {
-//			notification.defaults &= ~Notification.DEFAULT_SOUND;
-//		}
-//		if (vibrat&& SettingsUtil.getZhen(context)) {
-//			notification.defaults |= Notification.DEFAULT_VIBRATE;
-//		} else {
-//			notification.defaults &= ~Notification.DEFAULT_VIBRATE;
-//		}
-//		PendingIntent contentIntent = PendingIntent.getActivity(context,
-//                R.string.app_name, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//		notification.setLatestEventInfo(context, title, message, contentIntent);
-//		nm.notify(notificationID, notification);
-//
-//		return notificationID;
-//	}
 
     public void deleteNotification(Context context,int id){
         NotificationManager nm = (NotificationManager) context
@@ -696,7 +660,6 @@ public class NHelper {
     }
 
     public void deleteNotification(Context context){
-//        int nid=intent.getIntExtra(NHelper.NOTIFICATIONID, -1);
         for(Integer integer:nationidmap.values()){
             if(integer>-1){
                 NHelper.getNHelper().deleteNotification(context,integer);

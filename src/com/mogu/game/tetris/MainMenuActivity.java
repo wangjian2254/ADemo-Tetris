@@ -8,10 +8,7 @@ import android.os.Bundle;
 import android.view.View;
 
 import com.liyu.pluginframe.util.MainDataTool;
-import com.liyu.pluginframe.util.UserInfo;
 import com.umeng.analytics.MobclickAgent;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 public class MainMenuActivity extends Activity {
 	

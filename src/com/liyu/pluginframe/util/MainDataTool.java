@@ -40,6 +40,8 @@ public class MainDataTool {
 
     private static String appcode=null;
     private static String appname=null;
+    private static String static_point=null;
+    private static long timeline=0;
 
 
     private static int version=0;
@@ -147,13 +149,6 @@ public class MainDataTool {
 
     public static void startGetPoint(){
         uploadPoint("",con);
-//        try{
-//            runing=true;
-//            uploadPoint("",con);
-//            th.start();
-//        }catch (Exception e){
-//
-//        }
     }
     public static void stopGetPoint(){
         runing=false;
@@ -195,12 +190,39 @@ public class MainDataTool {
 
     }
 
-    public static void uploadPoint(String p,Context context){
+
+
+    public static void uploadEndPoint(String p,Context context){
+        if(p==null||p.equals(static_point)){
+            return;
+        }
 
         if(roomid==null||userInfo.getUsername()==null||appcode==null){
             return;
         }
 
+        static_point=p;
+        con=context;
+        try {
+            gameRoomService.uploadPoint(appcode,roomid,userInfo.getUsername(),p);
+            gameRoomService.uploadEndPoint(appcode, roomid, userInfo.getUsername(), p);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
+        userPointMap.put(userInfo.getUsername(),p);
+        gamehandler.obtainMessage(0).sendToTarget();
+    }
+      
+    public static void uploadPoint(String p,Context context){
+        if((System.currentTimeMillis()-timeline)/1000<1){
+            return;
+        }
+        timeline = System.currentTimeMillis();
+
+        if(roomid==null||userInfo.getUsername()==null||appcode==null){
+            return;
+        }
+        con=context;
         try {
             gameRoomService.uploadPoint(appcode,roomid,userInfo.getUsername(),p);
         } catch (RemoteException e) {
@@ -208,82 +230,6 @@ public class MainDataTool {
         }
         userPointMap.put(userInfo.getUsername(),p);
         gamehandler.obtainMessage(0).sendToTarget();
-
-//
-//        con= context;
-//        point=p;
-//
-//
-//        try{
-//            runing2=true;
-//            if(th2==null||!th2.isAlive()){
-//                th2=new Thread()
-//                {
-//
-//                    public void run()
-//                    {
-//                        while (runing2&&point!=null){
-//                            String strResult=null;
-//                            try{
-//                                ArrayList<BasicNameValuePair> tempPointList = new ArrayList< BasicNameValuePair >();
-//                                tempPointList.add(new BasicNameValuePair("username", userInfo.getUsername()));
-//                                tempPointList.add(new BasicNameValuePair("appcode",appcode));
-//                                tempPointList.add(new BasicNameValuePair("roomid",roomid));
-//                                tempPointList.add(new BasicNameValuePair("point",point));
-//                                HttpPost postMet = new HttpPost(gameroomurl+"/UploadPoint");
-//
-//                                postMet.setEntity(new UrlEncodedFormEntity(tempPointList, HTTP.UTF_8));
-//
-//                                Log.e("request", gameroomurl+"/UploadPoint");
-//                                DefaultHttpClient client = new DefaultHttpClient();
-//                                HttpContext httpContext=new BasicHttpContext();
-//                                client.getParams().setParameter(
-//                                        CoreConnectionPNames.CONNECTION_TIMEOUT, 30000);
-//                                client.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 30000);
-//                                client.getParams().setParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
-//
-//
-//                                HttpResponse httpResponse = client.execute(postMet,httpContext);
-//
-//
-//
-//                                int statusCode=httpResponse.getStatusLine().getStatusCode();
-//
-//                                if (statusCode == 200) {
-//                                    // 取出回应字串
-//
-//
-//                                	if(debug){
-//                                        try{
-//                                            mMainHandler.obtainMessage(0,"发送积分："+userInfo.getUsername()+":"+point).sendToTarget();
-//                                        } catch (Exception e){
-//
-//                                        }
-//                                    }
-//                                    strResult = EntityUtils.toString(httpResponse.getEntity());
-//                                    setPoint(strResult);
-//                                    point = null;
-//
-//                                }
-//                            }
-//                            catch (Exception e)
-//                            {
-//                                e.printStackTrace();
-//                            }
-//                            try {
-//                                sleep(2000);
-//                            } catch (InterruptedException e) {
-//                                e.printStackTrace();
-//                            }
-//                        }
-//
-//                    }
-//                };
-//            }
-//            th2.start();
-//        }catch (Exception e){
-//
-//        }
     }
 
     public static UserInfo getUserInfo() {
@@ -457,8 +403,10 @@ public class MainDataTool {
                     if(msg.what==2){
                         Map<String,Integer> m=(Map<String,Integer>)msg.obj;
                         NHelper.getNHelper().setStatus(con,m.get("num"),m.get("x"),m.get("y"),m.get("w"),m.get("h"),m.get("color"));
-                    }else{
+                    }else if(msg.what==0){
                         NHelper.getNHelper().showStatus(con, userPointMap);
+                    }else if(msg.what==1){
+                        NHelper.getNHelper().hiddenStatus();
                     }
 
                 }
@@ -536,9 +484,20 @@ public class MainDataTool {
                     e.printStackTrace();
                 }
             }
+            if(result.optString("route","").equals("onEndPoint")){
+
+            }
+
             if(result.optString("route","").equals("uploadPoint")){
 
             }
+
+            if(result.optString("route","").equals("intoRoom")){
+                // 取消显示 头像。
+                gamehandler.obtainMessage(1).sendToTarget();
+            }
+
+
 
         }
     };
