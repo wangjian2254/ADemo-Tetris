@@ -214,6 +214,7 @@ public class MainDataTool {
     }
       
     public static void uploadPoint(String p,Context context){
+        static_point=null;
         if((System.currentTimeMillis()-timeline)/1000<1){
             return;
         }
