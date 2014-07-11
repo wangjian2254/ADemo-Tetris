@@ -2,7 +2,7 @@
 
 /*
  * This file is auto-generated.  DO NOT MODIFY.
- * Original file: /Users/wangjian2254/work/javaworkspace2/ADemo-Tetris/src/com/liyu/pluginframe/util/AIDLGameRoomService.aidl
+ * Original file: D:\\GitProject\\AMogu3\\src\\com\\liyu\\pluginframe\\util\\AIDLGameRoomService.aidl
  */
 package com.liyu.pluginframe.util;
 /**
@@ -11,7 +11,7 @@ package com.liyu.pluginframe.util;
 public interface AIDLGameRoomService extends android.os.IInterface
 {
 /** Local-side IPC implementation stub class. */
-public static abstract class Stub extends android.os.Binder implements AIDLGameRoomService
+public static abstract class Stub extends android.os.Binder implements com.liyu.pluginframe.util.AIDLGameRoomService
 {
 private static final String DESCRIPTOR = "com.liyu.pluginframe.util.AIDLGameRoomService";
 /** Construct the stub at attach it to the interface. */
@@ -23,16 +23,16 @@ this.attachInterface(this, DESCRIPTOR);
  * Cast an IBinder object into an com.liyu.pluginframe.util.AIDLGameRoomService interface,
  * generating a proxy if needed.
  */
-public static AIDLGameRoomService asInterface(android.os.IBinder obj)
+public static com.liyu.pluginframe.util.AIDLGameRoomService asInterface(android.os.IBinder obj)
 {
 if ((obj==null)) {
 return null;
 }
 android.os.IInterface iin = obj.queryLocalInterface(DESCRIPTOR);
-if (((iin!=null)&&(iin instanceof AIDLGameRoomService))) {
-return ((AIDLGameRoomService)iin);
+if (((iin!=null)&&(iin instanceof com.liyu.pluginframe.util.AIDLGameRoomService))) {
+return ((com.liyu.pluginframe.util.AIDLGameRoomService)iin);
 }
-return new AIDLGameRoomService.Stub.Proxy(obj);
+return new com.liyu.pluginframe.util.AIDLGameRoomService.Stub.Proxy(obj);
 }
 @Override public android.os.IBinder asBinder()
 {
@@ -59,17 +59,19 @@ return true;
 case TRANSACTION_addCB:
 {
 data.enforceInterface(DESCRIPTOR);
-ICallBack _arg0;
-_arg0 = ICallBack.Stub.asInterface(data.readStrongBinder());
-this.addCB(_arg0);
+String _arg0;
+_arg0 = data.readString();
+com.liyu.pluginframe.util.ICallBack _arg1;
+_arg1 = com.liyu.pluginframe.util.ICallBack.Stub.asInterface(data.readStrongBinder());
+this.addCB(_arg0, _arg1);
 reply.writeNoException();
 return true;
 }
 case TRANSACTION_delCB:
 {
 data.enforceInterface(DESCRIPTOR);
-ICallBack _arg0;
-_arg0 = ICallBack.Stub.asInterface(data.readStrongBinder());
+String _arg0;
+_arg0 = data.readString();
 this.delCB(_arg0);
 reply.writeNoException();
 return true;
@@ -187,6 +189,19 @@ this.uploadEndPoint(_arg0, _arg1, _arg2, _arg3);
 reply.writeNoException();
 return true;
 }
+case TRANSACTION_getEndPoint:
+{
+data.enforceInterface(DESCRIPTOR);
+String _arg0;
+_arg0 = data.readString();
+String _arg1;
+_arg1 = data.readString();
+String _arg2;
+_arg2 = data.readString();
+this.getEndPoint(_arg0, _arg1, _arg2);
+reply.writeNoException();
+return true;
+}
 case TRANSACTION_cleanPoint:
 {
 data.enforceInterface(DESCRIPTOR);
@@ -196,14 +211,65 @@ String _arg1;
 _arg1 = data.readString();
 String _arg2;
 _arg2 = data.readString();
-this.cleanPoint(_arg0, _arg1, _arg2);
+String _arg3;
+_arg3 = data.readString();
+this.cleanPoint(_arg0, _arg1, _arg2, _arg3);
+reply.writeNoException();
+return true;
+}
+case TRANSACTION_changeRoomStatus:
+{
+data.enforceInterface(DESCRIPTOR);
+String _arg0;
+_arg0 = data.readString();
+String _arg1;
+_arg1 = data.readString();
+String _arg2;
+_arg2 = data.readString();
+this.changeRoomStatus(_arg0, _arg1, _arg2);
+reply.writeNoException();
+return true;
+}
+case TRANSACTION_addRoomListener:
+{
+data.enforceInterface(DESCRIPTOR);
+String _arg0;
+_arg0 = data.readString();
+String _arg1;
+_arg1 = data.readString();
+String _arg2;
+_arg2 = data.readString();
+this.addRoomListener(_arg0, _arg1, _arg2);
+reply.writeNoException();
+return true;
+}
+case TRANSACTION_intoRoom:
+{
+data.enforceInterface(DESCRIPTOR);
+this.intoRoom();
+reply.writeNoException();
+return true;
+}
+case TRANSACTION_quickGame:
+{
+data.enforceInterface(DESCRIPTOR);
+String _arg0;
+_arg0 = data.readString();
+this.quickGame(_arg0);
+reply.writeNoException();
+return true;
+}
+case TRANSACTION_close:
+{
+data.enforceInterface(DESCRIPTOR);
+this.close();
 reply.writeNoException();
 return true;
 }
 }
 return super.onTransact(code, data, reply, flags);
 }
-private static class Proxy implements AIDLGameRoomService
+private static class Proxy implements com.liyu.pluginframe.util.AIDLGameRoomService
 {
 private android.os.IBinder mRemote;
 Proxy(android.os.IBinder remote)
@@ -233,12 +299,13 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override public void addCB(ICallBack icallback) throws android.os.RemoteException
+@Override public void addCB(String key, com.liyu.pluginframe.util.ICallBack icallback) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
 try {
 _data.writeInterfaceToken(DESCRIPTOR);
+_data.writeString(key);
 _data.writeStrongBinder((((icallback!=null))?(icallback.asBinder()):(null)));
 mRemote.transact(Stub.TRANSACTION_addCB, _data, _reply, 0);
 _reply.readException();
@@ -248,13 +315,13 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override public void delCB(ICallBack icallback) throws android.os.RemoteException
+@Override public void delCB(String key) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
 try {
 _data.writeInterfaceToken(DESCRIPTOR);
-_data.writeStrongBinder((((icallback!=null))?(icallback.asBinder()):(null)));
+_data.writeString(key);
 mRemote.transact(Stub.TRANSACTION_delCB, _data, _reply, 0);
 _reply.readException();
 }
@@ -414,7 +481,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override public void cleanPoint(String appcode, String roomid, String username) throws android.os.RemoteException
+@Override public void getEndPoint(String appcode, String roomid, String username) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -423,7 +490,102 @@ _data.writeInterfaceToken(DESCRIPTOR);
 _data.writeString(appcode);
 _data.writeString(roomid);
 _data.writeString(username);
+mRemote.transact(Stub.TRANSACTION_getEndPoint, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
+@Override public void cleanPoint(String appcode, String roomid, String username, String members) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeString(appcode);
+_data.writeString(roomid);
+_data.writeString(username);
+_data.writeString(members);
 mRemote.transact(Stub.TRANSACTION_cleanPoint, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
+@Override public void changeRoomStatus(String appcode, String roomid, String status) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeString(appcode);
+_data.writeString(roomid);
+_data.writeString(status);
+mRemote.transact(Stub.TRANSACTION_changeRoomStatus, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
+@Override public void addRoomListener(String appcode, String username, String roomid) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeString(appcode);
+_data.writeString(username);
+_data.writeString(roomid);
+mRemote.transact(Stub.TRANSACTION_addRoomListener, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
+@Override public void intoRoom() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_intoRoom, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
+@Override public void quickGame(String appcode) throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+_data.writeString(appcode);
+mRemote.transact(Stub.TRANSACTION_quickGame, _data, _reply, 0);
+_reply.readException();
+}
+finally {
+_reply.recycle();
+_data.recycle();
+}
+}
+@Override public void close() throws android.os.RemoteException
+{
+android.os.Parcel _data = android.os.Parcel.obtain();
+android.os.Parcel _reply = android.os.Parcel.obtain();
+try {
+_data.writeInterfaceToken(DESCRIPTOR);
+mRemote.transact(Stub.TRANSACTION_close, _data, _reply, 0);
 _reply.readException();
 }
 finally {
@@ -444,11 +606,17 @@ static final int TRANSACTION_addRoom = (android.os.IBinder.FIRST_CALL_TRANSACTIO
 static final int TRANSACTION_quiteRoom = (android.os.IBinder.FIRST_CALL_TRANSACTION + 9);
 static final int TRANSACTION_uploadPoint = (android.os.IBinder.FIRST_CALL_TRANSACTION + 10);
 static final int TRANSACTION_uploadEndPoint = (android.os.IBinder.FIRST_CALL_TRANSACTION + 11);
-static final int TRANSACTION_cleanPoint = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
+static final int TRANSACTION_getEndPoint = (android.os.IBinder.FIRST_CALL_TRANSACTION + 12);
+static final int TRANSACTION_cleanPoint = (android.os.IBinder.FIRST_CALL_TRANSACTION + 13);
+static final int TRANSACTION_changeRoomStatus = (android.os.IBinder.FIRST_CALL_TRANSACTION + 14);
+static final int TRANSACTION_addRoomListener = (android.os.IBinder.FIRST_CALL_TRANSACTION + 15);
+static final int TRANSACTION_intoRoom = (android.os.IBinder.FIRST_CALL_TRANSACTION + 16);
+static final int TRANSACTION_quickGame = (android.os.IBinder.FIRST_CALL_TRANSACTION + 17);
+static final int TRANSACTION_close = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
 }
 public void init(String appcode) throws android.os.RemoteException;
-public void addCB(ICallBack icallback) throws android.os.RemoteException;
-public void delCB(ICallBack icallback) throws android.os.RemoteException;
+public void addCB(String key, com.liyu.pluginframe.util.ICallBack icallback) throws android.os.RemoteException;
+public void delCB(String key) throws android.os.RemoteException;
 public void addRoomList(String appcode, String username, String userinfo) throws android.os.RemoteException;
 public void queryRoomList(String appcode, int start, int limit) throws android.os.RemoteException;
 public void quiteRoomList(String appcode) throws android.os.RemoteException;
@@ -458,5 +626,11 @@ public void addRoom(String appcode, String roomid, String username) throws andro
 public void quiteRoom(String appcode, String roomid, String username) throws android.os.RemoteException;
 public void uploadPoint(String appcode, String roomid, String username, String point) throws android.os.RemoteException;
 public void uploadEndPoint(String appcode, String roomid, String username, String point) throws android.os.RemoteException;
-public void cleanPoint(String appcode, String roomid, String username) throws android.os.RemoteException;
+public void getEndPoint(String appcode, String roomid, String username) throws android.os.RemoteException;
+public void cleanPoint(String appcode, String roomid, String username, String members) throws android.os.RemoteException;
+public void changeRoomStatus(String appcode, String roomid, String status) throws android.os.RemoteException;
+public void addRoomListener(String appcode, String username, String roomid) throws android.os.RemoteException;
+public void intoRoom() throws android.os.RemoteException;
+public void quickGame(String appcode) throws android.os.RemoteException;
+public void close() throws android.os.RemoteException;
 }

@@ -445,7 +445,7 @@ public class MainDataTool {
             if (gameRoomService != null)
             {
                 try {
-                    gameRoomService.addCB(mCallBack);
+                    gameRoomService.addCB("game",mCallBack);
                     gameRoomService.init(appcode);
 
                 } catch (RemoteException e) {
