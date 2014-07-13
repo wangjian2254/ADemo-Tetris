@@ -408,6 +408,23 @@ public class MainDataTool {
                         NHelper.getNHelper().showStatus(con, userPointMap);
                     }else if(msg.what==1){
                         NHelper.getNHelper().hiddenStatus();
+                    }else if(msg.what==800){
+                        JSONObject m=new JSONObject();
+                        try {
+                            m.put("code",200);
+                            m.put("route","disconnect");
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+
+                        try {
+                            if(mCallBack!=null){
+                                mCallBack.handleByServer(m.toString());
+                            }
+
+                        } catch (RemoteException e) {
+                            e.printStackTrace();
+                        }
                     }
 
                 }
@@ -473,6 +490,11 @@ public class MainDataTool {
             if(result.optString("route","").equals("connect")){
                 if(result.optBoolean("success",false)){
                 }
+            }
+            if(result.optString("route","").equals("disconnect")){
+                Log.e("kill game","ggggggggggggg");
+                android.os.Process.killProcess(android.os.Process.myPid());
+                gamehandler.obtainMessage(800).sendToTarget();
             }
             if(result.optString("route","").equals("onChat")){
                 try{
