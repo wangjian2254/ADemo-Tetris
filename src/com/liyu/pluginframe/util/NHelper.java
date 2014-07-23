@@ -62,8 +62,8 @@ public class NHelper {
     private int h=24;
     private int c =0;
 
-    private int face_board=0;
-    private int[] nn =new int[6];
+//    private int face_board=0;
+    private int[] nn =new int[3];
 
     private String headpic="com.mogu3.mainapp.im.util.HeaderPic";
 	/**
@@ -73,14 +73,14 @@ public class NHelper {
 
 	}
 
-    public void setResid(int f,int n1,int n2,int n3,int n4,int n5,int n6){
-        face_board=f;
+    public void setResid(int n1,int n2,int n3){
+//        face_board=f;
         nn[0]=n1;
         nn[1]=n2;
         nn[2]=n3;
-        nn[3]=n4;
-        nn[4]=n5;
-        nn[5]=n6;
+//        nn[3]=n4;
+//        nn[4]=n5;
+//        nn[5]=n6;
 
     }
 
@@ -216,7 +216,7 @@ public class NHelper {
 
                 panellinear2=new RelativeLayout(con);
                 imageView = new  ImageView(con);
-                imageView.setImageDrawable(targetContext.getResources().getDrawable(face_board));
+//                imageView.setImageDrawable(targetContext.getResources().getDrawable(face_board));
                 panellinear.addView(imageView);
                 panellinear.addView(panellinear2);
                 panellinear.addView(panellinear1);
@@ -591,6 +591,9 @@ public class NHelper {
         try {
             Context targetContext=context.createPackageContext("com.mogu3.mainapp", Context.CONTEXT_INCLUDE_CODE|Context.CONTEXT_IGNORE_SECURITY);
             for (int i = 0; i < infoIds.size(); i++) {
+                if(i==nn.length){
+                      break;
+                }
                 paiming.get(infoIds.get(i).getKey()).setImageDrawable(targetContext.getResources().getDrawable(nn[i]));
             }
 

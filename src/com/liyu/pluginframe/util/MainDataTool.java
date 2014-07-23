@@ -46,8 +46,8 @@ public class MainDataTool {
 
     private static int version=0;
     private static String roomid =null;
-    private static String author=null;
-    private static String gameroomurl=null;
+    private static String author =null;
+    private static String gameroomurl =null;
     private static Map<String,Integer> userlist=new HashMap<String, Integer>();
     private static Map<String,String> nicklist=new HashMap<String, String>();
     private static Map<Integer,String> shunxulist=new HashMap<Integer, String>();
@@ -56,104 +56,17 @@ public class MainDataTool {
     private static Map<String,String> userPointMap = new HashMap<String, String>();
     private static List<BasicNameValuePair> getPointList = new ArrayList< BasicNameValuePair >();
 
-    private static boolean runing=false;
-    private static boolean runing2=false;
 
     private static int x,y,w,h,c ;
 
     private static AIDLGameRoomService gameRoomService;
 
 
-    private static   Thread th = new Thread()
-    {
-        public void run()
-        {
-            while (runing){
-                try{
-                    HttpPost postMet = new HttpPost(gameroomurl+"/GetAllPoint");
-
-                    postMet.setEntity(new UrlEncodedFormEntity(getPointList, HTTP.UTF_8));
-
-                    Log.e("request", gameroomurl+"/GetAllPoint");
-                    DefaultHttpClient client = new DefaultHttpClient();
-                    HttpContext httpContext=new BasicHttpContext();
-                    client.getParams().setParameter(
-                            CoreConnectionPNames.CONNECTION_TIMEOUT, 30000);
-                    client.getParams().setParameter(CoreConnectionPNames.SO_TIMEOUT, 30000);
-                    client.getParams().setParameter(CoreProtocolPNames.USE_EXPECT_CONTINUE, false);
-
-
-                    HttpResponse httpResponse = client.execute(postMet,httpContext);
-
-
-
-                    int statusCode=httpResponse.getStatusLine().getStatusCode();
-
-                    if (statusCode == 200) {
-                        // 取出回应字串
-                        setPoint(EntityUtils.toString(httpResponse.getEntity()));
-                    }
-                }
-                catch (Exception e)
-                {
-
-                }
-
-                try {
-                    sleep(5000);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                }
-            }
-
-
-        }
-    };
-    private static String point;
-    private static   Thread th2 = null;
-
-    private static void setPoint(String result){
-        JSONObject jsonobj= null;
-        try {
-            jsonobj = new JSONObject(result);
-            int status=jsonobj.getInt("status");
-            if(status==200){
-                JSONArray jsonArray= jsonobj.getJSONArray("result");
-                JSONObject userp = null;
-                StringBuilder sb = new StringBuilder();
-                for(int i=0;i<jsonArray.length();i++){
-                    userp = jsonArray.getJSONObject(i);
-                    userPointMap.put(userp.optString("username"),userp.optString("point",""));
-                    sb.append(userp.optString("username"));
-                    sb.append(":");
-                    sb.append(userp.optString("point"));
-                    sb.append(";");
-                    if(debug){
-                        try{
-                            mMainHandler.obtainMessage(0,""+userp.optString("username")+":"+userp.optString("point","初始化")).sendToTarget();
-                        } catch (Exception e){
-
-                        }
-                    }
-
-                }
-
-                gamehandler.obtainMessage(0).sendToTarget();
-
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     public static void startGetPoint(){
         uploadPoint("",con);
     }
-    public static void stopGetPoint(){
-        runing=false;
-        runing2=false;
-    }
+
 
     public static void setPos(int num,int xx,int yy,int ww,int color,Context context){
         int hh=ww+24;
@@ -352,14 +265,11 @@ public class MainDataTool {
                 author = j.optString("author","");
                 gameroomurl = j.optString("gameroom","");
                 int face_board,n_1,n_2,n_3,n_4,n_5,n_6;
-                face_board = j.optInt("face_board");
+//                face_board = j.optInt("face_board");
                 n_1=j.optInt("n_1");
                 n_2=j.optInt("n_2");
                 n_3=j.optInt("n_3");
-                n_4=j.optInt("n_4");
-                n_5=j.optInt("n_5");
-                n_6=j.optInt("n_6");
-                NHelper.getNHelper().setResid(face_board,n_1,n_2,n_3,n_4,n_5,n_6);
+                NHelper.getNHelper().setResid(n_1,n_2,n_3);
                 try {
                     JSONArray jsonArray = new JSONArray(j.getString("userlist"));
                     JSONArray nickArray = new JSONArray(j.getString("nicklist"));
