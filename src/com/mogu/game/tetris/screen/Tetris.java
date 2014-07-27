@@ -189,13 +189,7 @@ public class Tetris extends Screen {
 
 
 
-        MainDataTool.setPos(0,10,220,80,0xFFFFFFFF,LSystem.screenActivity);
-        MainDataTool.setPos(1,10,324,100,0xFFFFFFFF,LSystem.screenActivity);
-        MainDataTool.setPos(2,10,448,80,0xFFFFFFFF,LSystem.screenActivity);
-        MainDataTool.setPos(3,10,552,100,0xFFFFFFFF,LSystem.screenActivity);
 
-        MainDataTool.setPos(4,390,476,100,0xFFFFFFFF,LSystem.screenActivity);
-        MainDataTool.setPos(5,390,602,80,0xFFFFFFFF,LSystem.screenActivity);
 
 	}
 
@@ -220,6 +214,14 @@ public class Tetris extends Screen {
 		}
 		// 自动计时
 		if (delay!=null&&delay.action(timer.getTimeSinceLastUpdate())) {
+            MainDataTool.setPos(0,1,10,220,120,0xFFFFFFFF,LSystem.screenActivity);
+            MainDataTool.setPos(1,1,10,354,80,0xFFFFFFFF,LSystem.screenActivity);
+            MainDataTool.setPos(2,1,10,508,80,0xFFFFFFFF,LSystem.screenActivity);
+            MainDataTool.setPos(3,1,10,602,100,0xFFFFFFFF,LSystem.screenActivity);
+
+            MainDataTool.setPos(4,1,390,476,100,0xFFFFFFFF,LSystem.screenActivity);
+            MainDataTool.setPos(5,1,390,602,80,0xFFFFFFFF,LSystem.screenActivity);
+
 //			if(num%20==0){
 //				num1=Math.abs(random.nextInt())%10;
 //			}

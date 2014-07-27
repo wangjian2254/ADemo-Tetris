@@ -66,7 +66,6 @@ public class MainMenuActivity extends Activity {
     public void onResume(){
     	super.onResume();
     	MobclickAgent.onResume(this);
-        MainDataTool.stopGetPoint();
     }
     public void onPause() {
         super.onPause();

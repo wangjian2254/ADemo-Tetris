@@ -57,7 +57,8 @@ public class MainDataTool {
     private static List<BasicNameValuePair> getPointList = new ArrayList< BasicNameValuePair >();
 
 
-    private static int x,y,w,h,c ;
+    private static int type,x,y,w,h,c ;
+    public static enum HEAD_TYPE{HEAD,POINT};
 
     private static AIDLGameRoomService gameRoomService;
 
@@ -68,16 +69,24 @@ public class MainDataTool {
     }
 
 
-    public static void setPos(int num,int xx,int yy,int ww,int color,Context context){
-        int hh=ww+24;
+    public static void setPos(int num,int t,int xx,int yy,int ww,int color,Context context){
+        // w 70 h 108
+        int hh=0;
+        if(t==1){
+            hh=(int)((108.0/70.0)*ww+0.5);
+        }else{
+            hh=(int)((48.0/70.0)*ww+0.5);
+        }
+
         Map<String,Integer> numpos=weizhilist.get(num);
         if (numpos!=null){
+            type=numpos.get("type");
             x=numpos.get("x");
             y=numpos.get("y");
             w=numpos.get("w");
             h=numpos.get("h");
             c = numpos.get("color");
-            if(x==xx&&y==yy&&w==ww&&h==hh&&c==color&&con==context){
+            if(type==t&&x==xx&&y==yy&&w==ww&&h==hh&&c==color&&con==context){
                 return;
             }
         }else{
@@ -87,6 +96,7 @@ public class MainDataTool {
 
         con= context;
         Map<String,Integer> pos =new HashMap<String,Integer>();
+        pos.put("type",t);
         pos.put("x",xx);
         pos.put("y",yy);
         pos.put("w",ww);
@@ -95,6 +105,7 @@ public class MainDataTool {
         pos.put("num",num);
 
         gamehandler.obtainMessage(2,pos).sendToTarget();
+        numpos.put("type", t);
         numpos.put("x",xx);
         numpos.put("y",yy);
         numpos.put("w",ww);
@@ -264,12 +275,12 @@ public class MainDataTool {
                 roomid = j.optString("spaceid","");
                 author = j.optString("author","");
                 gameroomurl = j.optString("gameroom","");
-                int face_board,n_1,n_2,n_3,n_4,n_5,n_6;
-//                face_board = j.optInt("face_board");
+                int face_board,n_1,n_2,n_3;
+                face_board = j.optInt("face_board");
                 n_1=j.optInt("n_1");
                 n_2=j.optInt("n_2");
                 n_3=j.optInt("n_3");
-                NHelper.getNHelper().setResid(n_1,n_2,n_3);
+                NHelper.getNHelper().setResid(face_board,n_1,n_2,n_3);
                 try {
                     JSONArray jsonArray = new JSONArray(j.getString("userlist"));
                     JSONArray nickArray = new JSONArray(j.getString("nicklist"));
@@ -313,7 +324,7 @@ public class MainDataTool {
 
                     if(msg.what==2){
                         Map<String,Integer> m=(Map<String,Integer>)msg.obj;
-                        NHelper.getNHelper().setStatus(con,m.get("num"),m.get("x"),m.get("y"),m.get("w"),m.get("h"),m.get("color"));
+                        NHelper.getNHelper().setStatus(con,m.get("num"),m.get("type"),m.get("x"),m.get("y"),m.get("w"),m.get("h"),m.get("color"));
                     }else if(msg.what==0){
                         NHelper.getNHelper().showStatus(con, userPointMap);
                     }else if(msg.what==1){

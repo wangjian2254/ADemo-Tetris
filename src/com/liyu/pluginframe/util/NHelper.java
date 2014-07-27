@@ -50,6 +50,7 @@ public class NHelper {
 
     private static Map<String,ImageView> paiming = new HashMap<String, ImageView>();
     private static Map<String,TextView> jindulist = new HashMap<String, TextView>();
+    private static Map<String,TextView> pointlist = new HashMap<String, TextView>();
     private static Map<String,Integer> wlist = new HashMap<String, Integer>();
     private static  Map<String,Integer> userlist;
     private static  Map<String,String> nicklist;
@@ -62,7 +63,7 @@ public class NHelper {
     private int h=24;
     private int c =0;
 
-//    private int face_board=0;
+    private int face_board=0;
     private int[] nn =new int[3];
 
     private String headpic="com.mogu3.mainapp.im.util.HeaderPic";
@@ -73,8 +74,8 @@ public class NHelper {
 
 	}
 
-    public void setResid(int n1,int n2,int n3){
-//        face_board=f;
+    public void setResid(int f,int n1,int n2,int n3){
+        face_board=f;
         nn[0]=n1;
         nn[1]=n2;
         nn[2]=n3;
@@ -178,9 +179,8 @@ public class NHelper {
             ImageView imageView=null;
 
 
-            RelativeLayout panellinear=null;
-            RelativeLayout panellinear1=null;
-            RelativeLayout panellinear2=null;
+            RelativeLayout parent=null;
+            LinearLayout     panellinear =null;
 
 
             int num=0;
@@ -188,134 +188,148 @@ public class NHelper {
             for (String u:userlist.keySet()){
                 Map<String,Integer> numpos=weizhilist.get(num);
 
-                int face_board_w=80;
+                int face_board_w=70;
                 if (numpos!=null){
                     face_board_w=numpos.get("w");
                 }
-                panellinear=notiViewmap.get(num);
-                if(panellinear==null){
-                    panellinear=new RelativeLayout(con);
+                parent=notiViewmap.get(num);
+                if(parent==null){
+                    parent=new RelativeLayout(con);
                 }else{
-                    panellinear.removeAllViews();
+                    parent.removeAllViews();
+                }
+                panellinear=new LinearLayout(con);
+
+                panellinear.setBackgroundDrawable(targetContext.getResources().getDrawable(face_board));
+                LinearLayout.LayoutParams lb = new LinearLayout.LayoutParams(face_board_w, ViewGroup.LayoutParams.WRAP_CONTENT);
+                panellinear.setOrientation(LinearLayout.VERTICAL);
+                panellinear.setLayoutParams(lb);
+
+                RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                parent.setLayoutParams(params);
+
+                RelativeLayout.LayoutParams lineparam = new RelativeLayout.LayoutParams(face_board_w, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                lineparam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                lineparam.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                lineparam.setMargins((int)(face_board_w/6.0+0.5),(int)(face_board_w/6.0+0.5),0,0);
+//                lineparam.addRule(RelativeLayout.MarginLayoutParams);
+
+                parent.addView(panellinear,lineparam);
+
+//                panellinear1=new RelativeLayout(con);
+//                panellinear1.setPadding(0,0,0,0);
+//                RelativeLayout.LayoutParams n0=new RelativeLayout.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT);
+//                n0.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+                t = new TextView(con);
+                t.setSingleLine(true);
+//                t.setHeight(30);
+                t.setText(nicklist.get(u));
+//                t.setPadding(0, 2, 0, 0);
+                t.setWidth(face_board_w);
+                t.setTextSize(12);
+                t.setGravity(Gravity.CENTER);
+                t.setId(num+200);
+                panellinear.addView(t,lb);
+
+
+//                panellinear2=new RelativeLayout(con);
+//                imageView = new  ImageView(con);
+//                imageView.setImageDrawable();
+//                panellinear.addView(imageView);
+
+//                panellinear.addView(panellinear2);
+//                panellinear.addView(panellinear1);
+
+//                panellinear2.setPadding(5,5,5,5);
+
+//                RelativeLayout.LayoutParams param=new RelativeLayout.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT);
+//                RelativeLayout.LayoutParams nickparam=new RelativeLayout.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT);
+//                RelativeLayout.LayoutParams paimingparam=new RelativeLayout.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT);
+//
+//                nickparam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
+//                nickparam.addRule(RelativeLayout.CENTER_HORIZONTAL);
+
+//                t = new TextView(con);
+//
+//                t.setHeight(21);
+//                t.setPadding(0, 0, 0, 0);
+//                t.setWidth(face_board_w-10);
+//                t.setTextSize(12);
+//                t.setId(num+1);
+//                panellinear2.addView(t,nickparam);
+
+                if(numpos==null||numpos.get("type")==1){
+                    imageView = new  ImageView(con);
+                    p[0]=userlist.get(u);
+//                BitmapFactory.decodeResource()
+                    imageView.setImageBitmap(zoomDrawable(targetContext.getResources().getDrawable((Integer) m.invoke(c, p)), face_board_w, (int)((62.0/70.0)*face_board_w+0.5)));
+                    imageView.setId(num+100);
+//                param.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+//                param.addRule(RelativeLayout.CENTER_HORIZONTAL);
+
+                    panellinear.addView(imageView);
                 }
 
-
-                panellinear1=new RelativeLayout(con);
-                panellinear1.setPadding(2,2,2,0);
-                RelativeLayout.LayoutParams n0=new RelativeLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                n0.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                t = new TextView(con);
-                t.setHeight(26);
-                t.setPadding(0, 2, 0, 0);
-                t.setWidth(face_board_w-10);
-                t.setTextSize(12);
-                t.setId(num+200);
-                panellinear1.addView(t,n0);
-
-                panellinear2=new RelativeLayout(con);
-                imageView = new  ImageView(con);
-//                imageView.setImageDrawable(targetContext.getResources().getDrawable(face_board));
-                panellinear.addView(imageView);
-                panellinear.addView(panellinear2);
-                panellinear.addView(panellinear1);
-
-                panellinear2.setPadding(5,5,5,5);
-
-                RelativeLayout.LayoutParams param=new RelativeLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                RelativeLayout.LayoutParams nickparam=new RelativeLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                RelativeLayout.LayoutParams paimingparam=new RelativeLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-
-                nickparam.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM);
-                nickparam.addRule(RelativeLayout.CENTER_HORIZONTAL);
-
-                t = new TextView(con);
-                t.setText(nicklist.get(u));
-                t.setHeight(21);
-                t.setPadding(0, 0, 0, 0);
-                t.setWidth(face_board_w-10);
-                t.setTextSize(12);
-                t.setId(num+1);
-                panellinear2.addView(t,nickparam);
-
-                imageView = new  ImageView(con);
-                p[0]=userlist.get(u);
-//                BitmapFactory.decodeResource()
-                imageView.setImageBitmap(zoomDrawable(targetContext.getResources().getDrawable((Integer) m.invoke(c, p)), face_board_w-(int)(face_board_w/80.0*10), face_board_w-(int)(face_board_w/80.0*12)));
-                imageView.setId(num+100);
-                param.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                param.addRule(RelativeLayout.CENTER_HORIZONTAL);
-
-                panellinear2.addView(imageView,param);
 
 
 
 
                 //进度条
-                RelativeLayout.LayoutParams j1=new RelativeLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                j1.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                j1.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+//                RelativeLayout.LayoutParams j1=new RelativeLayout.LayoutParams(
+//                        ViewGroup.LayoutParams.WRAP_CONTENT,
+//                        ViewGroup.LayoutParams.WRAP_CONTENT);
+//                j1.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+//                j1.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                LinearLayout j = new LinearLayout(con);
+                LinearLayout.LayoutParams jin = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT,8);
+                if(numpos==null||numpos.get("type")==1){
+                    j.setBackgroundColor(0xff505760);
+                }else{
+                    j.setBackgroundColor(0xff0c1218);
+                }
+                j.setOrientation(LinearLayout.VERTICAL);
+                j.setLayoutParams(jin);
+
                 t1 = new TextView(con);
                 t1.setWidth(0);
-                t1.setHeight(3);
-                t1.setBackgroundColor(0xfffff000);
-                panellinear1.addView(t1,j1);
-                jindulist.put(u+"_t",t1);
-                RelativeLayout.LayoutParams j2=new RelativeLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                j2.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                j2.addRule(RelativeLayout.ALIGN_PARENT_TOP);
-                t1 = new TextView(con);
-                t1.setWidth(3);
-                t1.setHeight(0);
-                t1.setBackgroundColor(0xfffff000);
-                panellinear1.addView(t1,j2);
-                jindulist.put(u+"_r",t1);
-
-                RelativeLayout.LayoutParams j3=new RelativeLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                j3.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                j3.addRule(RelativeLayout.ABOVE,num+1);
-                t1 = new TextView(con);
-                t1.setWidth(0);
-                t1.setHeight(3);
-                t1.setBackgroundColor(0xfffff000);
-                t1.setId(num+1000);
-                panellinear2.addView(t1,j3);
-                jindulist.put(u+"_b",t1);
-
-                RelativeLayout.LayoutParams j4=new RelativeLayout.LayoutParams(
-                        ViewGroup.LayoutParams.WRAP_CONTENT,
-                        ViewGroup.LayoutParams.WRAP_CONTENT);
-                j4.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
-                j4.addRule(RelativeLayout.ABOVE,num+200);
-                t1 = new TextView(con);
-                t1.setWidth(3);
-                t1.setHeight(0);
-                t1.setBackgroundColor(0xfffff000);
-                panellinear1.addView(t1,j4);
-                jindulist.put(u+"_l",t1);
-                //进度条 end
+                t1.setHeight(8);
+                t1.setBackgroundColor(0xfffffc00);
+                j.addView(t1);
+                panellinear.addView(j);
+                jindulist.put(u,t1);
 
 
 
-                imageView = new ImageView(con);
-                paimingparam.addRule(RelativeLayout.ALIGN_PARENT_RIGHT);
-                paimingparam.addRule(RelativeLayout.ABOVE,num+1000);
-                paiming.put(u,imageView);
-                panellinear2.addView(imageView, paimingparam);
-                notiViewmap.put(num, panellinear);
+
+
+                n = new TextView(con);
+//                n.setHeight(25);
+                n.setWidth(face_board_w);
+                n.setTextSize(12);
+                n.setGravity(Gravity.CENTER);
+                n.setId(num + 300);
+                panellinear.addView(n,lb);
+                pointlist.put(u,n);
+
+                notiViewmap.put(num, parent);
+
+                ImageView pai = new ImageView(con);
+                pai.setVisibility(View.GONE);
+                RelativeLayout.LayoutParams jinduparam = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+
+                jinduparam.addRule(RelativeLayout.ALIGN_PARENT_TOP);
+                jinduparam.addRule(RelativeLayout.ALIGN_PARENT_LEFT);
+                parent.addView(pai,jinduparam);
+                paiming.put(u,pai);
                 wlist.put(u,face_board_w);
                 num++;
 
@@ -402,18 +416,14 @@ public class NHelper {
 //		}
 //	};
 
-    public void setStatus(Context context,int num,int xx,int yy,int ww,int hh,int color){
+    public void setStatus(Context context,int num,int type,int xx,int yy,int ww,int hh,int color){
         RelativeLayout notiView = notiViewmap.get(num);
         if(notiView==null){
             return;
         }
+
         if(con!=context){
-            synchronized (popWinLock) {
-                if (showStatused) {
-                    mWindowManager.removeView(notiView);
-                    showStatused = false;
-                }
-            }
+            hiddenStatus();
             mWindowManager = (WindowManager) context
                     .getSystemService("window");
             mWindowManager.getDefaultDisplay().getMetrics(mDisplayMetrics);
@@ -427,6 +437,7 @@ public class NHelper {
             weizhilist.put(num,numpos);
         }
 
+        numpos.put("type",type);
         numpos.put("x",xx);
         numpos.put("y",yy);
         numpos.put("w",ww);
@@ -442,8 +453,9 @@ public class NHelper {
                         | WindowManager.LayoutParams.FLAG_FULLSCREEN
                         | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN;
 
-                wmParams.width = ww;
-                wmParams.height = hh;
+                wmParams.width = ww+15;
+                wmParams.height = hh*2;
+
                 wmParams.gravity = Gravity.TOP | Gravity.LEFT;
                 wmParams.x = xx;
                 wmParams.y = yy;
@@ -460,6 +472,7 @@ public class NHelper {
                 for (RelativeLayout notiView:notiViewmap.values()){
                     mWindowManager.removeView(notiView);
                 }
+
                 showStatused = false;
             }
         }
@@ -483,7 +496,7 @@ public class NHelper {
         }
 
         ///////////////////////////////////////////////////
-        float max=0;
+        float max=1;
         for(String u:up.keySet()){
                 try{
                     if(Integer.valueOf(up.get(u)).intValue()>max){
@@ -494,70 +507,22 @@ public class NHelper {
                 }
 
         }
-        float point=0;
+        int point=0;
         TextView t=null;
-        TextView r=null;
-        TextView b=null;
-        TextView l=null;
+
         for(String u:up.keySet()){
             int face_board_w=80;
             if (wlist.containsKey(u)){
                 face_board_w=wlist.get(u);
             }
+             try{
+                 point = Integer.valueOf(up.get(u));
+             }catch (Exception e){
+                 point = 0;
+             }
               
-            t=jindulist.get(u+"_t");
-            r=jindulist.get(u+"_r");
-            b=jindulist.get(u+"_b");
-            l=jindulist.get(u+"_l");
-            if(t!=null&&r!=null&&b!=null&&l!=null){
-                if(max==0){
-                    t.setWidth(0);
-                    r.setHeight(0);
-                    b.setWidth(0);
-                    l.setHeight(0);
-                }else{
-                    try{
-                        point=(Float.valueOf(up.get(u)).floatValue()/max*100);
-                        if(point<25){
-                            t.setWidth((int)(point/25.0*face_board_w));
-                            r.setHeight(0);
-                            b.setWidth(0);
-                            l.setHeight(0);
-                        }else{
-                            if(point>=25){
-                                t.setWidth(face_board_w);
-                                if(point>=50){
-                                    t.setWidth(face_board_w);
-                                    r.setHeight(face_board_w-5);
-
-                                    if(point>=75){
-
-                                        b.setWidth(face_board_w);
-                                        l.setHeight((int)((point-75.0)/25.0*(face_board_w-5)));
-                                    }else{
-                                        b.setWidth((int)((point-50.0)/25.0*face_board_w));
-                                        l.setHeight(0);
-                                    }
-                                }else{
-                                    r.setHeight((int)((point-25.0)/25.0*(face_board_w-5)));
-                                    b.setWidth(0);
-                                    l.setHeight(0);
-                                }
-
-
-                            }
-
-                        }
-
-
-                    }catch (Exception e){
-                        t.setWidth(0);
-                        r.setHeight(0);
-                        b.setWidth(0);
-                        l.setHeight(0);
-                    }
-                }
-            }
+            t=jindulist.get(u);
+            t.setWidth((int)(point/max*face_board_w));
 
         }
         ///////////////////////////////////////////////////////////////////
@@ -571,6 +536,7 @@ public class NHelper {
         for(String u:up.keySet()){
             try{
                 map.put(u, Integer.valueOf(up.get(u)));
+                pointlist.get(u).setText(up.get(u));
             }catch (Exception e){
                 map.put(u,0);
             }
@@ -592,9 +558,16 @@ public class NHelper {
             Context targetContext=context.createPackageContext("com.mogu3.mainapp", Context.CONTEXT_INCLUDE_CODE|Context.CONTEXT_IGNORE_SECURITY);
             for (int i = 0; i < infoIds.size(); i++) {
                 if(i==nn.length){
-                      break;
+                    paiming.get(infoIds.get(i).getKey()).setVisibility(View.GONE);
+                      continue;
                 }
-                paiming.get(infoIds.get(i).getKey()).setImageDrawable(targetContext.getResources().getDrawable(nn[i]));
+                int pw=25;
+                if(wlist.get(infoIds.get(i).getKey())!=null){
+                    pw = (int)(wlist.get(infoIds.get(i).getKey())/2.8+0.5);
+                }
+
+                paiming.get(infoIds.get(i).getKey()).setImageBitmap(zoomDrawable(targetContext.getResources().getDrawable(nn[i]),pw,pw));
+                paiming.get(infoIds.get(i).getKey()).setVisibility(View.VISIBLE);
             }
 
 
@@ -635,6 +608,7 @@ public class NHelper {
 
             }
         }
+
 
         showStatused = true;
     }
