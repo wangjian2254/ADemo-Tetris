@@ -5,8 +5,6 @@ package com.mogu.game.tetris.screen;
 
 import java.util.Random;
 
-import loon.LGame;
-import loon.action.sprite.Sprites;
 import loon.core.LSystem;
 import loon.core.graphics.LColor;
 import loon.core.graphics.LFont;
@@ -214,13 +212,13 @@ public class Tetris extends Screen {
 		}
 		// 自动计时
 		if (delay!=null&&delay.action(timer.getTimeSinceLastUpdate())) {
-            MainDataTool.setPos(0,1,10,220,120,0xFFFFFFFF,LSystem.screenActivity);
-            MainDataTool.setPos(1,1,10,354,80,0xFFFFFFFF,LSystem.screenActivity);
-            MainDataTool.setPos(2,1,10,508,80,0xFFFFFFFF,LSystem.screenActivity);
-            MainDataTool.setPos(3,1,10,602,100,0xFFFFFFFF,LSystem.screenActivity);
+            MainDataTool.setPos(0,1,10,220,120,LSystem.screenActivity);
+            MainDataTool.setPos(1,1,10,354,80,LSystem.screenActivity);
+            MainDataTool.setPos(2,1,10,508,80,LSystem.screenActivity);
+            MainDataTool.setPos(3,1,10,602,100,LSystem.screenActivity);
 
-            MainDataTool.setPos(4,1,390,476,100,0xFFFFFFFF,LSystem.screenActivity);
-            MainDataTool.setPos(5,1,390,602,80,0xFFFFFFFF,LSystem.screenActivity);
+            MainDataTool.setPos(4,1,390,476,100,LSystem.screenActivity);
+            MainDataTool.setPos(5,1,390,602,80,LSystem.screenActivity);
 
 //			if(num%20==0){
 //				num1=Math.abs(random.nextInt())%10;
@@ -405,7 +403,7 @@ public class Tetris extends Screen {
 			}
 			if (gameField.isGameOver()) {
 				if(!writeresult){
-					MainDataTool.setResultString1(gameField.getPoints(),"俄罗斯方块获取新的积分！", MainDataTool.Model.WEEKLY);
+					MainDataTool.setResultString1(gameField.getPoints(), "俄罗斯方块获取新的积分！", MainDataTool.Model.WEEKLY);
 					writeresult=true;
 				}
 				g.setColor(LColor.white);

@@ -416,7 +416,7 @@ public class NHelper {
 //		}
 //	};
 
-    public void setStatus(Context context,int num,int type,int xx,int yy,int ww,int hh,int color){
+    public void setStatus(Context context,int num,int type,int xx,int yy,int ww,int hh){
         RelativeLayout notiView = notiViewmap.get(num);
         if(notiView==null){
             return;
@@ -442,7 +442,7 @@ public class NHelper {
         numpos.put("y",yy);
         numpos.put("w",ww);
         numpos.put("h",hh);
-        numpos.put("color",color);
+//        numpos.put("color",color);
 
 
         synchronized (popWinLock) {

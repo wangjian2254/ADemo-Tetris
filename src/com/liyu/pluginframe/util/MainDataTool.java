@@ -57,7 +57,7 @@ public class MainDataTool {
     private static List<BasicNameValuePair> getPointList = new ArrayList< BasicNameValuePair >();
 
 
-    private static int type,x,y,w,h,c ;
+    private static int type,x,y,w,h ;
     public static enum HEAD_TYPE{HEAD,POINT};
 
     private static AIDLGameRoomService gameRoomService;
@@ -69,7 +69,7 @@ public class MainDataTool {
     }
 
 
-    public static void setPos(int num,int t,int xx,int yy,int ww,int color,Context context){
+    public static void setPos(int num,int t,int xx,int yy,int ww,Context context){
         // w 70 h 108
         int hh=0;
         if(t==1){
@@ -85,8 +85,8 @@ public class MainDataTool {
             y=numpos.get("y");
             w=numpos.get("w");
             h=numpos.get("h");
-            c = numpos.get("color");
-            if(type==t&&x==xx&&y==yy&&w==ww&&h==hh&&c==color&&con==context){
+//            c = numpos.get("color");
+            if(type==t&&x==xx&&y==yy&&w==ww&&h==hh&&con==context){
                 return;
             }
         }else{
@@ -101,7 +101,7 @@ public class MainDataTool {
         pos.put("y",yy);
         pos.put("w",ww);
         pos.put("h",hh);
-        pos.put("color",color);
+//        pos.put("color",color);
         pos.put("num",num);
 
         gamehandler.obtainMessage(2,pos).sendToTarget();
@@ -110,7 +110,7 @@ public class MainDataTool {
         numpos.put("y",yy);
         numpos.put("w",ww);
         numpos.put("h",hh);
-        numpos.put("color",color);
+//        numpos.put("color",color);
 
     }
 
@@ -165,7 +165,7 @@ public class MainDataTool {
 
     public static enum Model{NORMAL,DAILY,WEEKLY,MONTHLY,YEAR};
 
-	public static void setResultString1(int jf,String message,Model model){
+	public static void setResultString1(int jf, String message, Model model){
 		SharedPreferences resp = con.getSharedPreferences(appcode, 0);
 		String pjs=resp.getString(DATA,null);  
 		int totaljf=jf;
@@ -324,7 +324,7 @@ public class MainDataTool {
 
                     if(msg.what==2){
                         Map<String,Integer> m=(Map<String,Integer>)msg.obj;
-                        NHelper.getNHelper().setStatus(con,m.get("num"),m.get("type"),m.get("x"),m.get("y"),m.get("w"),m.get("h"),m.get("color"));
+                        NHelper.getNHelper().setStatus(con,m.get("num"),m.get("type"),m.get("x"),m.get("y"),m.get("w"),m.get("h"));
                     }else if(msg.what==0){
                         NHelper.getNHelper().showStatus(con, userPointMap);
                     }else if(msg.what==1){
