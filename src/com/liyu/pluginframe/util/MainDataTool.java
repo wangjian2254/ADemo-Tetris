@@ -47,7 +47,7 @@ public class MainDataTool {
     private static int version=0;
     private static String roomid =null;
     private static String author =null;
-    private static String gameroomurl =null;
+//    private static String gameroomurl =null;
     private static Map<String,Integer> userlist=new HashMap<String, Integer>();
     private static Map<String,String> nicklist=new HashMap<String, String>();
     private static Map<Integer,String> shunxulist=new HashMap<Integer, String>();
@@ -270,11 +270,11 @@ public class MainDataTool {
             userInfo.setChallengr(j.optBoolean("challenger",false));
             debug = j.optBoolean("debug",false);
             debug = false;
-            if(j.has("version")&&j.optInt("version",1)==2){
+            if(j.has("version")&&j.optInt("version",1)==3){
                 version = j.optInt("version");
                 roomid = j.optString("spaceid","");
                 author = j.optString("author","");
-                gameroomurl = j.optString("gameroom","");
+//                gameroomurl = j.optString("gameroom","");
                 int face_board,n_1,n_2,n_3;
                 face_board = j.optInt("face_board");
                 n_1=j.optInt("n_1");
@@ -302,9 +302,9 @@ public class MainDataTool {
                 getPointList.add(new BasicNameValuePair("username", userInfo.getUsername()));
                 getPointList.add(new BasicNameValuePair("appcode",appcode));
                 getPointList.add(new BasicNameValuePair("roomid", roomid));
-
+                getServiceConnect(mainactivity.getApplicationContext());
             }
-            getServiceConnect(mainactivity.getApplicationContext());
+
 
             if(debug){
                 mMainHandler = new Handler(){
