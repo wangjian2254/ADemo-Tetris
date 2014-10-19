@@ -8,17 +8,7 @@ import android.os.Message;
 import android.os.RemoteException;
 import android.util.Log;
 import android.widget.Toast;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.DefaultHttpClient;
 import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.params.CoreConnectionPNames;
-import org.apache.http.params.CoreProtocolPNames;
-import org.apache.http.protocol.BasicHttpContext;
-import org.apache.http.protocol.HTTP;
-import org.apache.http.protocol.HttpContext;
-import org.apache.http.util.EntityUtils;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -138,8 +128,9 @@ public class MainDataTool {
     }
       
     public static void uploadPoint(String p,Context context){
+    	
         static_point=null;
-        if((System.currentTimeMillis()-timeline)/1000<1){
+        if(p==null||(System.currentTimeMillis()-timeline)/1000<1){
             return;
         }
         timeline = System.currentTimeMillis();
@@ -150,7 +141,7 @@ public class MainDataTool {
         con=context;
         try {
             gameRoomService.uploadPoint(appcode,roomid,userInfo.getUsername(),p);
-        } catch (RemoteException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         userPointMap.put(userInfo.getUsername(),p);
@@ -270,7 +261,7 @@ public class MainDataTool {
             userInfo.setChallengr(j.optBoolean("challenger",false));
             debug = j.optBoolean("debug",false);
             debug = false;
-            if(j.has("version")&&j.optInt("version",1)==3){
+            if(j.has("version")&&j.optInt("version",1)==2){
                 version = j.optInt("version");
                 roomid = j.optString("spaceid","");
                 author = j.optString("author","");

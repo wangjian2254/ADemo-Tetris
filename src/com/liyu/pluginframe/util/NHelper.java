@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.pm.PackageManager;
 import android.content.res.Configuration;
 import android.graphics.*;
-import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -127,7 +126,10 @@ public class NHelper {
                 mDisplayMetrics = new DisplayMetrics();
 
         
-
+                mWindowManager = (WindowManager) activity
+                        .getSystemService("window");
+                mWindowManager.getDefaultDisplay().getMetrics(mDisplayMetrics);
+                con=activity;
 
 //            }
 
