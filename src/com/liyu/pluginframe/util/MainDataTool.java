@@ -234,9 +234,6 @@ public class MainDataTool {
 	}
 
     public static void getUserInfoJSON(Activity mainactivity){
-        NHelper.getNHelper().init(mainactivity);
-
-        NHelper.mHandler = new Handler();
         con = mainactivity.getApplicationContext();
         appcode = con.getPackageName();
         appname =  con.getPackageManager().getApplicationLabel(con.getApplicationInfo()).toString();
@@ -271,7 +268,6 @@ public class MainDataTool {
                 n_1=j.optInt("n_1");
                 n_2=j.optInt("n_2");
                 n_3=j.optInt("n_3");
-                NHelper.getNHelper().setResid(face_board,n_1,n_2,n_3);
                 try {
                     JSONArray jsonArray = new JSONArray(j.getString("userlist"));
                     JSONArray nickArray = new JSONArray(j.getString("nicklist"));
@@ -285,7 +281,6 @@ public class MainDataTool {
                         shunxulist.put(i,ju.getString("username"));
                     }
 
-                    NHelper.getNHelper().setHead(mainactivity,userlist,nicklist);
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -315,11 +310,8 @@ public class MainDataTool {
 
                     if(msg.what==2){
                         Map<String,Integer> m=(Map<String,Integer>)msg.obj;
-                        NHelper.getNHelper().setStatus(con,m.get("num"),m.get("type"),m.get("x"),m.get("y"),m.get("w"),m.get("h"));
                     }else if(msg.what==0){
-                        NHelper.getNHelper().showStatus(con, userPointMap);
                     }else if(msg.what==1){
-                        NHelper.getNHelper().hiddenStatus();
                     }else if(msg.what==800){
                         JSONObject m=new JSONObject();
                         try {
