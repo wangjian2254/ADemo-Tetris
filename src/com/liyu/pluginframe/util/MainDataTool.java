@@ -428,4 +428,52 @@ public class MainDataTool {
 
         }
     };
+
+    /**
+     * 开始游戏
+     */
+    public static void startGame(){
+
+    }
+
+
+    public static void uploadGamePoint(String point){
+
+    }
+
+    public static void uploadEndGamePoint(String point){
+
+    }
+
+    public static void pushGameDataToUser(){
+
+    }
+
+    public static void pushGameDataToUsers(){
+
+    }
+
+    public static void pushGameDataToAllUser(){
+
+    }
+
+    public static void pushPropertyDataToUser(){
+
+    }
+
+    public static void pushPropertyDataToUsers(){
+
+    }
+
+    public static void pushPropertyDataToAllUser(){
+
+    }
+
+    public static void sendChatToUser(){
+
+    }
+
+    public static void sendChatToAllUser(){
+
+    }
 }
