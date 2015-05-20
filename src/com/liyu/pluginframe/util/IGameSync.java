@@ -40,6 +40,13 @@ public interface IGameSync {
     public void syncEndGame();
 
     /**
+     * 服务器端发来游戏结束的信号,某人结束
+     * by:王健 at:2015-5-20
+     * @param from 结束游戏的人
+     */
+    public void syncEndGame(String from);
+
+    /**
      * 自定义游戏数据的同步，同步给本客户端的
      * by:王健 at:2015-5-19
      * @param from   发起人
@@ -72,6 +79,24 @@ public interface IGameSync {
      * @param property_flag 道具标示
      */
     public void syncGamePropertyInfo(String from, String[] to, String property_flag);
+
+    /**
+     * 向所有人发送聊天内容
+     * by:王健 at:2015-5-20
+     * @param from 发起人
+     * @param msg 聊天内容
+     */
+    public void syncChat(String from, String msg);
+
+
+    /**
+     * 向某人发送私聊
+     * by:王健 at:2015-5-20
+     * @param from 发起人
+     * @param to 接收人数组
+     * @param msg 聊天内容
+     */
+    public void syncChat(String from, String to, String msg);
 
 
 }

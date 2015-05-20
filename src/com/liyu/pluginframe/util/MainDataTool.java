@@ -20,8 +20,18 @@ import java.util.*;
 public class MainDataTool {
 //	private final static String RESULTDATA="resultData";
 	private final static String DATA="data";
+
+	private final static String START_GAME="start_game";
+	private final static String END_GAME="end_game";
+	private final static String UPLOAD_GAME_POINT="upload_game_point";
+	private final static String UPLOAD_END_GAME_POINT="upload_end_game_point";
+	private final static String PUSH_GAME_DATA="push_game_data";
+	private final static String PUSH_PROPERTY_DATA="push_property_data";
+	private final static String SEND_CHAT="send_chat";
+    private static Map<String, Long> api_timeout= new HashMap<String, Long>();
     private static DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//默认应用中的时间格式化
     private static Context con;
+    private static IGameSync iGameSync;
 
     private static boolean debug=false;
 
@@ -54,98 +64,52 @@ public class MainDataTool {
 
 
 
-    public static void startGetPoint(){
-        uploadPoint("",con);
-    }
+//
+//    public static void uploadEndPoint(String p,Context context){
+//        if(p==null||p.equals(static_point)){
+//            return;
+//        }
+//
+//        if(roomid==null||userInfo.getUsername()==null||appcode==null){
+//            return;
+//        }
+//
+//        static_point=p;
+//        con=context;
+//        try {
+//            gameRoomService.uploadPoint(appcode,roomid,userInfo.getUsername(),p);
+//            gameRoomService.uploadEndPoint(appcode, roomid, userInfo.getUsername(), p);
+//        } catch (RemoteException e) {
+//            e.printStackTrace();
+//        }
+//        userPointMap.put(userInfo.getUsername(),p);
+//        gamehandler.obtainMessage(0).sendToTarget();
+//    }
+//
+//    public static void uploadPoint(String p,Context context){
+//
+//        static_point=null;
+//        if(p==null||(System.currentTimeMillis()-timeline)/1000<1){
+//            return;
+//        }
+//        timeline = System.currentTimeMillis();
+//
+//        if(roomid==null||userInfo.getUsername()==null||appcode==null){
+//            return;
+//        }
+//        con=context;
+//        try {
+//            gameRoomService.uploadPoint(appcode,roomid,userInfo.getUsername(),p);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        userPointMap.put(userInfo.getUsername(),p);
+//        gamehandler.obtainMessage(0).sendToTarget();
+//    }
 
+    public static void setIGameSync(IGameSync iGameSync1){
+        iGameSync = iGameSync1;
 
-    public static void setPos(int num,int t,int xx,int yy,int ww,Context context){
-        // w 70 h 108
-        int hh=0;
-        if(t==1){
-            hh=(int)((108.0/70.0)*ww+0.5);
-        }else{
-            hh=(int)((48.0/70.0)*ww+0.5);
-        }
-
-        Map<String,Integer> numpos=weizhilist.get(num);
-        if (numpos!=null){
-            type=numpos.get("type");
-            x=numpos.get("x");
-            y=numpos.get("y");
-            w=numpos.get("w");
-            h=numpos.get("h");
-//            c = numpos.get("color");
-            if(type==t&&x==xx&&y==yy&&w==ww&&h==hh&&con==context){
-                return;
-            }
-        }else{
-            numpos = new HashMap<String, Integer>();
-            weizhilist.put(num,numpos);
-        }
-
-        con= context;
-        Map<String,Integer> pos =new HashMap<String,Integer>();
-        pos.put("type",t);
-        pos.put("x",xx);
-        pos.put("y",yy);
-        pos.put("w",ww);
-        pos.put("h",hh);
-//        pos.put("color",color);
-        pos.put("num",num);
-
-        gamehandler.obtainMessage(2,pos).sendToTarget();
-        numpos.put("type", t);
-        numpos.put("x",xx);
-        numpos.put("y",yy);
-        numpos.put("w",ww);
-        numpos.put("h",hh);
-//        numpos.put("color",color);
-
-    }
-
-
-
-    public static void uploadEndPoint(String p,Context context){
-        if(p==null||p.equals(static_point)){
-            return;
-        }
-
-        if(roomid==null||userInfo.getUsername()==null||appcode==null){
-            return;
-        }
-
-        static_point=p;
-        con=context;
-        try {
-            gameRoomService.uploadPoint(appcode,roomid,userInfo.getUsername(),p);
-            gameRoomService.uploadEndPoint(appcode, roomid, userInfo.getUsername(), p);
-        } catch (RemoteException e) {
-            e.printStackTrace();
-        }
-        userPointMap.put(userInfo.getUsername(),p);
-        gamehandler.obtainMessage(0).sendToTarget();
-    }
-      
-    public static void uploadPoint(String p,Context context){
-    	
-        static_point=null;
-        if(p==null||(System.currentTimeMillis()-timeline)/1000<1){
-            return;
-        }
-        timeline = System.currentTimeMillis();
-
-        if(roomid==null||userInfo.getUsername()==null||appcode==null){
-            return;
-        }
-        con=context;
-        try {
-            gameRoomService.uploadPoint(appcode,roomid,userInfo.getUsername(),p);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        userPointMap.put(userInfo.getUsername(),p);
-        gamehandler.obtainMessage(0).sendToTarget();
     }
 
     public static UserInfo getUserInfo() {
@@ -311,6 +275,77 @@ public class MainDataTool {
                     if(msg.what==2){
                         Map<String,Integer> m=(Map<String,Integer>)msg.obj;
                     }else if(msg.what==0){
+                        JSONObject result = (JSONObject)msg.obj;
+                        String from = result.optString("from", null);
+                        String route = result.optString("route","");
+                        if(iGameSync==null){
+                            Log.e("game_sync", "iGameSync is null");
+                        }
+                        if(route.equals(START_GAME)){
+                            iGameSync.syncStartGame();
+                        }
+                        if(route.equals(UPLOAD_GAME_POINT)){
+                            iGameSync.syncGamePoints(from, result.optString("point", ""));
+                        }
+                        if(route.equals(UPLOAD_END_GAME_POINT)){
+                            JSONObject jsonObject = result.optJSONObject("end_poits");
+                            if(jsonObject==null){
+                                return;
+                            }
+                            Map<String, String> ends = new HashMap<String, String>();
+                            String k;
+                            for(Iterator iterator = jsonObject.keys();iterator.hasNext();){
+                                k = iterator.next().toString();
+                                ends.put(k, jsonObject.optString(k));
+                            }
+                            iGameSync.syncEndGamePoints(ends);
+                        }
+                        if(route.equals(END_GAME)){
+                            if(from == null){
+                                iGameSync.syncEndGame();
+                            }else{
+                                iGameSync.syncEndGame(from);
+                            }
+
+                        }
+                        if(route.equals(PUSH_GAME_DATA)){
+                            if(result.has("users")){
+                                JSONArray jsonArray = result.optJSONArray("users");
+                                if(jsonArray.length()>0){
+                                    String[] users = new String[jsonArray.length()];
+                                    for(int i=0;i<jsonArray.length();i++){
+                                        users[i] = jsonArray.optString(i);
+                                    }
+                                    iGameSync.syncGameData(from, users,result);
+                                }
+
+                            }else{
+                                iGameSync.syncGameData(from, result);
+                            }
+
+                        }
+                        if(route.equals(PUSH_PROPERTY_DATA)){
+                            if(result.has("users")){
+                                JSONArray jsonArray = result.optJSONArray("users");
+                                if(jsonArray.length()>0){
+                                    String[] users = new String[jsonArray.length()];
+                                    for(int i=0;i<jsonArray.length();i++){
+                                        users[i] = jsonArray.optString(i);
+                                    }
+                                    iGameSync.syncGamePropertyInfo(from, users, result.optString("property_flag", null));
+                                }
+
+                            }else{
+                                iGameSync.syncGamePropertyInfo(from, result.optString("property_flag", null));
+                            }
+                        }
+                        if(route.equals(SEND_CHAT)){
+                            if(result.has("user")){
+                                iGameSync.syncChat(from, result.optString("user"), result.optString("msg"));
+                            }else{
+                                iGameSync.syncChat(from, result.optString("msg"));
+                            }
+                        }
                     }else if(msg.what==1){
                     }else if(msg.what==800){
                         JSONObject m=new JSONObject();
@@ -400,24 +435,28 @@ public class MainDataTool {
                 android.os.Process.killProcess(android.os.Process.myPid());
                 gamehandler.obtainMessage(800).sendToTarget();
             }
-            if(result.optString("route","").equals("onChat")){
-                try{
-                    String from = result.getString("from");
-                    String msg = result.getString("msg");
-                    userPointMap.put(from,msg);
-                    gamehandler.obtainMessage(0).sendToTarget();
-
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+            String route = result.optString("route","");
+            if(route.equals(START_GAME)||route.equals(UPLOAD_GAME_POINT)||route.equals(UPLOAD_END_GAME_POINT)||route.equals(PUSH_GAME_DATA)||route.equals(PUSH_PROPERTY_DATA)||route.equals(SEND_CHAT)){
+                gamehandler.obtainMessage(0, result);
             }
-            if(result.optString("route","").equals("onEndPoint")){
-
-            }
-
-            if(result.optString("route","").equals("uploadPoint")){
-
-            }
+//            if(result.optString("route","").equals("onChat")){
+//                try{
+//                    String from = result.getString("from");
+//                    String msg = result.getString("msg");
+//                    userPointMap.put(from,msg);
+//                    gamehandler.obtainMessage(0).sendToTarget();
+//
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            }
+//            if(result.optString("route","").equals("onEndPoint")){
+//
+//            }
+//
+//            if(result.optString("route","").equals("uploadPoint")){
+//
+//            }
 
             if(result.optString("route","").equals("intoRoom")){
                 // 取消显示 头像。
@@ -429,51 +468,194 @@ public class MainDataTool {
         }
     };
 
+    private static int syncGameRoom(String route, String json){
+        long currentTimeMillis = System.currentTimeMillis();
+        if(api_timeout.containsKey(route)) {
+            if (currentTimeMillis - api_timeout.get(route) < 100) {
+                return 1;
+            }
+        }
+        api_timeout.put(route, currentTimeMillis);
+        try {
+            gameRoomService.syncGameRoom(appcode, roomid, route, json);
+            return 0;
+        } catch (RemoteException e) {
+            e.printStackTrace();
+            Log.e("game_sync", route + "-----error");
+            return 2;
+        }
+    }
+
     /**
      * 开始游戏
+     * @return 0成功，1间隔太短，2失败
      */
-    public static void startGame(){
-
+    public static int startGame(){
+        return syncGameRoom(START_GAME, "{}");
     }
 
-
-    public static void uploadGamePoint(String point){
-
+    /**
+     * 上传积分，进度……游戏数据
+     * @param point
+     *  @return 0成功，1间隔太短，2失败
+     */
+    public static int uploadGamePoint(String point){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("point", point);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return syncGameRoom(UPLOAD_GAME_POINT, jsonObject.toString());
     }
 
-    public static void uploadEndGamePoint(String point){
-
+    /**
+     * 上传最终结果数据
+     * @param point
+     *  @return 0成功，1间隔太短，2失败
+     */
+    public static int uploadEndGamePoint(String point){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("point", point);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return syncGameRoom(UPLOAD_END_GAME_POINT, jsonObject.toString());
     }
 
-    public static void pushGameDataToUser(){
+    /**
+     * 向用户发送自定义游戏数据
+     * @param jsonObject
+     * @param user
+     *  @return 0成功，1间隔太短，2失败
+     */
+    public static int pushGameDataToUser(JSONObject jsonObject, String user){
+        try {
+            JSONArray users = new JSONArray();
+            users.put(user);
+            jsonObject.put("users", users);
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return syncGameRoom(PUSH_GAME_DATA, jsonObject.toString());
     }
 
-    public static void pushGameDataToUsers(){
-
+    /**
+     * 向多个用户发送自定义游戏数据
+     * @param jsonObject
+     * @param users
+     *  @return 0成功，1间隔太短，2失败
+     */
+    public static int pushGameDataToUsers(JSONObject jsonObject, String[] users){
+        try {
+            JSONArray jsonArray = new JSONArray();
+            for(String user:users){
+                jsonArray.put(user);
+            }
+            jsonObject.put("users", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return syncGameRoom(PUSH_GAME_DATA, jsonObject.toString());
     }
 
-    public static void pushGameDataToAllUser(){
+    /**
+     * 向所有用户发送自定义游戏数据
+     * @param jsonObject
+     *  @return 0成功，1间隔太短，2失败
+     */
+    public static int pushGameDataToAllUser(JSONObject jsonObject){
 
+        return syncGameRoom(PUSH_GAME_DATA, jsonObject.toString());
     }
 
-    public static void pushPropertyDataToUser(){
+    /**
+     * 向用户发送道具数据
+     * @param property_flag
+     * @param user
+     *  @return 0成功，1间隔太短，2失败
+     */
+    public static int pushPropertyDataToUser(String property_flag, String user){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("property_flag", property_flag);
+            JSONArray jsonArray = new JSONArray();
+            jsonArray.put(user);
+            jsonObject.put("users", jsonArray);
 
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return syncGameRoom(PUSH_PROPERTY_DATA, jsonObject.toString());
     }
 
-    public static void pushPropertyDataToUsers(){
-
+    /**
+     * 向多个用户发送道具数据
+     * @param property_flag
+     * @param users
+     *  @return 0成功，1间隔太短，2失败
+     */
+    public static int pushPropertyDataToUsers(String property_flag, String[] users){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("property_flag", property_flag);
+            JSONArray jsonArray = new JSONArray();
+            for(String user:users){
+                jsonArray.put(user);
+            }
+            jsonObject.put("users", jsonArray);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return syncGameRoom(PUSH_PROPERTY_DATA, jsonObject.toString());
     }
 
-    public static void pushPropertyDataToAllUser(){
-
+    /**
+     * 向所有用户发送道具数据
+     * @param property_flag
+     *  @return 0成功，1间隔太短，2失败
+     */
+    public static int pushPropertyDataToAllUser(String property_flag){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("property_flag", property_flag);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return syncGameRoom(PUSH_PROPERTY_DATA, jsonObject.toString());
     }
 
-    public static void sendChatToUser(){
-
+    /**
+     * 发送私聊内容
+     * @param msg
+     * @param user
+     *  @return 0成功，1间隔太短，2失败
+     */
+    public static int sendChatToUser(String msg, String user){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("msg", msg);
+            jsonObject.put("user", user);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return syncGameRoom(SEND_CHAT, jsonObject.toString());
     }
 
-    public static void sendChatToAllUser(){
-
+    /**
+     *发送谈话内容
+     * @param msg 谈话内容
+     *  @return 0成功，1间隔太短，2失败
+     */
+    public static int sendChatToAllUser(String msg){
+        JSONObject jsonObject = new JSONObject();
+        try {
+            jsonObject.put("msg", msg);
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+        return syncGameRoom(SEND_CHAT, jsonObject.toString());
     }
 }
