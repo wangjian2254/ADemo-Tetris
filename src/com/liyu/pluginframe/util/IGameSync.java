@@ -29,9 +29,10 @@ public interface IGameSync {
     /**
      * 将游戏的最终得分，以Map的形式，同步
      * by:王健 at:2015-5-19
-     * @param userpointmap  得分Map
+     * @param user  玩家
+     * @param point  得分
      */
-    public void syncEndGamePoints(Map<String, String > userpointmap);
+    public void syncEndGamePoints(String user, String point);
 
     /**
      * 服务器端发来游戏结束的信号
@@ -98,5 +99,10 @@ public interface IGameSync {
      */
     public void syncChat(String from, String to, String msg);
 
-
+    /**
+     * 人员变动
+     * @param user 用户id
+     * @param in  true为加入，false为推出
+     */
+    public void syncMemberChange(String user, boolean in);
 }

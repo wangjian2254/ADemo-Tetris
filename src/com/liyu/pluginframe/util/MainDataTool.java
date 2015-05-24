@@ -28,6 +28,8 @@ public class MainDataTool {
 	private final static String PUSH_GAME_DATA="push_game_data";
 	private final static String PUSH_PROPERTY_DATA="push_property_data";
 	private final static String SEND_CHAT="send_chat";
+	private final static String IN_ROOM="in_room";
+	private final static String OUT_ROOM="out_room";
     private static Map<String, Long> api_timeout= new HashMap<String, Long>();
     private static DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//默认应用中的时间格式化
     private static Context con;
@@ -50,7 +52,8 @@ public class MainDataTool {
 //    private static String gameroomurl =null;
     private static Map<String,Integer> userlist=new HashMap<String, Integer>();
     private static Map<String,String> nicklist=new HashMap<String, String>();
-    private static Map<Integer,String> shunxulist=new HashMap<Integer, String>();
+    private static ArrayList<String> shunxulist = new ArrayList<String>();
+//    private static Map<Integer,String> shunxulist=new HashMap<Integer, String>();
     private static Map<Integer,Map<String,Integer>> weizhilist=new HashMap<Integer, Map<String, Integer>>();
 
     private static Map<String,String> userPointMap = new HashMap<String, String>();
@@ -242,7 +245,7 @@ public class MainDataTool {
                         jn = nickArray.getJSONObject(i);
                         userlist.put(ju.getString("username"),ju.getInt("head"));
                         nicklist.put(jn.getString("username"),jn.getString("nickname"));
-                        shunxulist.put(i,ju.getString("username"));
+                        shunxulist.add(ju.getString("username"));
                     }
 
                 } catch (JSONException e) {
@@ -276,29 +279,21 @@ public class MainDataTool {
                         Map<String,Integer> m=(Map<String,Integer>)msg.obj;
                     }else if(msg.what==0){
                         JSONObject result = (JSONObject)msg.obj;
-                        String from = result.optString("from", null);
+                        JSONObject result_json = (JSONObject)result.optJSONObject("json");
+                        String from = result_json.optString("from", null);
                         String route = result.optString("route","");
                         if(iGameSync==null){
                             Log.e("game_sync", "iGameSync is null");
+                            return;
                         }
                         if(route.equals(START_GAME)){
                             iGameSync.syncStartGame();
                         }
                         if(route.equals(UPLOAD_GAME_POINT)){
-                            iGameSync.syncGamePoints(from, result.optString("point", ""));
+                            iGameSync.syncGamePoints(from, result_json.optString("point", ""));
                         }
                         if(route.equals(UPLOAD_END_GAME_POINT)){
-                            JSONObject jsonObject = result.optJSONObject("end_poits");
-                            if(jsonObject==null){
-                                return;
-                            }
-                            Map<String, String> ends = new HashMap<String, String>();
-                            String k;
-                            for(Iterator iterator = jsonObject.keys();iterator.hasNext();){
-                                k = iterator.next().toString();
-                                ends.put(k, jsonObject.optString(k));
-                            }
-                            iGameSync.syncEndGamePoints(ends);
+                            iGameSync.syncEndGamePoints(from, result_json.optString("point", ""));
                         }
                         if(route.equals(END_GAME)){
                             if(from == null){
@@ -309,8 +304,8 @@ public class MainDataTool {
 
                         }
                         if(route.equals(PUSH_GAME_DATA)){
-                            if(result.has("users")){
-                                JSONArray jsonArray = result.optJSONArray("users");
+                            if(result_json.has("users")){
+                                JSONArray jsonArray = result_json.optJSONArray("users");
                                 if(jsonArray.length()>0){
                                     String[] users = new String[jsonArray.length()];
                                     for(int i=0;i<jsonArray.length();i++){
@@ -325,26 +320,30 @@ public class MainDataTool {
 
                         }
                         if(route.equals(PUSH_PROPERTY_DATA)){
-                            if(result.has("users")){
-                                JSONArray jsonArray = result.optJSONArray("users");
+                            if(result_json.has("users")){
+                                JSONArray jsonArray = result_json.optJSONArray("users");
                                 if(jsonArray.length()>0){
                                     String[] users = new String[jsonArray.length()];
                                     for(int i=0;i<jsonArray.length();i++){
                                         users[i] = jsonArray.optString(i);
                                     }
-                                    iGameSync.syncGamePropertyInfo(from, users, result.optString("property_flag", null));
+                                    iGameSync.syncGamePropertyInfo(from, users, result_json.optString("property_flag", null));
                                 }
 
                             }else{
-                                iGameSync.syncGamePropertyInfo(from, result.optString("property_flag", null));
+                                iGameSync.syncGamePropertyInfo(from, result_json.optString("property_flag", null));
                             }
                         }
                         if(route.equals(SEND_CHAT)){
-                            if(result.has("user")){
-                                iGameSync.syncChat(from, result.optString("user"), result.optString("msg"));
+                            if(result_json.has("user")){
+                                iGameSync.syncChat(from, result_json.optString("user"), result_json.optString("msg"));
                             }else{
-                                iGameSync.syncChat(from, result.optString("msg"));
+                                iGameSync.syncChat(from, result_json.optString("msg"));
                             }
+                        }
+                        if(route.equals(OUT_ROOM)){
+                            shunxulist.remove(result_json.optString("user"));
+                            iGameSync.syncMemberChange(result_json.optString("user"), false);
                         }
                     }else if(msg.what==1){
                     }else if(msg.what==800){
@@ -437,7 +436,19 @@ public class MainDataTool {
             }
             String route = result.optString("route","");
             if(route.equals(START_GAME)||route.equals(UPLOAD_GAME_POINT)||route.equals(UPLOAD_END_GAME_POINT)||route.equals(PUSH_GAME_DATA)||route.equals(PUSH_PROPERTY_DATA)||route.equals(SEND_CHAT)){
-                gamehandler.obtainMessage(0, result);
+                gamehandler.obtainMessage(0, result).sendToTarget();
+            }
+            if(route.equals("onLeave")){
+                try{
+                    String username = result.getString("user");
+                    String roomid = result.getString("roomid");
+                    JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("user", username);
+                    jsonObject.put("route", OUT_ROOM);
+                    gamehandler.obtainMessage(0, jsonObject).sendToTarget();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
 //            if(result.optString("route","").equals("onChat")){
 //                try{
@@ -477,7 +488,7 @@ public class MainDataTool {
         }
         api_timeout.put(route, currentTimeMillis);
         try {
-            gameRoomService.syncGameRoom(appcode, roomid, route, json);
+            gameRoomService.syncGameRoom(appcode,userInfo.getUsername(), roomid, route, json);
             return 0;
         } catch (RemoteException e) {
             e.printStackTrace();
@@ -657,5 +668,9 @@ public class MainDataTool {
             e.printStackTrace();
         }
         return syncGameRoom(SEND_CHAT, jsonObject.toString());
+    }
+
+    public static ArrayList<String> getMembers(){
+        return shunxulist;
     }
 }

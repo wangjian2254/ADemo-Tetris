@@ -13,7 +13,7 @@ public interface AIDLGameRoomService extends android.os.IInterface
 /** Local-side IPC implementation stub class. */
 public static abstract class Stub extends android.os.Binder implements com.liyu.pluginframe.util.AIDLGameRoomService
 {
-private static final java.lang.String DESCRIPTOR = "com.liyu.pluginframe.util.AIDLGameRoomService";
+private static final String DESCRIPTOR = "com.liyu.pluginframe.util.AIDLGameRoomService";
 /** Construct the stub at attach it to the interface. */
 public Stub()
 {
@@ -34,13 +34,11 @@ return ((com.liyu.pluginframe.util.AIDLGameRoomService)iin);
 }
 return new com.liyu.pluginframe.util.AIDLGameRoomService.Stub.Proxy(obj);
 }
-@Override
-public android.os.IBinder asBinder()
+@Override public android.os.IBinder asBinder()
 {
 return this;
 }
-@Override
-public boolean onTransact(int code, android.os.Parcel data, android.os.Parcel reply, int flags) throws android.os.RemoteException
+@Override public boolean onTransact(int code, android.os.Parcel data, android.os.Parcel reply, int flags) throws android.os.RemoteException
 {
 switch (code)
 {
@@ -52,7 +50,7 @@ return true;
 case TRANSACTION_init:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
 this.init(_arg0);
 reply.writeNoException();
@@ -61,7 +59,7 @@ return true;
 case TRANSACTION_addCB:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
 com.liyu.pluginframe.util.ICallBack _arg1;
 _arg1 = com.liyu.pluginframe.util.ICallBack.Stub.asInterface(data.readStrongBinder());
@@ -72,7 +70,7 @@ return true;
 case TRANSACTION_delCB:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
 this.delCB(_arg0);
 reply.writeNoException();
@@ -81,11 +79,11 @@ return true;
 case TRANSACTION_addRoomList:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
-java.lang.String _arg1;
+String _arg1;
 _arg1 = data.readString();
-java.lang.String _arg2;
+String _arg2;
 _arg2 = data.readString();
 this.addRoomList(_arg0, _arg1, _arg2);
 reply.writeNoException();
@@ -94,7 +92,7 @@ return true;
 case TRANSACTION_queryRoomList:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
 int _arg1;
 _arg1 = data.readInt();
@@ -107,7 +105,7 @@ return true;
 case TRANSACTION_quiteRoomList:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
 this.quiteRoomList(_arg0);
 reply.writeNoException();
@@ -116,9 +114,9 @@ return true;
 case TRANSACTION_getMembersByRoom:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
-java.lang.String _arg1;
+String _arg1;
 _arg1 = data.readString();
 this.getMembersByRoom(_arg0, _arg1);
 reply.writeNoException();
@@ -127,9 +125,9 @@ return true;
 case TRANSACTION_getRoomInfoByRoomId:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
-java.lang.String _arg1;
+String _arg1;
 _arg1 = data.readString();
 this.getRoomInfoByRoomId(_arg0, _arg1);
 reply.writeNoException();
@@ -138,11 +136,11 @@ return true;
 case TRANSACTION_addRoom:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
-java.lang.String _arg1;
+String _arg1;
 _arg1 = data.readString();
-java.lang.String _arg2;
+String _arg2;
 _arg2 = data.readString();
 this.addRoom(_arg0, _arg1, _arg2);
 reply.writeNoException();
@@ -151,11 +149,11 @@ return true;
 case TRANSACTION_quiteRoom:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
-java.lang.String _arg1;
+String _arg1;
 _arg1 = data.readString();
-java.lang.String _arg2;
+String _arg2;
 _arg2 = data.readString();
 this.quiteRoom(_arg0, _arg1, _arg2);
 reply.writeNoException();
@@ -164,13 +162,13 @@ return true;
 case TRANSACTION_uploadPoint:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
-java.lang.String _arg1;
+String _arg1;
 _arg1 = data.readString();
-java.lang.String _arg2;
+String _arg2;
 _arg2 = data.readString();
-java.lang.String _arg3;
+String _arg3;
 _arg3 = data.readString();
 this.uploadPoint(_arg0, _arg1, _arg2, _arg3);
 reply.writeNoException();
@@ -179,13 +177,13 @@ return true;
 case TRANSACTION_uploadEndPoint:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
-java.lang.String _arg1;
+String _arg1;
 _arg1 = data.readString();
-java.lang.String _arg2;
+String _arg2;
 _arg2 = data.readString();
-java.lang.String _arg3;
+String _arg3;
 _arg3 = data.readString();
 this.uploadEndPoint(_arg0, _arg1, _arg2, _arg3);
 reply.writeNoException();
@@ -194,11 +192,11 @@ return true;
 case TRANSACTION_getEndPoint:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
-java.lang.String _arg1;
+String _arg1;
 _arg1 = data.readString();
-java.lang.String _arg2;
+String _arg2;
 _arg2 = data.readString();
 this.getEndPoint(_arg0, _arg1, _arg2);
 reply.writeNoException();
@@ -207,13 +205,13 @@ return true;
 case TRANSACTION_cleanPoint:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
-java.lang.String _arg1;
+String _arg1;
 _arg1 = data.readString();
-java.lang.String _arg2;
+String _arg2;
 _arg2 = data.readString();
-java.lang.String _arg3;
+String _arg3;
 _arg3 = data.readString();
 this.cleanPoint(_arg0, _arg1, _arg2, _arg3);
 reply.writeNoException();
@@ -222,11 +220,11 @@ return true;
 case TRANSACTION_changeRoomStatus:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
-java.lang.String _arg1;
+String _arg1;
 _arg1 = data.readString();
-java.lang.String _arg2;
+String _arg2;
 _arg2 = data.readString();
 this.changeRoomStatus(_arg0, _arg1, _arg2);
 reply.writeNoException();
@@ -235,11 +233,11 @@ return true;
 case TRANSACTION_addRoomListener:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
-java.lang.String _arg1;
+String _arg1;
 _arg1 = data.readString();
-java.lang.String _arg2;
+String _arg2;
 _arg2 = data.readString();
 this.addRoomListener(_arg0, _arg1, _arg2);
 reply.writeNoException();
@@ -255,7 +253,7 @@ return true;
 case TRANSACTION_quickGame:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
 this.quickGame(_arg0);
 reply.writeNoException();
@@ -264,15 +262,17 @@ return true;
 case TRANSACTION_syncGameRoom:
 {
 data.enforceInterface(DESCRIPTOR);
-java.lang.String _arg0;
+String _arg0;
 _arg0 = data.readString();
-java.lang.String _arg1;
+String _arg1;
 _arg1 = data.readString();
-java.lang.String _arg2;
+String _arg2;
 _arg2 = data.readString();
-java.lang.String _arg3;
+String _arg3;
 _arg3 = data.readString();
-this.syncGameRoom(_arg0, _arg1, _arg2, _arg3);
+String _arg4;
+_arg4 = data.readString();
+this.syncGameRoom(_arg0, _arg1, _arg2, _arg3, _arg4);
 reply.writeNoException();
 return true;
 }
@@ -293,17 +293,15 @@ Proxy(android.os.IBinder remote)
 {
 mRemote = remote;
 }
-@Override
-public android.os.IBinder asBinder()
+@Override public android.os.IBinder asBinder()
 {
 return mRemote;
 }
-public java.lang.String getInterfaceDescriptor()
+public String getInterfaceDescriptor()
 {
 return DESCRIPTOR;
 }
-@Override
-public void init(java.lang.String appcode) throws android.os.RemoteException
+@Override public void init(String appcode) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -318,8 +316,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void addCB(java.lang.String key, com.liyu.pluginframe.util.ICallBack icallback) throws android.os.RemoteException
+@Override public void addCB(String key, com.liyu.pluginframe.util.ICallBack icallback) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -335,8 +332,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void delCB(java.lang.String key) throws android.os.RemoteException
+@Override public void delCB(String key) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -351,8 +347,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void addRoomList(java.lang.String appcode, java.lang.String username, java.lang.String userinfo) throws android.os.RemoteException
+@Override public void addRoomList(String appcode, String username, String userinfo) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -369,8 +364,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void queryRoomList(java.lang.String appcode, int start, int limit) throws android.os.RemoteException
+@Override public void queryRoomList(String appcode, int start, int limit) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -387,8 +381,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void quiteRoomList(java.lang.String appcode) throws android.os.RemoteException
+@Override public void quiteRoomList(String appcode) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -403,8 +396,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void getMembersByRoom(java.lang.String appcode, java.lang.String roomid) throws android.os.RemoteException
+@Override public void getMembersByRoom(String appcode, String roomid) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -420,8 +412,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void getRoomInfoByRoomId(java.lang.String appcode, java.lang.String roomid) throws android.os.RemoteException
+@Override public void getRoomInfoByRoomId(String appcode, String roomid) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -437,8 +428,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void addRoom(java.lang.String appcode, java.lang.String roomid, java.lang.String username) throws android.os.RemoteException
+@Override public void addRoom(String appcode, String roomid, String username) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -455,8 +445,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void quiteRoom(java.lang.String appcode, java.lang.String roomid, java.lang.String username) throws android.os.RemoteException
+@Override public void quiteRoom(String appcode, String roomid, String username) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -473,8 +462,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void uploadPoint(java.lang.String appcode, java.lang.String roomid, java.lang.String username, java.lang.String point) throws android.os.RemoteException
+@Override public void uploadPoint(String appcode, String roomid, String username, String point) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -492,8 +480,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void uploadEndPoint(java.lang.String appcode, java.lang.String roomid, java.lang.String username, java.lang.String point) throws android.os.RemoteException
+@Override public void uploadEndPoint(String appcode, String roomid, String username, String point) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -511,8 +498,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void getEndPoint(java.lang.String appcode, java.lang.String roomid, java.lang.String username) throws android.os.RemoteException
+@Override public void getEndPoint(String appcode, String roomid, String username) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -529,8 +515,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void cleanPoint(java.lang.String appcode, java.lang.String roomid, java.lang.String username, java.lang.String members) throws android.os.RemoteException
+@Override public void cleanPoint(String appcode, String roomid, String username, String members) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -548,8 +533,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void changeRoomStatus(java.lang.String appcode, java.lang.String roomid, java.lang.String status) throws android.os.RemoteException
+@Override public void changeRoomStatus(String appcode, String roomid, String status) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -566,8 +550,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void addRoomListener(java.lang.String appcode, java.lang.String username, java.lang.String roomid) throws android.os.RemoteException
+@Override public void addRoomListener(String appcode, String username, String roomid) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -584,8 +567,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void intoRoom() throws android.os.RemoteException
+@Override public void intoRoom() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -599,8 +581,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void quickGame(java.lang.String appcode) throws android.os.RemoteException
+@Override public void quickGame(String appcode) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -615,14 +596,14 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void syncGameRoom(java.lang.String appcode, java.lang.String roomid, java.lang.String route, java.lang.String json) throws android.os.RemoteException
+@Override public void syncGameRoom(String appcode, String username, String roomid, String route, String json) throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
 try {
 _data.writeInterfaceToken(DESCRIPTOR);
 _data.writeString(appcode);
+_data.writeString(username);
 _data.writeString(roomid);
 _data.writeString(route);
 _data.writeString(json);
@@ -634,8 +615,7 @@ _reply.recycle();
 _data.recycle();
 }
 }
-@Override
-public void close() throws android.os.RemoteException
+@Override public void close() throws android.os.RemoteException
 {
 android.os.Parcel _data = android.os.Parcel.obtain();
 android.os.Parcel _reply = android.os.Parcel.obtain();
@@ -671,24 +651,24 @@ static final int TRANSACTION_quickGame = (android.os.IBinder.FIRST_CALL_TRANSACT
 static final int TRANSACTION_syncGameRoom = (android.os.IBinder.FIRST_CALL_TRANSACTION + 18);
 static final int TRANSACTION_close = (android.os.IBinder.FIRST_CALL_TRANSACTION + 19);
 }
-public void init(java.lang.String appcode) throws android.os.RemoteException;
-public void addCB(java.lang.String key, com.liyu.pluginframe.util.ICallBack icallback) throws android.os.RemoteException;
-public void delCB(java.lang.String key) throws android.os.RemoteException;
-public void addRoomList(java.lang.String appcode, java.lang.String username, java.lang.String userinfo) throws android.os.RemoteException;
-public void queryRoomList(java.lang.String appcode, int start, int limit) throws android.os.RemoteException;
-public void quiteRoomList(java.lang.String appcode) throws android.os.RemoteException;
-public void getMembersByRoom(java.lang.String appcode, java.lang.String roomid) throws android.os.RemoteException;
-public void getRoomInfoByRoomId(java.lang.String appcode, java.lang.String roomid) throws android.os.RemoteException;
-public void addRoom(java.lang.String appcode, java.lang.String roomid, java.lang.String username) throws android.os.RemoteException;
-public void quiteRoom(java.lang.String appcode, java.lang.String roomid, java.lang.String username) throws android.os.RemoteException;
-public void uploadPoint(java.lang.String appcode, java.lang.String roomid, java.lang.String username, java.lang.String point) throws android.os.RemoteException;
-public void uploadEndPoint(java.lang.String appcode, java.lang.String roomid, java.lang.String username, java.lang.String point) throws android.os.RemoteException;
-public void getEndPoint(java.lang.String appcode, java.lang.String roomid, java.lang.String username) throws android.os.RemoteException;
-public void cleanPoint(java.lang.String appcode, java.lang.String roomid, java.lang.String username, java.lang.String members) throws android.os.RemoteException;
-public void changeRoomStatus(java.lang.String appcode, java.lang.String roomid, java.lang.String status) throws android.os.RemoteException;
-public void addRoomListener(java.lang.String appcode, java.lang.String username, java.lang.String roomid) throws android.os.RemoteException;
+public void init(String appcode) throws android.os.RemoteException;
+public void addCB(String key, com.liyu.pluginframe.util.ICallBack icallback) throws android.os.RemoteException;
+public void delCB(String key) throws android.os.RemoteException;
+public void addRoomList(String appcode, String username, String userinfo) throws android.os.RemoteException;
+public void queryRoomList(String appcode, int start, int limit) throws android.os.RemoteException;
+public void quiteRoomList(String appcode) throws android.os.RemoteException;
+public void getMembersByRoom(String appcode, String roomid) throws android.os.RemoteException;
+public void getRoomInfoByRoomId(String appcode, String roomid) throws android.os.RemoteException;
+public void addRoom(String appcode, String roomid, String username) throws android.os.RemoteException;
+public void quiteRoom(String appcode, String roomid, String username) throws android.os.RemoteException;
+public void uploadPoint(String appcode, String roomid, String username, String point) throws android.os.RemoteException;
+public void uploadEndPoint(String appcode, String roomid, String username, String point) throws android.os.RemoteException;
+public void getEndPoint(String appcode, String roomid, String username) throws android.os.RemoteException;
+public void cleanPoint(String appcode, String roomid, String username, String members) throws android.os.RemoteException;
+public void changeRoomStatus(String appcode, String roomid, String status) throws android.os.RemoteException;
+public void addRoomListener(String appcode, String username, String roomid) throws android.os.RemoteException;
 public void intoRoom() throws android.os.RemoteException;
-public void quickGame(java.lang.String appcode) throws android.os.RemoteException;
-public void syncGameRoom(java.lang.String appcode, java.lang.String roomid, java.lang.String route, java.lang.String json) throws android.os.RemoteException;
+public void quickGame(String appcode) throws android.os.RemoteException;
+public void syncGameRoom(String appcode, String username, String roomid, String route, String json) throws android.os.RemoteException;
 public void close() throws android.os.RemoteException;
 }

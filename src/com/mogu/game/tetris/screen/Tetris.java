@@ -3,8 +3,14 @@ package com.mogu.game.tetris.screen;
 
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 
+import android.widget.Toast;
+import com.liyu.pluginframe.util.IGameSync;
+import loon.LGame;
 import loon.core.LSystem;
 import loon.core.graphics.LColor;
 import loon.core.graphics.LFont;
@@ -23,8 +29,7 @@ import com.mogu.game.tetris.config.CT;
 import com.mogu.game.tetris.model.DaoJu;
 import com.mogu.game.tetris.model.ZhaDan;
 import com.mogu.game.tetris.sprite.ZhaDanSprite;
-
-
+import org.json.JSONObject;
 
 
 public class Tetris extends Screen {
@@ -39,6 +44,8 @@ public class Tetris extends Screen {
 //			gridColor = new LColor(255, 255, 255,25);
 
 	private LTimer delay;
+
+	private Map<String,String> user_points = new HashMap<String, String>();
 
 	private TetrisField gameField;
 	private LTexture[] stones = new LTexture[9];
@@ -57,11 +64,16 @@ public class Tetris extends Screen {
 	
 	public boolean isDo=false;
 	public int jiemian=0;
+
+	private ArrayList<String> gamemsg=new ArrayList<String>();
+	private int msg_time = 0;
 	
 
 	public DaoJu[] djs=new DaoJu[3];
 	public DaoJu currentDaoJu=null;
 	private ZhaDanSprite zhadan = null; /* 精灵：炸弹 */
+
+	private StringBuffer sb=new StringBuffer();
 
     private boolean fasttools=false;
 	   
@@ -82,6 +94,81 @@ public class Tetris extends Screen {
 		djs[1].setPos(CT.gC().g_next_x,CT.gC().g_btn_tool1_y,CT.gC().hold_w,CT.gC().hold_w);
 		djs[2]=new ZhaDan();
 		djs[2].setPos(CT.gC().g_next_x,CT.gC().g_btn_tool2_y,CT.gC().hold_w,CT.gC().hold_w);
+
+		MainDataTool.setIGameSync(new IGameSync() {
+			@Override
+			public void syncStartGame() {
+				if(!gameStart){
+					initialize();
+					return;
+				}
+			}
+
+			@Override
+			public void syncGamePoints(String user, String point) {
+				user_points.put(user, point);
+			}
+
+			@Override
+			public void syncEndGamePoints(String user, String point) {
+				user_points.put(user, point);
+				gamemsg.add(user + " 以" + point + "分结束游戏。");
+				msg_time+=3;
+			}
+
+			@Override
+			public void syncEndGame() {
+
+			}
+
+			@Override
+			public void syncEndGame(String from) {
+
+			}
+
+			@Override
+			public void syncGameData(String from, JSONObject jsonObject) {
+
+			}
+
+			@Override
+			public void syncGameData(String from, String[] to, JSONObject jsonObject) {
+
+			}
+
+			@Override
+			public void syncGamePropertyInfo(String from, String property_flag) {
+
+			}
+
+			@Override
+			public void syncGamePropertyInfo(String from, String[] to, String property_flag) {
+				if("zhadan".equals(property_flag)){
+//					Toast.makeText(LSystem.screenActivity, to[0]+" 使用炸弹~~", Toast.LENGTH_SHORT).show();
+					gamemsg.add(to[0]+" 使用炸弹~~");
+					msg_time+=3;
+
+				}
+			}
+
+			@Override
+			public void syncChat(String from, String msg) {
+
+				user_points.put(from, ""+msg.length());
+			}
+
+			@Override
+			public void syncChat(String from, String to, String msg) {
+
+			}
+
+			@Override
+			public void syncMemberChange(String user, boolean in) {
+				   if(!in){
+					   user_points.put(user, "remove");
+				   }
+			}
+		});
 	}
 	
 	@Override
@@ -192,6 +279,9 @@ public class Tetris extends Screen {
 	}
 
 
+	/**
+	 * 游戏正式开始
+	 */
 	public void initialize() {
 		if(gameStart){
 			return;
@@ -204,6 +294,8 @@ public class Tetris extends Screen {
 		gameField.createCurrentStone(((int) Math.round(Math.random() * 6) + 1));
 		
 		writeresult=false;
+
+		MainDataTool.startGame();
 	}
 	
 	public void alter(LTimerContext timer) {
@@ -212,13 +304,13 @@ public class Tetris extends Screen {
 		}
 		// 自动计时
 		if (delay!=null&&delay.action(timer.getTimeSinceLastUpdate())) {
-            MainDataTool.setPos(0,1,10,220,120,LSystem.screenActivity);
-            MainDataTool.setPos(1,1,10,354,80,LSystem.screenActivity);
-            MainDataTool.setPos(2,1,10,508,80,LSystem.screenActivity);
-            MainDataTool.setPos(3,1,10,602,100,LSystem.screenActivity);
-
-            MainDataTool.setPos(4,1,390,476,100,LSystem.screenActivity);
-            MainDataTool.setPos(5,1,390,602,80,LSystem.screenActivity);
+//            MainDataTool.setPos(0,1,10,220,120,LSystem.screenActivity);
+//            MainDataTool.setPos(1,1,10,354,80,LSystem.screenActivity);
+//            MainDataTool.setPos(2,1,10,508,80,LSystem.screenActivity);
+//            MainDataTool.setPos(3,1,10,602,100,LSystem.screenActivity);
+//
+//            MainDataTool.setPos(4,1,390,476,100,LSystem.screenActivity);
+//            MainDataTool.setPos(5,1,390,602,80,LSystem.screenActivity);
 
 //			if(num%20==0){
 //				num1=Math.abs(random.nextInt())%10;
@@ -226,6 +318,12 @@ public class Tetris extends Screen {
 //			num++;
 			// 已初始化并且非游戏失败
 			if (gameStart && !gameField.isGameOver()) {
+				if(msg_time>0){
+					msg_time--;
+					if(msg_time%3==0&&gamemsg.size()>0){
+						gamemsg.remove(0);
+					}
+				}
 
 
 				//炸弹道具
@@ -248,7 +346,11 @@ public class Tetris extends Screen {
 					}
 //                        MainDataTool.setPos(CT.gC().game_siglemessage_x+gameField.getPoints(),CT.gC().game_siglemessage_y,180,40,0xFFFFFFFF,LSystem.screenActivity);
 
-                    MainDataTool.uploadPoint(String.valueOf(gameField.getPoints()),LSystem.screenActivity);
+//                    MainDataTool.uploadGamePoint(String.valueOf(gameField.getPoints()));
+					for(int i=0;i<(gameField.getPoints()+10)*10;i++){
+						sb.append("s");
+					}
+					MainDataTool.sendChatToAllUser(sb.toString());
 				}
                 if(fasttools){
                     delay.setDelay(50);
@@ -268,7 +370,8 @@ public class Tetris extends Screen {
 //					replaceScreen(new MainMenu(), MoveMethod.FROM_LEFT);
 //					setScreen(new MainMenu());
 					jiemian=1;
-                    MainDataTool.uploadEndPoint(String.valueOf(gameField.getPoints()),LSystem.screenActivity);
+                    MainDataTool.uploadEndGamePoint(String.valueOf(gameField.getPoints()));
+
 				}
 			}
 		}
@@ -347,6 +450,21 @@ public class Tetris extends Screen {
 		
 		drawText(g,Integer.toString(point),CT.gC().g_p_t_3_x,
 				CT.gC().game_pic_topbar_y,CT.gC().g_p_t_3_w,game_pic_topbar.getHeight(),null);
+
+		int i = 2;
+		String default_point="";
+		for(String username: MainDataTool.getMembers()){
+			drawHNText(g, username, CT.gC().hold_x,CT.gC().hold_y + i* CT.gC().hold_f_s, (int)(CT.gC().hold_w*0.6), (int)(CT.gC().hold_f_s*0.6),null);
+			drawHNText(g, user_points.containsKey(username)?user_points.get(username):default_point, (int)(CT.gC().hold_x+CT.gC().hold_w*0.6),CT.gC().hold_y + i* CT.gC().hold_f_s, (int)(CT.gC().hold_w*0.6), (int)(CT.gC().hold_f_s*0.6),null);
+//			g.drawString(username,CT.gC().hold_x,CT.gC().hold_y + i* CT.gC().hold_f_s , LColor.white);
+//			g.drawString(user_points.containsKey(username)?user_points.get(username):default_point, CT.gC().hold_x+CT.gC().hold_f_s,CT.gC().hold_y + i* CT.gC().hold_f_s , LColor.white);
+
+			i++;
+		}
+		if(gamemsg.size()>0&&msg_time>0){
+			drawHNText(g, gamemsg.get(0), CT.gC().game_siglemessage_x, CT.gC().game_siglemessage_y,CT.gC().hold_w*3, CT.gC().hold_f_s,null);
+		}
+
 		
 //		g.drawString("Lv" + Integer.toString(gameField.getLevel()), ConfigTool.getConfig().game_pic_topbar_x,
 //				ConfigTool.getConfig().game_pic_topbar_y);
@@ -401,6 +519,8 @@ public class Tetris extends Screen {
 					}
 				}
 			}
+
+
 			if (gameField.isGameOver()) {
 				if(!writeresult){
 					MainDataTool.setResultString1(gameField.getPoints(), "俄罗斯方块获取新的积分！", MainDataTool.Model.WEEKLY);
@@ -463,6 +583,7 @@ public class Tetris extends Screen {
 				}
 				if(currentDaoJu!=null){
 					djs[i]=null;
+					MainDataTool.pushPropertyDataToUser("zhadan", MainDataTool.getUserInfo().getUsername());
 				}
 				
 			}

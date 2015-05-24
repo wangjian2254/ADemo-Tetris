@@ -48,7 +48,7 @@ public class MainActivity extends LGame {
 		setting.fps = 30;
 		setting.landscape = false;
 		register(setting, Tetris.class);
-        MainDataTool.startGetPoint();
+
 		
 	}
 	
