@@ -115,6 +115,10 @@ public class MainDataTool {
 
     }
 
+    /**
+     * 获取用户信息
+     * @return
+     */
     public static UserInfo getUserInfo() {
         return userInfo;
     }
@@ -200,6 +204,10 @@ public class MainDataTool {
         }
 	}
 
+    /**
+     * 获取用户信息、包括房间信息
+     * @param mainactivity  Activity 句柄
+     */
     public static void getUserInfoJSON(Activity mainactivity){
         con = mainactivity.getApplicationContext();
         appcode = con.getPackageName();
@@ -240,6 +248,9 @@ public class MainDataTool {
                     JSONArray nickArray = new JSONArray(j.getString("nicklist"));
                     JSONObject ju=null;
                     JSONObject jn=null;
+                    shunxulist.clear();
+                    userlist.clear();
+                    nicklist.clear();
                     for(int i=0;i<jsonArray.length();i++){
                         ju = jsonArray.getJSONObject(i);
                         jn = nickArray.getJSONObject(i);
@@ -670,7 +681,23 @@ public class MainDataTool {
         return syncGameRoom(SEND_CHAT, jsonObject.toString());
     }
 
+    /**
+     * 获取当前用户列表，username列表
+     * @return 用户列表
+     */
     public static ArrayList<String> getMembers(){
         return shunxulist;
+    }
+
+
+    /**
+     * 退出当前房间，如果在游戏，则退出游戏
+     */
+    public static void quiteRoom(){
+        try {
+            gameRoomService.quiteRoom(appcode,roomid, getUserInfo().getUsername());
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 }

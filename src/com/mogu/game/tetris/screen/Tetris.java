@@ -78,7 +78,6 @@ public class Tetris extends Screen {
     private boolean fasttools=false;
 	   
 
-//	private String[] msg={"宝贝儿~~ 我爱你~~","宝贝儿~~ 好想你","亲爱的~~ 亲亲","最爱我的宝宝了","最喜欢我的宝宝了","宝贝儿，好喜欢你哦~~","爱你一万年宝贝儿~~","亲亲我的宝贝儿~~","宝贝儿 我要亲亲你","来宝贝儿 ，Kiss一个"};
 //	private int num=0;
 //	private int num1=0;
 	Random random = new Random();
@@ -154,7 +153,7 @@ public class Tetris extends Screen {
 			@Override
 			public void syncChat(String from, String msg) {
 
-				user_points.put(from, ""+msg.length());
+//				user_points.put(from, ""+msg.length());
 			}
 
 			@Override
@@ -346,11 +345,11 @@ public class Tetris extends Screen {
 					}
 //                        MainDataTool.setPos(CT.gC().game_siglemessage_x+gameField.getPoints(),CT.gC().game_siglemessage_y,180,40,0xFFFFFFFF,LSystem.screenActivity);
 
-//                    MainDataTool.uploadGamePoint(String.valueOf(gameField.getPoints()));
-					for(int i=0;i<(gameField.getPoints()+10)*10;i++){
-						sb.append("s");
-					}
-					MainDataTool.sendChatToAllUser(sb.toString());
+                    MainDataTool.uploadGamePoint(String.valueOf(gameField.getPoints()));
+//					for(int i=0;i<(gameField.getPoints()+10)*10;i++){
+//						sb.append("s");
+//					}
+//					MainDataTool.sendChatToAllUser(sb.toString());
 				}
                 if(fasttools){
                     delay.setDelay(50);
