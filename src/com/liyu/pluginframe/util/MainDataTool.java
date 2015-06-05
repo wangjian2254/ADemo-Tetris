@@ -28,6 +28,7 @@ public class MainDataTool {
 	private final static String PUSH_GAME_DATA="push_game_data";
 	private final static String PUSH_PROPERTY_DATA="push_property_data";
 	private final static String SEND_CHAT="send_chat";
+	private final static String LET_USERNAME_OUT="let_username_out";
 	private final static String IN_ROOM="in_room";
 	private final static String OUT_ROOM="out_room";
     private static Map<String, Long> api_timeout= new HashMap<String, Long>();
@@ -679,6 +680,19 @@ public class MainDataTool {
             e.printStackTrace();
         }
         return syncGameRoom(SEND_CHAT, jsonObject.toString());
+    }
+
+    /**
+     *踢人
+     * @param user 被踢的人
+     *
+     */
+    public static void quiteRoom(String user){
+        try {
+            gameRoomService.quiteRoom(appcode, roomid, user);
+        } catch (RemoteException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
