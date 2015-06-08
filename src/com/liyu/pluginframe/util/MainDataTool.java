@@ -355,7 +355,17 @@ public class MainDataTool {
                         }
                         if(route.equals(OUT_ROOM)){
                             shunxulist.remove(result_json.optString("user"));
-                            iGameSync.syncMemberChange(result_json.optString("user"), false);
+                            if(result_json.optString("user").equals(getUserInfo().getUsername())){
+                                if(result_json.optString("do_user", "").length()>0&&!result_json.optString("do_user", "").equals(result_json.optString("user"))){
+                                    iGameSync.syncQuiteRoomByUser(result_json.optString("do_user"));
+                                }else{
+                                    iGameSync.syncMemberChange(result_json.optString("user"), false);
+                                }
+                            }else{
+                                iGameSync.syncMemberChange(result_json.optString("user"), false);
+                            }
+
+
                         }
                     }else if(msg.what==1){
                     }else if(msg.what==800){
@@ -453,8 +463,10 @@ public class MainDataTool {
             if(route.equals("onLeave")){
                 try{
                     String username = result.getString("user");
+                    String do_user = result.getString("do_user");
                     String roomid = result.getString("roomid");
                     JSONObject jsonObject = new JSONObject();
+                    jsonObject.put("do_user", do_user);
                     jsonObject.put("user", username);
                     jsonObject.put("route", OUT_ROOM);
                     gamehandler.obtainMessage(0, jsonObject).sendToTarget();

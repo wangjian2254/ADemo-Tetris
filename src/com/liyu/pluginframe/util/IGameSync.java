@@ -105,4 +105,10 @@ public interface IGameSync {
      * @param in  true为加入，false为推出
      */
     public void syncMemberChange(String user, boolean in);
+
+    /**
+     * 被提出房间
+     * @param user 用户id，被用户 user剔除房间
+     */
+    public void syncQuiteRoomByUser(String user);
 }

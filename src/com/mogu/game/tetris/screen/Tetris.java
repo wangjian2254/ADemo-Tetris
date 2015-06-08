@@ -167,6 +167,12 @@ public class Tetris extends Screen {
 					   user_points.put(user, "remove");
 				   }
 			}
+
+			@Override
+			public void syncQuiteRoomByUser(String user) {
+				gamemsg.add(user+":把我踢出了房间");
+				msg_time+=3;
+			}
 		});
 	}
 	
