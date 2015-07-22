@@ -466,9 +466,11 @@ public class MainDataTool {
                     String do_user = result.getString("do_user");
                     String roomid = result.getString("roomid");
                     JSONObject jsonObject = new JSONObject();
-                    jsonObject.put("do_user", do_user);
-                    jsonObject.put("user", username);
+                    JSONObject jsonObject2 = new JSONObject();
+                    jsonObject2.put("do_user", do_user);
+                    jsonObject2.put("user", username);
                     jsonObject.put("route", OUT_ROOM);
+                    jsonObject.put("json", jsonObject2);
                     gamehandler.obtainMessage(0, jsonObject).sendToTarget();
                 } catch (Exception e) {
                     e.printStackTrace();
