@@ -31,6 +31,7 @@ public class MainDataTool {
 	private final static String LET_USERNAME_OUT="let_username_out";
 	private final static String IN_ROOM="in_room";
 	private final static String OUT_ROOM="out_room";
+	private final static String QUERY_MY_PROP="query_my_prop";
     private static Map<String, Long> api_timeout= new HashMap<String, Long>();
     private static DateFormat format1 = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");//默认应用中的时间格式化
     private static Context con;
@@ -727,5 +728,30 @@ public class MainDataTool {
         } catch (RemoteException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * 判断自己是否房主
+     * @return
+     */
+    public static boolean isMaster(){
+        if(shunxulist.size()==0){
+
+            return false;
+        }
+        if(shunxulist.get(0).equals(getUserInfo().getUsername())){
+
+            return true;
+
+        }
+        return false;
+    }
+
+    /**
+     * 判断自己是否房主
+     * @return
+     */
+    public static void queryMyProps(){
+
     }
 }
