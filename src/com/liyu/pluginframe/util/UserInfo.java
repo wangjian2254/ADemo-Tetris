@@ -14,25 +14,13 @@ public class UserInfo {
     private boolean newroom=false;
     private boolean challengr=false;
 
-    public String getC_nickname() {
-        return c_nickname;
-    }
 
-    public void setC_nickname(String c_nickname) {
-        this.c_nickname = c_nickname;
-    }
+    private int head;
+    private String rank;
+    private int point;
 
-    public String getC_username() {
-        return c_username;
-    }
 
-    public void setC_username(String c_username) {
-        this.c_username = c_username;
-    }
 
-    private String c_nickname=null;
-    private String c_username=null;
-    private String c_jid=null;
 
     public String getUsername() {
         return username;
@@ -75,12 +63,28 @@ public class UserInfo {
     }
 
 
-
-    public String getC_jid() {
-        return c_jid;
+    public String getRank() {
+        return rank;
     }
 
-    public void setC_jid(String c_jid) {
-        this.c_jid = c_jid;
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
+
+    public int getPoint() {
+        return point;
+    }
+
+    public void setPoint(int point) {
+        this.point = point;
+    }
+
+
+    public int getHead() {
+        return head;
+    }
+
+    public void setHead(int head) {
+        this.head = head;
     }
 }

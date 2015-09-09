@@ -2,6 +2,7 @@ package com.liyu.pluginframe.util;
 
 import org.json.JSONObject;
 
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -104,11 +105,31 @@ public interface IGameSync {
      * @param user 用户id
      * @param in  true为加入，false为推出
      */
-    public void syncMemberChange(String user, boolean in);
+    public void syncMemberChange(String user, boolean in, JSONObject userinfo);
 
     /**
      * 被提出房间
      * @param user 用户id，被用户 user剔除房间
      */
     public void syncQuiteRoomByUser(String user);
+
+    public void syncRoomMembers(List<String> usernames, Map<String, UserInfo> usermap);
+
+    public void syncInRoom();
+
+    /**
+     * 掉线
+     *
+     */
+    public void syncQuiteRoom();
+
+
+    public void syncGameInfo(JSONObject json);
+
+    public void syncUserPropertyInfo(Map<String,Integer> propinfo);
+
+    public void syncResultAddPropertyInfo(String prop_flag, int num, boolean success);
+
+    public void syncUsedProperty(String prop_flag, int num, boolean success);
+
 }

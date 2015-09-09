@@ -3,13 +3,11 @@ package com.mogu.game.tetris.screen;
 
 
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.*;
 
 import android.widget.Toast;
 import com.liyu.pluginframe.util.IGameSync;
+import com.liyu.pluginframe.util.UserInfo;
 import loon.LGame;
 import loon.core.LSystem;
 import loon.core.graphics.LColor;
@@ -162,16 +160,53 @@ public class Tetris extends Screen {
 			}
 
 			@Override
-			public void syncMemberChange(String user, boolean in) {
-				   if(!in){
-					   user_points.put(user, "remove");
-				   }
+			public void syncMemberChange(String user, boolean in, JSONObject userinfo) {
+				if(!in){
+					user_points.put(user, "remove");
+				}
 			}
+
+
 
 			@Override
 			public void syncQuiteRoomByUser(String user) {
 				gamemsg.add(user+":把我踢出了房间");
 				msg_time+=3;
+			}
+
+			@Override
+			public void syncRoomMembers(List<String> usernames, Map<String, UserInfo> usermap) {
+
+			}
+
+			@Override
+			public void syncInRoom() {
+
+			}
+
+			@Override
+			public void syncQuiteRoom() {
+
+			}
+
+			@Override
+			public void syncGameInfo(JSONObject json) {
+
+			}
+
+			@Override
+			public void syncUserPropertyInfo(Map<String, Integer> propinfo) {
+
+			}
+
+			@Override
+			public void syncResultAddPropertyInfo(String prop_flag, int num, boolean success) {
+
+			}
+
+			@Override
+			public void syncUsedProperty(String prop_flag, int num, boolean success) {
+
 			}
 		});
 	}
@@ -528,7 +563,7 @@ public class Tetris extends Screen {
 
 			if (gameField.isGameOver()) {
 				if(!writeresult){
-					MainDataTool.setResultString1(gameField.getPoints(), "俄罗斯方块获取新的积分！", MainDataTool.Model.WEEKLY);
+//					MainDataTool.setResultString1(gameField.getPoints(), "俄罗斯方块获取新的积分！", MainDataTool.Model.WEEKLY);
 					writeresult=true;
 				}
 				g.setColor(LColor.white);
