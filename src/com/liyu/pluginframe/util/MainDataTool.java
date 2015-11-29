@@ -78,6 +78,7 @@ public class MainDataTool {
         con = mainactivity.getApplicationContext();
         appcode = con.getPackageName();
         appname =  con.getPackageManager().getApplicationLabel(con.getApplicationInfo()).toString();
+
         JSONObject j=null;
         String result = mainactivity.getIntent().getExtras().getString("user");
         if(result!=null){
@@ -95,6 +96,8 @@ public class MainDataTool {
             userInfo.setNewroom(j.optBoolean("newroom", false));
             userInfo.setChallengr(j.optBoolean("challenger", false));
             appcode_dt_id = j.optString("appcode_dt_id");
+            appcode = j.optString("appcode", null);
+            appname = "测试游戏";
             debug = j.optBoolean("debug",false);
             debug = false;
             if(j.has("version")&&j.optInt("version",1)==2){
@@ -184,7 +187,7 @@ public class MainDataTool {
             e.printStackTrace();
         }
         GameService.getInstance().upload_end_point(appcode, roomid, point);
-        return syncGameRoom(UPLOAD_END_GAME_POINT, jsonObject.toString());
+        return 0;
     }
 
     /**
@@ -371,14 +374,7 @@ public class MainDataTool {
     public static void query_my_prop(){
         GameService.getInstance().get_user_prop_by_appcode_username(appcode);
     }
-//    /**
-//     * 查询游戏中所有的道具种类
-//     * @return
-//     */
-//    public static void query_game_prop(){
-//
-//    }
-//
+
     /**
      * 增加道具
      * @return
@@ -392,6 +388,28 @@ public class MainDataTool {
      */
     public static void used_game_prop(String prop_flag, int num){
         GameService.getInstance().used_prop_by_appcode_username(appcode, prop_flag, num);
+    }
+
+    /**
+     * 保存我的游戏信息
+     * @param json
+     */
+    public static void save_game_info_by_appcode_username(String json){
+        GameService.getInstance().save_game_info_by_appcode_username(appcode, json);
+    }
+
+    /**
+     * 获取我的游戏信息
+     */
+    public static void get_game_info_by_appcode_username(){
+        GameService.getInstance().get_game_info_by_appcode_username(appcode);
+    }
+
+    /**
+     * 清空房间内积分信息
+     */
+    public static void clean_point(){
+        GameService.getInstance().clean_point(appcode, roomid);
     }
 
 }

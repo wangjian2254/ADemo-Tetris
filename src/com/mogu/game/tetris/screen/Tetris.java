@@ -6,8 +6,10 @@ package com.mogu.game.tetris.screen;
 import java.util.*;
 
 import android.widget.Toast;
+
 import com.liyu.pluginframe.util.IGameSync;
 import com.liyu.pluginframe.util.UserInfo;
+
 import loon.LGame;
 import loon.core.LSystem;
 import loon.core.graphics.LColor;
@@ -27,6 +29,7 @@ import com.mogu.game.tetris.config.CT;
 import com.mogu.game.tetris.model.DaoJu;
 import com.mogu.game.tetris.model.ZhaDan;
 import com.mogu.game.tetris.sprite.ZhaDanSprite;
+
 import org.json.JSONObject;
 
 
@@ -168,11 +171,11 @@ public class Tetris extends Screen {
 
 
 
-			@Override
-			public void syncQuiteRoomByUser(String user) {
-				gamemsg.add(user+":把我踢出了房间");
-				msg_time+=3;
-			}
+//			@Override
+//			public void syncQuiteRoomByUser(String user) {
+//				gamemsg.add(user+":把我踢出了房间");
+//				msg_time+=3;
+//			}
 
 			@Override
 			public void syncRoomMembers(List<String> usernames, Map<String, UserInfo> usermap) {
@@ -207,6 +210,12 @@ public class Tetris extends Screen {
 			@Override
 			public void syncUsedProperty(String prop_flag, int num, boolean success) {
 
+			}
+
+			@Override
+			public void syncError(String message, int status_code) {
+				// TODO Auto-generated method stub
+				
 			}
 		});
 	}

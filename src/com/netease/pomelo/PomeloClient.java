@@ -135,8 +135,12 @@ public class PomeloClient {
 			cb = (DataCallBack) args[2];
 		}
 		msg = filter(msg);
+
 		reqId++;
-		cbs.put(reqId, cb);
+		if(cb!=null){
+			cbs.put(reqId, cb);
+		}
+
 		sendMessage(reqId, route, msg);
 	}
 
@@ -189,13 +193,15 @@ public class PomeloClient {
 			// request message
 			if (jsonObject.has("id")) {
 				id = jsonObject.getInt("id");
-				DataCallBack cb = cbs.get(id);
-				cb.responseData(jsonObject.getJSONObject("body"));
+				if(cbs.containsKey(id)){
+					DataCallBack cb = cbs.get(id);
+					cb.responseData(jsonObject.getJSONObject("body"));
+				}
 				cbs.remove(id);
 			}
 			// broadcast message
 			else
-				emit(jsonObject.getString("route"), jsonObject);
+				emit(jsonObject.getString("route"), jsonObject.getJSONObject("body"));
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

@@ -107,7 +107,13 @@ public class GameService {
     private Object doResult(JSONObject jsonObject) {
         boolean r = jsonObject.optBoolean("success", true);
         if (!r) {
-            iGameDtSync.syncError(jsonObject.optString("message", "服务器错误"), jsonObject.optInt("status_code", 500));
+            if(iGameDtSync==null){
+                iGameDtSync.syncError(jsonObject.optString("message", "服务器错误"), jsonObject.optInt("status_code", 500));
+            }
+            if(iGameSync==null){
+                iGameSync.syncError(jsonObject.optString("message", "服务器错误"), jsonObject.optInt("status_code", 500));
+            }
+
             return null;
         }
         JSONObject result = jsonObject.optJSONObject("result");
@@ -329,7 +335,7 @@ public class GameService {
      * by:王健 at:2015-08-09
      */
     public void quite_dt() {
-    	if(pomeloClient==null){
+        if(pomeloClient==null||!pomeloClient.hasConnect()){
             return;
         }
         pomeloClient.disconnect();
@@ -456,8 +462,18 @@ public class GameService {
 
                     String roomid = result.optString("roomid");
                     String username = result.optString("user");
-                    JSONObject userinfo = result.optJSONObject("userinfo");
-                    iGameSync.syncMemberChange(username, true, userinfo);
+                    JSONObject user = result.optJSONObject("userinfo");
+                    UserInfo userInfo = new UserInfo();
+                    userInfo.setUsername(user.optString("username"));
+                    userInfo.setNickname(user.optString("nickname"));
+                    userInfo.setHead(user.optInt("head"));
+                    userInfo.setPoint(user.optInt("point"));
+                    userInfo.setRank(user.optString("rank"));
+
+                    usermap.put(userInfo.getUsername(), userInfo);
+                    shunxulist.add(userInfo.getUsername());
+                    
+                    iGameSync.syncMemberChange(username, true, user);
                 }
             }
         });
@@ -479,6 +495,8 @@ public class GameService {
 
                     String roomid = result.optString("roomid");
                     String username = result.optString("user");
+                    usermap.remove(username);
+                    shunxulist.remove(username);
                     iGameSync.syncMemberChange(username, false, null);
                 }
             }
